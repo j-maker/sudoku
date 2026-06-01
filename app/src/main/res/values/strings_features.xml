@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tutorial_title">Bienvenido</string>
+    <string name="tutorial_progress">%1$d / %2$d</string>
+    <string name="tutorial_step1">Esta plantilla incluye anuncios (AdMob), analítica Firebase y 14 idiomas.</string>
+    <string name="tutorial_step2">Puedes cambiar el idioma y el recordatorio diario con el botón Ajustes (arriba a la derecha).</string>
+    <string name="tutorial_step3">Sustituye la pantalla principal por tu app antes de publicar en Play Store.</string>
+    <string name="tutorial_step4">Opcional: activa un aviso diario para que los usuarios vuelvan a abrir la app.</string>
+    <string name="tutorial_skip">Omitir</string>
+    <string name="tutorial_next">Siguiente</string>
+    <string name="tutorial_start">Empezar</string>
+    <string name="reminder_prompt_title">¿Recordatorio diario?</string>
+    <string name="reminder_prompt_message">Te enviamos una notificación al día a la hora que elijas. Puedes cambiarla en Ajustes.</string>
+    <string name="reminder_prompt_enable">Activar</string>
+    <string name="reminder_prompt_later">Ahora no</string>
+    <string name="settings_title">Ajustes</string>
+    <string name="settings_done">Listo</string>
+    <string name="settings_language_section">Idioma</string>
+    <string name="settings_reminder_section">Recordatorio diario</string>
+    <string name="settings_daily_reminder">Activar recordatorio</string>
+    <string name="settings_daily_reminder_desc">Notificación diaria para volver a la app</string>
+    <string name="settings_reminder_hour">Hora del aviso: %1$d:00</string>
+    <string name="settings_privacy_policy">Política de privacidad</string>
+</resources>

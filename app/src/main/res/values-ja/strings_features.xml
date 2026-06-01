@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tutorial_title">ようこそ</string>
+    <string name="tutorial_progress">%1$d / %2$d</string>
+    <string name="tutorial_step1">このテンプレートには広告（AdMob）、Firebase Analytics、14言語が含まれます。</string>
+    <string name="tutorial_step2">言語とリマインダーは右上の「設定」ボタンで変更できます。</string>
+    <string name="tutorial_step3">公開前にメイン画面を自分のアプリに差し替えてください。</string>
+    <string name="tutorial_step4">任意：毎日のリマインダーでユーザーの再訪を促せます。</string>
+    <string name="tutorial_skip">スキップ</string>
+    <string name="tutorial_next">次へ</string>
+    <string name="tutorial_start">始める</string>
+    <string name="reminder_prompt_title">毎日のリマインダー？</string>
+    <string name="reminder_prompt_message">選んだ時刻に1日1回通知します。設定で変更できます。</string>
+    <string name="reminder_prompt_enable">有効にする</string>
+    <string name="reminder_prompt_later">後で</string>
+    <string name="settings_title">設定</string>
+    <string name="settings_done">完了</string>
+    <string name="settings_language_section">言語</string>
+    <string name="settings_reminder_section">毎日のリマインダー</string>
+    <string name="settings_daily_reminder">リマインダーを有効にする</string>
+    <string name="settings_daily_reminder_desc">アプリに戻るための毎日の通知</string>
+    <string name="settings_reminder_hour">通知時刻: %1$d:00</string>
+    <string name="settings_privacy_policy">プライバシーポリシー</string>
+</resources>

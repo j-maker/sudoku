@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tutorial_title">欢迎</string>
+    <string name="tutorial_progress">%1$d / %2$d</string>
+    <string name="tutorial_step1">此模板包含广告（AdMob）、Firebase Analytics 和 14 种语言。</string>
+    <string name="tutorial_step2">使用右上角“设置”按钮更改语言和每日提醒。</string>
+    <string name="tutorial_step3">发布前请将主界面替换为您的应用。</string>
+    <string name="tutorial_step4">可选：开启每日提醒，让用户回到应用。</string>
+    <string name="tutorial_skip">跳过</string>
+    <string name="tutorial_next">下一步</string>
+    <string name="tutorial_start">开始</string>
+    <string name="reminder_prompt_title">每日提醒？</string>
+    <string name="reminder_prompt_message">每天在您选择的时间发送一次通知。可在设置中更改。</string>
+    <string name="reminder_prompt_enable">启用</string>
+    <string name="reminder_prompt_later">稍后</string>
+    <string name="settings_title">设置</string>
+    <string name="settings_done">完成</string>
+    <string name="settings_language_section">语言</string>
+    <string name="settings_reminder_section">每日提醒</string>
+    <string name="settings_daily_reminder">启用提醒</string>
+    <string name="settings_daily_reminder_desc">每日通知，提醒用户返回应用</string>
+    <string name="settings_reminder_hour">提醒时间：%1$d:00</string>
+    <string name="settings_privacy_policy">隐私政策</string>
+</resources>

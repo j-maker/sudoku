@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tutorial_title">Bienvenue</string>
+    <string name="tutorial_progress">%1$d / %2$d</string>
+    <string name="tutorial_step1">Ce modèle inclut des annonces (AdMob), Firebase Analytics et 14 langues.</string>
+    <string name="tutorial_step2">Changez la langue et le rappel avec le bouton Paramètres (en haut à droite).</string>
+    <string name="tutorial_step3">Remplacez l\'écran principal par votre app avant de publier sur le Play Store.</string>
+    <string name="tutorial_step4">Optionnel : activez un rappel quotidien pour que les utilisateurs reviennent.</string>
+    <string name="tutorial_skip">Ignorer</string>
+    <string name="tutorial_next">Suivant</string>
+    <string name="tutorial_start">Commencer</string>
+    <string name="reminder_prompt_title">Rappel quotidien ?</string>
+    <string name="reminder_prompt_message">Une notification par jour à l\'heure choisie. Modifiable dans Paramètres.</string>
+    <string name="reminder_prompt_enable">Activer</string>
+    <string name="reminder_prompt_later">Plus tard</string>
+    <string name="settings_title">Paramètres</string>
+    <string name="settings_done">Terminé</string>
+    <string name="settings_language_section">Langue</string>
+    <string name="settings_reminder_section">Rappel quotidien</string>
+    <string name="settings_daily_reminder">Activer le rappel</string>
+    <string name="settings_daily_reminder_desc">Notification quotidienne pour revenir à l\'app</string>
+    <string name="settings_reminder_hour">Heure du rappel : %1$d:00</string>
+    <string name="settings_privacy_policy">Politique de confidentialité</string>
+</resources>

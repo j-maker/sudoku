@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tutorial_title">Willkommen</string>
+    <string name="tutorial_progress">%1$d / %2$d</string>
+    <string name="tutorial_step1">Diese Vorlage enthält Anzeigen (AdMob), Firebase Analytics und 14 Sprachen.</string>
+    <string name="tutorial_step2">Sprache und Erinnerung über die Schaltfläche Einstellungen ändern (oben rechts).</string>
+    <string name="tutorial_step3">Ersetzen Sie den Hauptbildschirm durch Ihre App vor der Veröffentlichung.</string>
+    <string name="tutorial_step4">Optional: tägliche Erinnerung aktivieren, damit Nutzer zurückkommen.</string>
+    <string name="tutorial_skip">Überspringen</string>
+    <string name="tutorial_next">Weiter</string>
+    <string name="tutorial_start">Loslegen</string>
+    <string name="reminder_prompt_title">Tägliche Erinnerung?</string>
+    <string name="reminder_prompt_message">Eine Benachrichtigung pro Tag zur gewählten Zeit. In Einstellungen änderbar.</string>
+    <string name="reminder_prompt_enable">Aktivieren</string>
+    <string name="reminder_prompt_later">Nicht jetzt</string>
+    <string name="settings_title">Einstellungen</string>
+    <string name="settings_done">Fertig</string>
+    <string name="settings_language_section">Sprache</string>
+    <string name="settings_reminder_section">Tägliche Erinnerung</string>
+    <string name="settings_daily_reminder">Erinnerung aktivieren</string>
+    <string name="settings_daily_reminder_desc">Tägliche Benachrichtigung zur App-Rückkehr</string>
+    <string name="settings_reminder_hour">Uhrzeit: %1$d:00</string>
+    <string name="settings_privacy_policy">Datenschutzrichtlinie</string>
+</resources>

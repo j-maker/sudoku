@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tutorial_title">환영합니다</string>
+    <string name="tutorial_progress">%1$d / %2$d</string>
+    <string name="tutorial_step1">이 템플릿에는 광고(AdMob), Firebase Analytics, 14개 언어가 포함됩니다.</string>
+    <string name="tutorial_step2">언어와 알림은 오른쪽 상단 설정 버튼에서 변경하세요.</string>
+    <string name="tutorial_step3">게시 전에 메인 화면을 앱으로 바꾸세요.</string>
+    <string name="tutorial_step4">선택: 사용자가 돌아오도록 일일 알림을 켤 수 있습니다.</string>
+    <string name="tutorial_skip">건너뛰기</string>
+    <string name="tutorial_next">다음</string>
+    <string name="tutorial_start">시작</string>
+    <string name="reminder_prompt_title">매일 알림?</string>
+    <string name="reminder_prompt_message">선택한 시간에 하루 한 번 알림을 보냅니다. 설정에서 변경할 수 있습니다.</string>
+    <string name="reminder_prompt_enable">사용</string>
+    <string name="reminder_prompt_later">나중에</string>
+    <string name="settings_title">설정</string>
+    <string name="settings_done">완료</string>
+    <string name="settings_language_section">언어</string>
+    <string name="settings_reminder_section">매일 알림</string>
+    <string name="settings_daily_reminder">알림 사용</string>
+    <string name="settings_daily_reminder_desc">앱으로 돌아오도록 매일 알림</string>
+    <string name="settings_reminder_hour">알림 시간: %1$d:00</string>
+    <string name="settings_privacy_policy">개인정보 처리방침</string>
+</resources>

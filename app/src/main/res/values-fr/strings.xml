@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Modèle d\'app</string>
+    <string name="home_open_settings">Paramètres</string>
+    <string name="home_title">Modèle Android</string>
+    <string name="home_subtitle">Remplacez cet écran par votre app. Les 14 langues sont prêtes.</string>
+    <string name="home_test_interstitial">Tester l\'interstitiel</string>
+    <string name="notification_channel_name">Rappels</string>
+    <string name="notification_channel_desc">Notifications optionnelles de l\'app</string>
+    <string name="notification_daily_title">Vous nous manquez !</string>
+    <string name="notification_daily_body">Revenez ouvrir l\'app quand vous voulez.</string>
+</resources>

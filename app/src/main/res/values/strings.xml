@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Español (por defecto). AdMob → admob.xml · Legal → legal.xml -->
+<resources>
+
+    <!-- app_name en ES; otros idiomas en values-XX. Sin app_name → usa appDisplayName de app.template.properties -->
+    <string name="app_name">Plantilla de app</string>
+    <string name="home_open_settings">Ajustes</string>
+    <string name="home_title">Plantilla Android</string>
+    <string name="home_subtitle">Sustituye esta pantalla por tu app. Ver README.md para configurar.</string>
+    <string name="home_test_interstitial">Probar intersticial</string>
+
+    <string name="notification_channel_name">Recordatorios</string>
+    <string name="notification_channel_desc">Avisos opcionales de la app</string>
+    <string name="notification_daily_title">¡Te echamos de menos!</string>
+    <string name="notification_daily_body">Vuelve a abrir la app cuando quieras.</string>
+
+    <!-- Etiquetas selector de idioma (iniciales, no traducir) -->
+    <string name="language_es">ES</string>
+    <string name="language_en">EN</string>
+    <string name="language_pt">PT</string>
+    <string name="language_fr">FR</string>
+    <string name="language_de">DE</string>
+    <string name="language_it">IT</string>
+    <string name="language_ru">RU</string>
+    <string name="language_tr">TR</string>
+    <string name="language_ar">AR</string>
+    <string name="language_hi">HI</string>
+    <string name="language_id">ID</string>
+    <string name="language_ja">JA</string>
+    <string name="language_ko">KO</string>
+    <string name="language_zh">ZH</string>
+
+</resources>

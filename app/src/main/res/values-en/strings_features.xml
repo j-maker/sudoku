@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tutorial_title">Welcome</string>
+    <string name="tutorial_progress">%1$d / %2$d</string>
+    <string name="tutorial_step1">This template includes ads (AdMob), Firebase Analytics, and 14 languages.</string>
+    <string name="tutorial_step2">Change language and daily reminder using the Settings button (top right).</string>
+    <string name="tutorial_step3">Replace the main screen with your app before publishing on Play Store.</string>
+    <string name="tutorial_step4">Optional: enable a daily reminder so users come back to the app.</string>
+    <string name="tutorial_skip">Skip</string>
+    <string name="tutorial_next">Next</string>
+    <string name="tutorial_start">Get started</string>
+    <string name="reminder_prompt_title">Daily reminder?</string>
+    <string name="reminder_prompt_message">We send one notification per day at your chosen time. You can change it in Settings.</string>
+    <string name="reminder_prompt_enable">Enable</string>
+    <string name="reminder_prompt_later">Not now</string>
+    <string name="settings_title">Settings</string>
+    <string name="settings_done">Done</string>
+    <string name="settings_language_section">Language</string>
+    <string name="settings_reminder_section">Daily reminder</string>
+    <string name="settings_daily_reminder">Enable reminder</string>
+    <string name="settings_daily_reminder_desc">Daily notification to return to the app</string>
+    <string name="settings_reminder_hour">Reminder time: %1$d:00</string>
+    <string name="settings_privacy_policy">Privacy policy</string>
+</resources>

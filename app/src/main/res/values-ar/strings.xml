@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">قالب تطبيق</string>
+    <string name="home_open_settings">الإعدادات</string>
+    <string name="home_title">قالب أندرويد</string>
+    <string name="home_subtitle">استبدل هذه الشاشة بتطبيقك. اللغات الـ14 جاهزة.</string>
+    <string name="home_test_interstitial">اختبار الإعلان البيني</string>
+    <string name="notification_channel_name">تذكيرات</string>
+    <string name="notification_channel_desc">إشعارات اختيارية للتطبيق</string>
+    <string name="notification_daily_title">نفتقدك!</string>
+    <string name="notification_daily_body">عد لفتح التطبيق متى شئت.</string>
+</resources>

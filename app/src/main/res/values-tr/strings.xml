@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Uygulama şablonu</string>
+    <string name="home_open_settings">Ayarlar</string>
+    <string name="home_title">Android şablonu</string>
+    <string name="home_subtitle">Bu ekranı uygulamanızla değiştirin. 14 dil hazır.</string>
+    <string name="home_test_interstitial">Geçiş reklamını test et</string>
+    <string name="notification_channel_name">Hatırlatıcılar</string>
+    <string name="notification_channel_desc">İsteğe bağlı uygulama bildirimleri</string>
+    <string name="notification_daily_title">Sizi özlüyoruz!</string>
+    <string name="notification_daily_body">İstediğiniz zaman uygulamayı tekrar açın.</string>
+</resources>

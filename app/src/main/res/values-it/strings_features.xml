@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tutorial_title">Benvenuto</string>
+    <string name="tutorial_progress">%1$d / %2$d</string>
+    <string name="tutorial_step1">Questo modello include annunci (AdMob), Firebase Analytics e 14 lingue.</string>
+    <string name="tutorial_step2">Cambia lingua e promemoria con il pulsante Impostazioni (in alto a destra).</string>
+    <string name="tutorial_step3">Sostituisci la schermata principale con la tua app prima di pubblicare.</string>
+    <string name="tutorial_step4">Opzionale: attiva un promemoria giornaliero per far tornare gli utenti.</string>
+    <string name="tutorial_skip">Salta</string>
+    <string name="tutorial_next">Avanti</string>
+    <string name="tutorial_start">Inizia</string>
+    <string name="reminder_prompt_title">Promemoria giornaliero?</string>
+    <string name="reminder_prompt_message">Una notifica al giorno all\'ora scelta. Modificabile in Impostazioni.</string>
+    <string name="reminder_prompt_enable">Attiva</string>
+    <string name="reminder_prompt_later">Non ora</string>
+    <string name="settings_title">Impostazioni</string>
+    <string name="settings_done">Fine</string>
+    <string name="settings_language_section">Lingua</string>
+    <string name="settings_reminder_section">Promemoria giornaliero</string>
+    <string name="settings_daily_reminder">Attiva promemoria</string>
+    <string name="settings_daily_reminder_desc">Notifica giornaliera per tornare all\'app</string>
+    <string name="settings_reminder_hour">Ora del promemoria: %1$d:00</string>
+    <string name="settings_privacy_policy">Informativa sulla privacy</string>
+</resources>

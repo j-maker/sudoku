@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Шаблон приложения</string>
+    <string name="home_open_settings">Настройки</string>
+    <string name="home_title">Шаблон Android</string>
+    <string name="home_subtitle">Замените этот экран своим приложением. Все 14 языков уже настроены.</string>
+    <string name="home_test_interstitial">Тест межстраничной рекламы</string>
+    <string name="notification_channel_name">Напоминания</string>
+    <string name="notification_channel_desc">Необязательные уведомления приложения</string>
+    <string name="notification_daily_title">Мы скучаем!</string>
+    <string name="notification_daily_body">Откройте приложение снова, когда захотите.</string>
+</resources>

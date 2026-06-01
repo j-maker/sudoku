@@ -1,0 +1,7 @@
+# Copia este archivo como signing.properties (no lo subas a git)
+# y rellena los valores para firmar el release de Play Store.
+
+storeFile=../keystore/release.keystore
+storePassword=TU_PASSWORD
+keyAlias=release
+keyPassword=TU_PASSWORD

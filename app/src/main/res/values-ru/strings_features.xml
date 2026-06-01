@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tutorial_title">Добро пожаловать</string>
+    <string name="tutorial_progress">%1$d / %2$d</string>
+    <string name="tutorial_step1">В шаблоне есть реклама (AdMob), Firebase Analytics и 14 языков.</string>
+    <string name="tutorial_step2">Язык и напоминание — кнопка «Настройки» (справа сверху).</string>
+    <string name="tutorial_step3">Замените главный экран своим приложением перед публикацией в Play Store.</string>
+    <string name="tutorial_step4">По желанию: ежедневное напоминание, чтобы пользователи возвращались.</string>
+    <string name="tutorial_skip">Пропустить</string>
+    <string name="tutorial_next">Далее</string>
+    <string name="tutorial_start">Начать</string>
+    <string name="reminder_prompt_title">Ежедневное напоминание?</string>
+    <string name="reminder_prompt_message">Одно уведомление в день в выбранное время. Можно изменить в настройках.</string>
+    <string name="reminder_prompt_enable">Включить</string>
+    <string name="reminder_prompt_later">Не сейчас</string>
+    <string name="settings_title">Настройки</string>
+    <string name="settings_done">Готово</string>
+    <string name="settings_language_section">Язык</string>
+    <string name="settings_reminder_section">Ежедневное напоминание</string>
+    <string name="settings_daily_reminder">Включить напоминание</string>
+    <string name="settings_daily_reminder_desc">Ежедневное уведомление для возврата в приложение</string>
+    <string name="settings_reminder_hour">Время: %1$d:00</string>
+    <string name="settings_privacy_policy">Политика конфиденциальности</string>
+</resources>
