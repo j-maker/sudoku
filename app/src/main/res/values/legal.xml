@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Privacidad y Play Games — reemplaza con tus datos -->
 <resources>
-    <string name="privacy_contact_email" translatable="false">tu-email@ejemplo.com</string>
-    <string name="privacy_policy_url" translatable="false">https://tu-dominio.github.io/tu-app/privacy.html</string>
+    <string name="privacy_contact_email" translatable="false">jhonatan.diaz2012@gmail.com</string>
+    <string name="privacy_policy_url" translatable="false">https://j-maker.github.io/sudoku/</string>
 
     <string name="play_games_project_id" translatable="false"></string>
     <string name="play_games_leaderboard_default" translatable="false"></string>
