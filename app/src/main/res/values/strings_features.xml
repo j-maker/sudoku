@@ -72,6 +72,7 @@
     <string name="win_title">¡Sudoku completado!</string>
     <string name="win_time">Tiempo: %1$s</string>
     <string name="win_mistakes">Errores: %1$d</string>
+    <string name="win_share">Compartir</string>
 
     <string name="share_title">Compartir app</string>
     <string name="share_subject">Sudoku — descarga gratis</string>

@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.BarChart
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.EmojiEvents
 import androidx.compose.material.icons.filled.LocalFireDepartment
 import androidx.compose.material.icons.filled.Schedule
@@ -358,34 +359,136 @@ fun WinDialog(
     elapsedSeconds: Int,
     mistakes: Int,
     onDismiss: () -> Unit,
+    onShare: () -> Unit,
     onNewGame: () -> Unit,
 ) {
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = {
+    Dialog(onDismissRequest = onDismiss) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(StatsDialogShape)
+                .background(
+                    Brush.verticalGradient(
+                        listOf(Color(0xFF1A1038), Color(0xFF12082A)),
+                    ),
+                )
+                .border(
+                    width = 1.5.dp,
+                    brush = Brush.linearGradient(
+                        listOf(SudokuNeonGreen, SudokuPrimary, SudokuAccent),
+                    ),
+                    shape = StatsDialogShape,
+                )
+                .padding(20.dp),
+        ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
+                Box(
+                    modifier = Modifier
+                        .size(44.dp)
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(SudokuNeonGreen.copy(alpha = 0.18f))
+                        .border(1.dp, SudokuNeonGreen.copy(alpha = 0.45f), RoundedCornerShape(12.dp)),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.EmojiEvents,
+                        contentDescription = null,
+                        tint = SudokuNeonGreen,
+                        modifier = Modifier.size(26.dp),
+                    )
+                }
                 Text(
                     text = stringResource(R.string.win_title),
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(horizontal = 12.dp),
+                    style = DialogTextStyle.copy(
+                        fontSize = 22.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White,
+                    ),
+                )
+                ModalHeaderActions(onDone = onDismiss)
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(10.dp),
+            ) {
+                StatsMetricCard(
+                    label = stringResource(R.string.status_time_label),
+                    value = formatTime(elapsedSeconds),
+                    accent = SudokuPrimary,
+                    icon = Icons.Filled.Schedule,
                     modifier = Modifier.weight(1f),
                 )
-                ModalHeaderActionsLight(onDone = onDismiss)
+                StatsMetricCard(
+                    label = stringResource(R.string.status_mistakes_label),
+                    value = mistakes.toString(),
+                    accent = if (mistakes > 0) SudokuNeonPink else SudokuNeonGreen,
+                    icon = Icons.Filled.Close,
+                    modifier = Modifier.weight(1f),
+                )
             }
-        },
-        text = {
-            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                Text(stringResource(R.string.win_time, formatTime(elapsedSeconds)))
-                Text(stringResource(R.string.win_mistakes, mistakes))
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(10.dp),
+            ) {
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .clip(RoundedCornerShape(14.dp))
+                        .background(
+                            Brush.horizontalGradient(
+                                listOf(SudokuPrimary, Color(0xFF0097A7)),
+                            ),
+                        )
+                        .clickable(onClick = onShare)
+                        .padding(vertical = 14.dp),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Text(
+                        text = stringResource(R.string.win_share),
+                        style = DialogTextStyle.copy(
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFF001A22),
+                        ),
+                    )
+                }
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .clip(RoundedCornerShape(14.dp))
+                        .background(
+                            Brush.horizontalGradient(
+                                listOf(SudokuNeonGreen, SudokuPrimary),
+                            ),
+                        )
+                        .clickable(onClick = onNewGame)
+                        .padding(vertical = 14.dp),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Text(
+                        text = stringResource(R.string.game_new),
+                        style = DialogTextStyle.copy(
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFF001A22),
+                        ),
+                    )
+                }
             }
-        },
-        confirmButton = {
-            TextButton(onClick = onNewGame) {
-                Text(stringResource(R.string.game_new))
-            }
-        },
-    )
+        }
+    }
 }
 
 fun formatTime(totalSeconds: Int): String {

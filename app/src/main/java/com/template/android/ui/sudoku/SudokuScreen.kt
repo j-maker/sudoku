@@ -59,6 +59,7 @@ import com.template.android.analytics.AppAnalytics
 import com.template.android.data.AppDataStore
 import com.template.android.data.AppSettings
 import com.template.android.data.HintState
+import com.template.android.engagement.PlayReviewHelper
 import com.template.android.ui.layout.SudokuLayoutInfo
 import com.template.android.ui.layout.boardSizeFor
 import com.template.android.ui.layout.rememberSudokuLayoutInfo
@@ -93,6 +94,7 @@ fun SudokuScreen(
     var hintState by remember { mutableStateOf(dataStore.loadHintState()) }
     var earnedHints by remember { mutableStateOf(0) }
     var nowMs by remember { mutableStateOf(System.currentTimeMillis()) }
+    var interstitialActive by remember { mutableStateOf(false) }
 
     val audioEnabled = settings.soundEnabled
     val freeHintsRemaining = hintState.freeHintsRemaining
@@ -154,11 +156,14 @@ fun SudokuScreen(
             manager.showIfReady(
                 act,
                 shouldShow = true,
+                ignoreCooldown = true,
+                onAdStarted = { interstitialActive = true },
                 onAdShown = {
                     // Tras el anuncio: 1 pista disponible; el jugador la usa con otro toque.
                     earnedHints = 1
                     AppAnalytics.logButtonClick("hint_video_reward")
                 },
+                onFinished = { interstitialActive = false },
             )
         }
     }
@@ -203,6 +208,13 @@ fun SudokuScreen(
             dataStore.clearSavedGame()
             playerStats = dataStore.loadStats()
             AppAnalytics.logButtonClick("puzzle_complete_${gameState.difficulty.name.lowercase()}")
+
+            // Review: pedir una vez al llegar a 3 victorias totales.
+            val act = activity
+            if (act != null && playerStats.gamesWon >= 3 && !dataStore.isReviewRequested()) {
+                dataStore.setReviewRequested()
+                PlayReviewHelper.requestReview(act)
+            }
         }
     }
 
@@ -217,9 +229,18 @@ fun SudokuScreen(
     }
 
     LaunchedEffect(Unit) {
+        val act = activity
+        if (act != null) {
+            interstitialAdManager?.markGameSessionStart()
+        }
+    }
+
+    LaunchedEffect(Unit) {
         while (true) {
             delay(1000)
-            gameState = gameState.tickSecond()
+            if (!interstitialActive) {
+                gameState = gameState.tickSecond()
+            }
             nowMs = System.currentTimeMillis()
         }
     }
@@ -230,7 +251,11 @@ fun SudokuScreen(
             delay(5_000)
             if (gameState.status != GameStatus.PLAYING) continue
             val act = activity ?: continue
-            interstitialAdManager?.maybeShowTimed(act)
+            interstitialAdManager?.maybeShowTimed(
+                act,
+                onAdStarted = { interstitialActive = true },
+                onFinished = { interstitialActive = false },
+            )
         }
     }
 
@@ -442,6 +467,11 @@ fun SudokuScreen(
             elapsedSeconds = gameState.elapsedSeconds,
             mistakes = gameState.mistakes,
             onDismiss = { showWin = false },
+            onShare = {
+                showWin = false
+                showShare = true
+                AppAnalytics.logButtonClick("win_share")
+            },
             onNewGame = {
                 showWin = false
                 startNewGame()

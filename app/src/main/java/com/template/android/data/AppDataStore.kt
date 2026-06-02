@@ -127,6 +127,12 @@ class AppDataStore(context: Context) {
             .apply()
     }
 
+    fun isReviewRequested(): Boolean = prefs.getBoolean(K_REVIEW_REQUESTED, false)
+
+    fun setReviewRequested() {
+        prefs.edit().putBoolean(K_REVIEW_REQUESTED, true).apply()
+    }
+
     private fun migrateDifficultyWinCounts() {
         val hasMedium = prefs.getInt(K_BEST_MEDIUM, -1) >= 0
         val hasHard = prefs.getInt(K_BEST_HARD, -1) >= 0
@@ -339,5 +345,6 @@ class AppDataStore(context: Context) {
         private const val K_REMINDER_PROMPT = "reminder_prompt_shown"
         private const val K_HINTS_FREE_REMAINING = "hints_free_remaining"
         private const val K_HINTS_LAST_REFILL_MS = "hints_last_refill_ms"
+        private const val K_REVIEW_REQUESTED = "review_requested"
     }
 }

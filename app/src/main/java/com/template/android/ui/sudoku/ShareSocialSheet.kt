@@ -49,7 +49,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import com.template.android.R
-import com.template.android.ui.components.ModalHeaderActions
 import com.template.android.ui.theme.SudokuPrimary
 
 private data class ShareTarget(
@@ -212,12 +211,6 @@ fun ShareSocialSheet(
                         vertical = layout.panelPaddingV,
                     ),
             ) {
-                Box(
-                    modifier = Modifier.fillMaxWidth(),
-                    contentAlignment = Alignment.TopEnd,
-                ) {
-                    ModalHeaderActions(onDone = onDismiss)
-                }
                 FlowRow(
                     horizontalArrangement = Arrangement.spacedBy(
                         layout.itemSpacing,

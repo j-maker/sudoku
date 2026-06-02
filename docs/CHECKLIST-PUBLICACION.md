@@ -3,7 +3,7 @@
 **Paquete:** `com.jmaker.sudoku`  
 **Orden recomendado:** app del juego → firma → UMP → AAB → Play Console.
 
-> **Importante:** La infraestructura (Firebase, AdMob, privacidad) avanza sobre la **plantilla**. El **juego Sudoku aún no está implementado** — sigue `TemplateHomeScreen.kt`. No publicar en Play hasta sustituir la pantalla principal por el producto real.
+> **Nota:** La infraestructura (Firebase, AdMob, privacidad) avanza sobre una **plantilla**, pero en este repo el **juego Sudoku ya está implementado**. Aun así, antes de publicar revisa UX, textos y capturas reales.
 
 Marca cada ítem cuando lo completes.
 
@@ -61,15 +61,13 @@ Marca cada ítem cuando lo completes.
 
 ## 3. UMP AdMob (GDPR) — **PENDIENTE**
 
-Mismo flujo para **Sudoku** y **Buscaminas** (mensaje por app recomendado).
+Configurar UMP para **Sudoku** (mensaje por app recomendado).
 
 | App | Paquete | URL privacidad |
 |-----|---------|----------------|
 | Sudoku | `com.jmaker.sudoku` | https://j-maker.github.io/sudoku/ |
-| Buscaminas | `com.jmaker.buscaminasarcade` | https://j-maker.github.io/busccaminas-arcade/ |
 
-- [ ] Sudoku — Reglamentos europeos: publicado + app vinculada
-- [ ] Buscaminas — idem
+- [ ] Reglamentos europeos: publicado + app vinculada
 - [ ] No consentir + Cerrar (no consentir) activados
 - [ ] (Opcional) Normativas EE. UU.
 
@@ -81,7 +79,7 @@ Ver [ADMOB.md](ADMOB.md) — Paso 9 · [PUBLICAR-PRIVACIDAD.md](PUBLICAR-PRIVACI
 
 | # | Tarea | Referencia |
 |---|--------|------------|
-| 4.1 | `keystore/release.keystore` + copia de seguridad | Ver guía Buscaminas `FIRMA-KEYSTORE.md` |
+| 4.1 | `keystore/release.keystore` + copia de seguridad | Crear y respaldar (NO subir a git) |
 | 4.2 | `signing.properties` (no git) | `signing.properties.example` |
 | 4.3 | AAB: `.\scripts\build-release-aab.ps1` | `app\build\outputs\bundle\release\app-release.aab` |
 
@@ -112,7 +110,7 @@ Ver [ADMOB.md](ADMOB.md) — Paso 9 · [PUBLICAR-PRIVACIDAD.md](PUBLICAR-PRIVACI
 [x] 0. JUEGO SUDOKU          ← implementado; pulir UX y capturas
 [x] 1. Firebase / AdMob / identidad
 [x] 2. Privacidad + GitHub Pages
-[ ] 3. UMP (Sudoku + Buscaminas)
+[ ] 3. UMP (Sudoku)
 [ ] 4. Keystore + AAB
 [ ] 5. Play Console + assets
 ```

@@ -15,6 +15,7 @@ class InterstitialAdManager(context: Context) {
     private val appContext = context.applicationContext
     private var interstitialAd: InterstitialAd? = null
     private var isLoading = false
+    private var sessionStartedAtMs = 0L
     private var lastShownAtMs = 0L
     private var isShowing = false
 
@@ -44,16 +45,40 @@ class InterstitialAdManager(context: Context) {
         )
     }
 
+    /** Llama al entrar a la pantalla principal del juego (NO al iniciar una nueva partida). */
+    fun markGameSessionStart(nowMs: Long = System.currentTimeMillis()) {
+        sessionStartedAtMs = nowMs
+        // Inicializa el cooldown base para que el primer anuncio sea 90s después de entrar al juego.
+        if (lastShownAtMs == 0L) {
+            lastShownAtMs = nowMs
+        }
+    }
+
     /** Intenta mostrar intersticial usando cooldown (90s) y disponibilidad del ad. */
-    fun maybeShowTimed(activity: Activity) {
+    fun maybeShowTimed(
+        activity: Activity,
+        onAdStarted: (() -> Unit)? = null,
+        onFinished: (() -> Unit)? = null,
+    ) {
+        // Primer anuncio solo 90s después de ENTRAR al juego.
+        if (sessionStartedAtMs == 0L) markGameSessionStart()
+        val now = System.currentTimeMillis()
+        if (now - sessionStartedAtMs < MIN_INTERVAL_MS) return
         MobileAdsInitializer.whenReady {
-            showIfReady(activity)
+            showIfReady(
+                activity = activity,
+                ignoreCooldown = false,
+                onAdStarted = onAdStarted,
+                onFinished = { onFinished?.invoke() },
+            )
         }
     }
 
     fun showIfReady(
         activity: Activity,
         shouldShow: Boolean = true,
+        ignoreCooldown: Boolean = false,
+        onAdStarted: (() -> Unit)? = null,
         onAdShown: (() -> Unit)? = null,
         onFinished: () -> Unit = {},
     ): Boolean {
@@ -69,7 +94,7 @@ class InterstitialAdManager(context: Context) {
         }
 
         val now = System.currentTimeMillis()
-        if (now - lastShownAtMs < MIN_INTERVAL_MS) {
+        if (!ignoreCooldown && now - lastShownAtMs < MIN_INTERVAL_MS) {
             AppAnalytics.logAdInterstitialSkipped("cooldown")
             onFinished()
             preload()
@@ -88,6 +113,7 @@ class InterstitialAdManager(context: Context) {
             override fun onAdShowedFullScreenContent() {
                 isShowing = true
                 AppAnalytics.logAdInterstitialShown(adUnitId)
+                onAdStarted?.invoke()
             }
 
             override fun onAdDismissedFullScreenContent() {
