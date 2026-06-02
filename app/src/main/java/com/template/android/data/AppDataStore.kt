@@ -38,6 +38,11 @@ data class PlayerStats(
     val bestTimeHard: Int? = null,
 )
 
+data class HintState(
+    val freeHintsRemaining: Int = 2,
+    val lastRefillAtMs: Long = 0L,
+)
+
 class AppDataStore(context: Context) {
     private val appContext = context.applicationContext
     private val prefs = appContext.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
@@ -107,6 +112,19 @@ class AppDataStore(context: Context) {
             bestTimeMedium = prefs.getInt(K_BEST_MEDIUM, -1).takeIf { it >= 0 },
             bestTimeHard = prefs.getInt(K_BEST_HARD, -1).takeIf { it >= 0 },
         )
+    }
+
+    fun loadHintState(): HintState {
+        val remaining = prefs.getInt(K_HINTS_FREE_REMAINING, 2).coerceIn(0, 2)
+        val lastRefill = prefs.getLong(K_HINTS_LAST_REFILL_MS, 0L)
+        return HintState(freeHintsRemaining = remaining, lastRefillAtMs = lastRefill)
+    }
+
+    fun saveHintState(state: HintState) {
+        prefs.edit()
+            .putInt(K_HINTS_FREE_REMAINING, state.freeHintsRemaining.coerceIn(0, 2))
+            .putLong(K_HINTS_LAST_REFILL_MS, state.lastRefillAtMs)
+            .apply()
     }
 
     private fun migrateDifficultyWinCounts() {
@@ -319,5 +337,7 @@ class AppDataStore(context: Context) {
         private const val K_SAVED_GAME = "saved_game"
         private const val K_TUTORIAL_DONE = "tutorial_done"
         private const val K_REMINDER_PROMPT = "reminder_prompt_shown"
+        private const val K_HINTS_FREE_REMAINING = "hints_free_remaining"
+        private const val K_HINTS_LAST_REFILL_MS = "hints_last_refill_ms"
     }
 }

@@ -54,9 +54,11 @@ import androidx.compose.ui.unit.sp
 import com.template.android.R
 import com.template.android.ads.BannerAdView
 import com.template.android.ads.InterstitialAdManager
+import com.template.android.ads.MobileAdsInitializer
 import com.template.android.analytics.AppAnalytics
 import com.template.android.data.AppDataStore
 import com.template.android.data.AppSettings
+import com.template.android.data.HintState
 import com.template.android.ui.layout.SudokuLayoutInfo
 import com.template.android.ui.layout.boardSizeFor
 import com.template.android.ui.layout.rememberSudokuLayoutInfo
@@ -88,12 +90,77 @@ fun SudokuScreen(
     var showStats by remember { mutableStateOf(false) }
     var showWin by remember { mutableStateOf(false) }
     var showShare by remember { mutableStateOf(false) }
+    var hintState by remember { mutableStateOf(dataStore.loadHintState()) }
+    var earnedHints by remember { mutableStateOf(0) }
+    var nowMs by remember { mutableStateOf(System.currentTimeMillis()) }
 
     val audioEnabled = settings.soundEnabled
+    val freeHintsRemaining = hintState.freeHintsRemaining
+    val freeHintsMax = 2
+    val freeHintsUsed = (freeHintsMax - freeHintsRemaining).coerceIn(0, freeHintsMax)
+    val hintRefillIntervalMs = 10 * 60 * 1000L // 10 minutos
+    val nextHintInSeconds: Int? = run {
+        // Mostrar contador solo cuando ya se consumieron todas las pistas gratis
+        if (freeHintsRemaining > 0) return@run null
+        val base = if (hintState.lastRefillAtMs > 0L) hintState.lastRefillAtMs else nowMs
+        val remainingMs = (hintRefillIntervalMs - (nowMs - base)).coerceAtLeast(0L)
+        (remainingMs / 1000L).toInt()
+    }
 
-    fun registerGameplayClick() {
+    fun applyHint(consumesFree: Boolean) {
+        val (next, applied) = gameState.applyHint()
+        if (!applied) return
+        gameState = next
+        if (consumesFree) {
+            val remainingAfter = (hintState.freeHintsRemaining - 1).coerceAtLeast(0)
+            val updated = hintState.copy(
+                freeHintsRemaining = remainingAfter,
+                // El timer empieza cuando se consumen TODAS las pistas (llegas a 0).
+                lastRefillAtMs = when {
+                    remainingAfter > 0 -> hintState.lastRefillAtMs
+                    hintState.lastRefillAtMs > 0L -> hintState.lastRefillAtMs
+                    else -> System.currentTimeMillis()
+                },
+            )
+            hintState = updated
+            dataStore.saveHintState(updated)
+        } else {
+            earnedHints = (earnedHints - 1).coerceAtLeast(0)
+        }
+        // Pista siempre es correcta, así que damos feedback “correcto”
+        feedback.onCellFilled(true)
+    }
+
+    fun onHintClick() {
+        // 2 gratis: muestra contador 0/2, 1/2, 2/2.
+        if (freeHintsRemaining > 0) {
+            AppAnalytics.logButtonClick("hint_free")
+            applyHint(consumesFree = true)
+            return
+        }
+
+        // Si ya hay pistas ganadas por anuncio, úsala sin pedir otro anuncio.
+        if (earnedHints > 0) {
+            AppAnalytics.logButtonClick("hint_earned")
+            applyHint(consumesFree = false)
+            return
+        }
+
+        // Después de las 2 gratis: botón con icono de video para monetizar.
         val act = activity ?: return
-        interstitialAdManager?.registerGameplayClick(act)
+        val manager = interstitialAdManager ?: return
+        AppAnalytics.logButtonClick("hint_video_request")
+        MobileAdsInitializer.whenReady {
+            manager.showIfReady(
+                act,
+                shouldShow = true,
+                onAdShown = {
+                    // Tras el anuncio: 1 pista disponible; el jugador la usa con otro toque.
+                    earnedHints = 1
+                    AppAnalytics.logButtonClick("hint_video_reward")
+                },
+            )
+        }
     }
 
     val shareStrings = ShareStrings(
@@ -153,12 +220,36 @@ fun SudokuScreen(
         while (true) {
             delay(1000)
             gameState = gameState.tickSecond()
+            nowMs = System.currentTimeMillis()
         }
+    }
+
+    // Intersticial por tiempo: intenta mostrarlo cada ~5s, pero el manager aplica cooldown de 90s.
+    LaunchedEffect(Unit) {
+        while (true) {
+            delay(5_000)
+            if (gameState.status != GameStatus.PLAYING) continue
+            val act = activity ?: continue
+            interstitialAdManager?.maybeShowTimed(act)
+        }
+    }
+
+    LaunchedEffect(nowMs, hintState.freeHintsRemaining, hintState.lastRefillAtMs) {
+        if (hintState.freeHintsRemaining >= freeHintsMax) return@LaunchedEffect
+        val base = if (hintState.lastRefillAtMs > 0L) hintState.lastRefillAtMs else nowMs
+        if (nowMs - base < hintRefillIntervalMs) return@LaunchedEffect
+        val updated = HintState(
+            freeHintsRemaining = (hintState.freeHintsRemaining + 1).coerceAtMost(freeHintsMax),
+            lastRefillAtMs = base + hintRefillIntervalMs,
+        )
+        hintState = updated
+        dataStore.saveHintState(updated)
     }
 
     fun startNewGame(difficulty: SudokuDifficulty = gameState.difficulty) {
         gameState = SudokuGameState.newGame(SudokuEngine.generate(difficulty))
         showWin = false
+        earnedHints = 0
         dataStore.clearSavedGame()
         AppAnalytics.logButtonClick("new_game_${difficulty.name.lowercase()}")
     }
@@ -215,14 +306,18 @@ fun SudokuScreen(
                 elapsedSeconds = gameState.elapsedSeconds,
                 mistakes = gameState.mistakes,
                 notesMode = gameState.notesMode,
+                hintsUsed = freeHintsUsed,
+                freeHints = freeHintsMax,
+                earnedHintsAvailable = earnedHints,
+                showHintVideo = freeHintsRemaining == 0 && earnedHints == 0,
                 onReset = {
                     startNewGame()
                     AppAnalytics.logButtonClick("reset_game")
                 },
                 onToggleNotes = {
-                    registerGameplayClick()
                     gameState = gameState.toggleNotesMode()
                 },
+                onHint = ::onHintClick,
                 isCompact = layout.isCompact,
                 chipHeight = layout.statusChipHeight,
                 captionFontSize = layout.statusCaptionFontSize,
@@ -236,6 +331,7 @@ fun SudokuScreen(
                 selected = gameState.difficulty,
                 playerStats = playerStats,
                 layout = layout,
+                nextHintSeconds = nextHintInSeconds,
                 onSelect = { diff ->
                     if (!playerStats.isDifficultyUnlocked(diff)) {
                         val progress = playerStats.winsTowardUnlock(diff) ?: return@DifficultyRow
@@ -278,7 +374,6 @@ fun SudokuScreen(
                         state = gameState,
                         settings = settings,
                         onCellClick = { index ->
-                            registerGameplayClick()
                             feedback.onTap()
                             gameState = gameState.withSelection(index)
                         },
@@ -289,7 +384,6 @@ fun SudokuScreen(
                         layout = layout,
                         gameState = gameState,
                         onDigit = { digit ->
-                            registerGameplayClick()
                             val before = gameState.userValues[gameState.selectedIndex]
                             gameState = gameState.enterDigit(digit)
                             if (gameState.selectedIndex in 0..80 &&
@@ -304,7 +398,6 @@ fun SudokuScreen(
                             }
                         },
                         onErase = {
-                            registerGameplayClick()
                             gameState = gameState.eraseCell()
                         },
                         modifier = Modifier
@@ -379,6 +472,7 @@ private fun DifficultyRow(
     selected: SudokuDifficulty,
     playerStats: PlayerStats,
     layout: SudokuLayoutInfo,
+    nextHintSeconds: Int?,
     onSelect: (SudokuDifficulty) -> Unit,
 ) {
     Row(
@@ -402,45 +496,49 @@ private fun DifficultyRow(
                 SudokuDifficulty.MEDIUM -> SudokuAccent
                 SudokuDifficulty.HARD -> SudokuNeonPink
             }
-            Box(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(16.dp))
-                    .then(
-                        if (isSelected) {
-                            Modifier.shadow(4.dp, RoundedCornerShape(16.dp), ambientColor = chipAccent, spotColor = chipAccent)
-                        } else {
-                            Modifier
-                        },
-                    )
-                    .background(
-                        when {
-                            isSelected -> Brush.horizontalGradient(
-                                listOf(chipAccent, chipAccent.copy(alpha = 0.7f)),
-                            )
-                            !isUnlocked -> Brush.verticalGradient(
-                                listOf(Color(0xFF1A1030), Color(0xFF0E0820)),
-                            )
-                            else -> Brush.verticalGradient(
-                                listOf(SudokuChromeBg, Color(0xFF120828)),
-                            )
-                        },
-                    )
-                    .border(
-                        1.dp,
-                        when {
-                            isSelected -> chipAccent
-                            !isUnlocked -> Color.White.copy(alpha = 0.2f)
-                            else -> chipAccent.copy(alpha = 0.45f)
-                        },
-                        RoundedCornerShape(16.dp),
-                    )
-                    .clickable { onSelect(diff) }
-                    .padding(
-                        horizontal = layout.chipHorizontalPadding,
-                        vertical = layout.chipVerticalPadding,
-                    ),
-                contentAlignment = Alignment.Center,
-            ) {
+            val chipModifier = Modifier
+                .clip(RoundedCornerShape(16.dp))
+                .then(
+                    if (isSelected) {
+                        Modifier.shadow(
+                            4.dp,
+                            RoundedCornerShape(16.dp),
+                            ambientColor = chipAccent,
+                            spotColor = chipAccent,
+                        )
+                    } else {
+                        Modifier
+                    },
+                )
+                .background(
+                    when {
+                        isSelected -> Brush.horizontalGradient(
+                            listOf(chipAccent, chipAccent.copy(alpha = 0.7f)),
+                        )
+                        !isUnlocked -> Brush.verticalGradient(
+                            listOf(Color(0xFF1A1030), Color(0xFF0E0820)),
+                        )
+                        else -> Brush.verticalGradient(
+                            listOf(SudokuChromeBg, Color(0xFF120828)),
+                        )
+                    },
+                )
+                .border(
+                    1.dp,
+                    when {
+                        isSelected -> chipAccent
+                        !isUnlocked -> Color.White.copy(alpha = 0.2f)
+                        else -> chipAccent.copy(alpha = 0.45f)
+                    },
+                    RoundedCornerShape(16.dp),
+                )
+                .clickable { onSelect(diff) }
+                .padding(
+                    horizontal = layout.chipHorizontalPadding,
+                    vertical = layout.chipVerticalPadding,
+                )
+
+            val chipContent: @Composable () -> Unit = {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(3.dp),
@@ -479,6 +577,34 @@ private fun DifficultyRow(
                             ),
                         )
                     }
+                }
+            }
+
+            if (diff == SudokuDifficulty.HARD && nextHintSeconds != null) {
+                val mm = nextHintSeconds / 60
+                val ss = nextHintSeconds % 60
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(4.dp),
+                ) {
+                    Box(modifier = chipModifier, contentAlignment = Alignment.Center) {
+                        chipContent()
+                    }
+                    Text(
+                        text = "${stringResource(R.string.hints_next)} ${"%d:%02d".format(mm, ss)}",
+                        style = TextStyle(
+                            fontSize = 11.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            lineHeight = layout.chipFontSize,
+                            platformStyle = PlatformTextStyle(includeFontPadding = false),
+                            color = SudokuPrimary.copy(alpha = 0.9f),
+                        ),
+                        maxLines = 1,
+                    )
+                }
+            } else {
+                Box(modifier = chipModifier, contentAlignment = Alignment.Center) {
+                    chipContent()
                 }
             }
         }

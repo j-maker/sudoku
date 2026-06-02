@@ -34,6 +34,8 @@
     <string name="status_notes_btn">Notas</string>
     <string name="status_notes_on">ON</string>
     <string name="status_notes_off">OFF</string>
+    <string name="status_hints_label">Pistas</string>
+    <string name="hints_next">Pista en:</string>
     <string name="status_daily_streak_label">Racha diaria</string>
     <string name="streak_day">%1$d día</string>
     <string name="streak_days">%1$d días</string>

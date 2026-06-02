@@ -73,6 +73,31 @@ data class SudokuGameState(
 
     fun toggleNotesMode(): SudokuGameState = copy(notesMode = !notesMode)
 
+    /**
+     * Pista: rellena la celda seleccionada con el valor correcto.
+     * Devuelve el nuevo estado y si se aplicó realmente.
+     */
+    fun applyHint(): Pair<SudokuGameState, Boolean> {
+        if (status != GameStatus.PLAYING) return this to false
+        if (selectedIndex !in 0..80) return this to false
+        if (fixed[selectedIndex]) return this to false
+        val correct = solution[selectedIndex]
+        if (correct == 0) return this to false
+        val before = userValues[selectedIndex]
+        if (before == correct) return this to false
+
+        val updated = userValues.copyOf()
+        updated[selectedIndex] = correct
+        val newNotes = notes.copyOf()
+        newNotes[selectedIndex] = mutableSetOf()
+        val won = SudokuEngine.isComplete(updated, solution)
+        return copy(
+            userValues = updated,
+            notes = newNotes,
+            status = if (won) GameStatus.WON else status,
+        ) to true
+    }
+
     fun isCellError(index: Int): Boolean {
         if (index !in 0..80 || fixed[index]) return false
         val value = userValues[index]

@@ -22,6 +22,8 @@ import androidx.compose.material.icons.automirrored.filled.VolumeUp
 import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Lightbulb
+import androidx.compose.material.icons.filled.OndemandVideo
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.LocalFireDepartment
 import androidx.compose.material.icons.filled.Schedule
@@ -252,8 +254,13 @@ fun SudokuStatusCard(
     elapsedSeconds: Int,
     mistakes: Int,
     notesMode: Boolean,
+    hintsUsed: Int,
+    freeHints: Int,
+    earnedHintsAvailable: Int,
+    showHintVideo: Boolean,
     onReset: () -> Unit,
     onToggleNotes: () -> Unit,
+    onHint: () -> Unit,
     isCompact: Boolean = false,
     chipHeight: Dp = if (isCompact) 54.dp else 58.dp,
     captionFontSize: TextUnit = if (isCompact) 12.sp else 13.sp,
@@ -268,6 +275,18 @@ fun SudokuStatusCard(
         stringResource(R.string.status_notes_off)
     }
     val notesContentDescription = "$notesBtnLabel — $notesStateLabel"
+    val hintsLabel = stringResource(R.string.status_hints_label)
+    val hintsValue = when {
+        showHintVideo -> ""
+        earnedHintsAvailable > 0 -> earnedHintsAvailable.toString()
+        else -> "${hintsUsed.coerceAtMost(freeHints)}/$freeHints"
+    }
+    val hintsAccent = when {
+        showHintVideo -> SudokuNeonPink
+        earnedHintsAvailable > 0 -> SudokuNeonGreen
+        else -> SudokuAccent
+    }
+    val hintsIcon = if (showHintVideo) Icons.Filled.OndemandVideo else Icons.Filled.Lightbulb
 
     Row(
         modifier = modifier
@@ -300,6 +319,19 @@ fun SudokuStatusCard(
             valueFontSize = valueFontSize,
             modifier = Modifier.weight(1f),
         )
+        StatusHintChip(
+            icon = hintsIcon,
+            caption = hintsLabel,
+            value = hintsValue,
+            accent = hintsAccent,
+            videoMode = showHintVideo,
+            readyHint = earnedHintsAvailable > 0,
+            height = chipHeight,
+            captionFontSize = captionFontSize,
+            valueFontSize = valueFontSize,
+            onClick = onHint,
+            modifier = Modifier.weight(0.95f),
+        )
         StatusActionChip(
             icon = Icons.Filled.Refresh,
             caption = resetLabel,
@@ -321,6 +353,76 @@ fun SudokuStatusCard(
             onClick = onToggleNotes,
             modifier = Modifier.weight(0.9f),
         )
+    }
+}
+
+@Composable
+private fun StatusHintChip(
+    icon: ImageVector,
+    caption: String,
+    value: String,
+    accent: Color,
+    videoMode: Boolean,
+    readyHint: Boolean,
+    height: Dp,
+    captionFontSize: TextUnit,
+    valueFontSize: TextUnit,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val labelSize = (captionFontSize.value * 1.22f).sp
+    Column(
+        modifier = modifier
+            .defaultMinSize(minHeight = height)
+            .heightIn(min = height)
+            .clip(RoundedCornerShape(8.dp))
+            .background(
+                when {
+                    videoMode -> accent.copy(alpha = 0.12f)
+                    readyHint -> accent.copy(alpha = 0.18f)
+                    else -> Color(0xFF0D0820)
+                },
+            )
+            .border(
+                width = if (videoMode || readyHint) 1.5.dp else 1.dp,
+                color = accent.copy(alpha = if (videoMode || readyHint) 0.75f else 0.45f),
+                shape = RoundedCornerShape(8.dp),
+            )
+            .clickable(onClick = onClick)
+            .padding(horizontal = 6.dp, vertical = 6.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(2.dp, Alignment.CenterVertically),
+    ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            tint = accent,
+            modifier = Modifier.size(if (videoMode) 24.dp else 22.dp),
+        )
+        Text(
+            text = caption,
+            style = ChromeCaptionStyle.copy(
+                fontSize = labelSize,
+                fontWeight = FontWeight.ExtraBold,
+                lineHeight = labelSize * 1.1f,
+                color = accent,
+            ),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            textAlign = TextAlign.Center,
+        )
+        if (value.isNotEmpty()) {
+            Text(
+                text = value,
+                style = ChromeCaptionStyle.copy(
+                    fontSize = (valueFontSize.value * 0.78f).sp,
+                    fontWeight = FontWeight.Bold,
+                    lineHeight = (valueFontSize.value * 0.78f).sp * 1.05f,
+                    color = Color.White.copy(alpha = 0.9f),
+                ),
+                maxLines = 1,
+            )
+        }
     }
 }
 

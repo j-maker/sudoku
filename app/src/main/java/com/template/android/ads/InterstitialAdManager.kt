@@ -16,7 +16,7 @@ class InterstitialAdManager(context: Context) {
     private var interstitialAd: InterstitialAd? = null
     private var isLoading = false
     private var lastShownAtMs = 0L
-    private var clicksSinceLastAd = 0
+    private var isShowing = false
 
     private val adUnitId: String
         get() = AdIds.interstitialId(appContext.getString(R.string.admob_interstitial_unit_id))
@@ -44,15 +44,10 @@ class InterstitialAdManager(context: Context) {
         )
     }
 
-    /** Cuenta toques de juego (celda, teclado, borrar, notas). Muestra intersticial cada [CLICKS_PER_INTERSTITIAL]. */
-    fun registerGameplayClick(activity: Activity) {
-        clicksSinceLastAd++
-        if (clicksSinceLastAd < CLICKS_PER_INTERSTITIAL) return
+    /** Intenta mostrar intersticial usando cooldown (90s) y disponibilidad del ad. */
+    fun maybeShowTimed(activity: Activity) {
         MobileAdsInitializer.whenReady {
-            showIfReady(
-                activity,
-                onAdShown = { clicksSinceLastAd = 0 },
-            )
+            showIfReady(activity)
         }
     }
 
@@ -62,6 +57,10 @@ class InterstitialAdManager(context: Context) {
         onAdShown: (() -> Unit)? = null,
         onFinished: () -> Unit = {},
     ): Boolean {
+        if (isShowing) {
+            AppAnalytics.logAdInterstitialSkipped("already_showing")
+            return false
+        }
         if (!shouldShow) {
             AppAnalytics.logAdInterstitialSkipped("engagement_policy")
             onFinished()
@@ -87,12 +86,14 @@ class InterstitialAdManager(context: Context) {
 
         ad.fullScreenContentCallback = object : FullScreenContentCallback() {
             override fun onAdShowedFullScreenContent() {
+                isShowing = true
                 AppAnalytics.logAdInterstitialShown(adUnitId)
             }
 
             override fun onAdDismissedFullScreenContent() {
                 interstitialAd = null
                 lastShownAtMs = System.currentTimeMillis()
+                isShowing = false
                 AppAnalytics.logAdInterstitialDismissed(adUnitId)
                 onAdShown?.invoke()
                 preload()
@@ -101,6 +102,7 @@ class InterstitialAdManager(context: Context) {
 
             override fun onAdFailedToShowFullScreenContent(error: AdError) {
                 interstitialAd = null
+                isShowing = false
                 AppAnalytics.logAdInterstitialFailed(adUnitId, error.code, "show")
                 preload()
                 onFinished()
@@ -110,12 +112,13 @@ class InterstitialAdManager(context: Context) {
                 AppAnalytics.logAdInterstitialClicked(adUnitId)
             }
         }
+        // Marca el intento de mostrar para que el loop por tiempo no lo dispare varias veces.
+        lastShownAtMs = System.currentTimeMillis()
         ad.show(activity)
         return true
     }
 
     companion object {
         private const val MIN_INTERVAL_MS = 90_000L
-        const val CLICKS_PER_INTERSTITIAL = 50
     }
 }
