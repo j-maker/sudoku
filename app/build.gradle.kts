@@ -19,7 +19,7 @@ fun templateProp(key: String, default: String = ""): String =
     templateConfig.getProperty(key, default).trim()
 
 val configuredApplicationId =
-    templateProp("applicationId", "com.template.android.base")
+    templateProp("applicationId", "com.jmaker.sudoku")
 val configuredAppSlug = templateProp("appSlug", "app_template")
 val configuredAppDisplayName = templateProp("appDisplayName", "App Template")
     .replace("\\", "\\\\")
