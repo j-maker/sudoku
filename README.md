@@ -29,9 +29,9 @@ En PowerShell, desde la raíz del proyecto:
 | Paso | Archivo / acción |
 |------|------------------|
 | Paquete, nombre, versión, slug GA4 | `app.template.properties` |
-| Firebase real (mismo `applicationId`) | `app/google-services.json` |
-| IDs AdMob de producción | `app/src/main/res/values/admob.xml` |
-| Política de privacidad (URL pública) | `app/src/main/res/values/legal.xml` |
+| Firebase real (mismo `applicationId`) | `app/google-services.json` — [docs/FIREBASE.md](docs/FIREBASE.md) |
+| IDs AdMob de producción | `app/src/main/res/values/admob.xml` — [docs/ADMOB.md](docs/ADMOB.md) |
+| Política de privacidad (URL pública) | `app/src/main/res/values/legal.xml` — [docs/PUBLICAR-PRIVACIDAD.md](docs/PUBLICAR-PRIVACIDAD.md) |
 | Pantalla principal de tu producto | `app/.../ui/TemplateHomeScreen.kt` |
 | Firma release | `signing.properties` (no subir a git) |
 | AAB firmado | `.\scripts\build-release-aab.ps1` |
@@ -59,13 +59,20 @@ Gradle lee este archivo solo; no hace falta editar `build.gradle.kts` para el pa
 
 **`app/google-services.json`**
 
-1. [Firebase Console](https://console.firebase.google.com/) → Añadir app Android.
-2. Paquete = `applicationId` del paso 1.
+Guía completa (compartido vs independiente, SDK, verificación): **[docs/FIREBASE.md](docs/FIREBASE.md)**
+
+Resumen:
+
+1. Decide proyecto **compartido** (recomendado, varias apps JMaker) o **independiente**.
+2. [Firebase Console](https://console.firebase.google.com/) → registrar app Android con paquete = `applicationId`.
 3. Descargar JSON y reemplazar el archivo en `app/`.
+4. Saltar «Agregar SDK» en consola — ya está en Gradle.
 
 ### 3. AdMob
 
 **`app/src/main/res/values/admob.xml`**
+
+Guía completa (registro, banner, intersticial, UMP, debug vs release): **[docs/ADMOB.md](docs/ADMOB.md)**
 
 | Recurso | Origen |
 |---------|--------|
@@ -73,7 +80,7 @@ Gradle lee este archivo solo; no hace falta editar `build.gradle.kts` para el pa
 | `admob_banner_unit_id` | Unidad Banner |
 | `admob_interstitial_unit_id` | Unidad Intersticial |
 
-Registra la app en [AdMob](https://apps.admob.com/) con el mismo paquete. UMP: AdMob → Privacidad (código en `ads/AdConsentManager.kt`).
+Registra la app en [AdMob](https://apps.admob.com/) con el mismo paquete. UMP: AdMob → Privacidad y mensajes (código en `ads/AdConsentManager.kt`).
 
 ### 4. Privacidad y Play Games
 

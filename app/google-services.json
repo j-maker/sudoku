@@ -1,21 +1,40 @@
 {
   "project_info": {
-    "project_number": "000000000000",
-    "project_id": "REEMPLAZA-CON-TU-PROYECTO",
-    "storage_bucket": "REEMPLAZA-CON-TU-PROYECTO.appspot.com"
+    "project_number": "1090237180401",
+    "project_id": "buscaminas-minesweeper",
+    "storage_bucket": "buscaminas-minesweeper.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:000000000000:android:0000000000000000000000",
+        "mobilesdk_app_id": "1:1090237180401:android:be75974b92b7b2a700fc50",
         "android_client_info": {
-          "package_name": "com.template.android.base"
+          "package_name": "com.jmaker.buscaminasarcade"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "REEMPLAZA_CON_API_KEY_DE_FIREBASE"
+          "current_key": "AIzaSyDsJzji8JfCH7SG-jMHexmUrHg2x8y5vog"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1090237180401:android:16bb7f1a983f461800fc50",
+        "android_client_info": {
+          "package_name": "com.jmaker.sudoku"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDsJzji8JfCH7SG-jMHexmUrHg2x8y5vog"
         }
       ],
       "services": {
