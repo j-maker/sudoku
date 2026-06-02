@@ -18,15 +18,17 @@
   <strong>Contacto:</strong> <a href="mailto:jhonatan.diaz2012@gmail.com">jhonatan.diaz2012@gmail.com</a></p>
 
   <h2>Resumen</h2>
-  <p>Sudoku guarda datos de juego y preferencias <strong>solo en tu dispositivo</strong>. La app muestra <strong>anuncios</strong> de Google AdMob y usa <strong>Firebase Analytics</strong> (Google) para estadísticas anónimas de uso. En la Unión Europea y otras regiones aplicables, puedes gestionar el consentimiento de publicidad desde el formulario que muestra la app al iniciar.</p>
+  <p>Sudoku guarda tu progreso, estadísticas y logros <strong>en el dispositivo</strong>. La app muestra <strong>anuncios</strong> de Google AdMob, usa <strong>Firebase Analytics</strong> (Google) para medir uso anónimo de la app y puede integrar <strong>Google Play Games</strong> para clasificaciones y logros en la nube si inicias sesión con tu cuenta de Google Play. En la Unión Europea y otras regiones aplicables, puedes gestionar el consentimiento de publicidad desde el formulario que muestra la app al iniciar.</p>
 
   <h2>Qué se guarda en el teléfono</h2>
   <ul>
-    <li>Partida o progreso del sudoku en curso (si aplica)</li>
+    <li>Partida en curso y progreso del sudoku</li>
     <li>Ajustes (idioma, recordatorio diario si lo activas)</li>
+    <li>Estadísticas de juego (partidas, tiempos, récords, rachas, etc.)</li>
+    <li>Logros desbloqueados en el dispositivo</li>
     <li>Estado del tutorial inicial</li>
   </ul>
-  <p>Nada de lo anterior se envía a nuestros servidores; permanece en el dispositivo hasta que desinstales la app.</p>
+  <p>Estos datos de juego <strong>no se envían a servidores propios</strong> nuestros; permanecen en el dispositivo hasta que desinstales la app o reinicies estadísticas y logros en Ajustes.</p>
 
   <h2>Notificaciones locales (opcional)</h2>
   <ul>
@@ -43,11 +45,20 @@
     <li>Puedes limitar anuncios personalizados en los ajustes de tu cuenta de Google o en el formulario de consentimiento de la app (EEE/Reino Unido).</li>
   </ul>
 
-  <h2>Estadísticas (Firebase Analytics)</h2>
+  <h2>Uso de la app (Firebase Analytics)</h2>
   <ul>
-    <li>Usamos <strong>Google Firebase Analytics</strong> para medir uso de la app (p. ej. pantallas, menús, anuncios).</li>
+    <li>Usamos <strong>Google Firebase Analytics</strong> para medir uso de la app (p. ej. pantallas, menús, partidas, anuncios).</li>
     <li>Los eventos se identifican con el slug <code>sudoku</code> para distinguirlos de otras apps del mismo proyecto Firebase.</li>
-    <li>No enviamos datos personales identificables (nombre, email, contactos).</li>
+    <li>No enviamos nombre, email ni contactos desde la app.</li>
+  </ul>
+
+  <h2>Google Play Games</h2>
+  <ul>
+    <li>La app puede usar <strong>Google Play Games</strong> para clasificaciones (leaderboards) y logros en la nube.</li>
+    <li>Si inicias sesión con tu cuenta de Google Play, Google puede procesar puntuaciones, logros e identificadores asociados a esa cuenta según su política:
+      <a href="https://policies.google.com/privacy">policies.google.com/privacy</a>.</li>
+    <li>Puedes jugar sin Play Games; las funciones en la nube son opcionales.</li>
+    <li>La gestión de la cuenta de Google Play (acceso, eliminación) se hace desde los servicios de Google.</li>
   </ul>
 
   <h2>Seguridad</h2>
@@ -55,21 +66,18 @@
 
   <h2>Qué NO hacemos</h2>
   <ul>
-    <li>No pedimos cuenta ni registro</li>
+    <li>No pedimos registro ni cuenta en servidores propios</li>
     <li>No vendemos tus datos</li>
     <li>No accedemos a contactos, cámara ni ubicación</li>
   </ul>
 
   <h2>Permisos</h2>
   <ul>
-    <li><strong>Internet / red:</strong> anuncios y estadísticas</li>
+    <li><strong>Internet / red:</strong> anuncios, estadísticas de uso y Play Games</li>
     <li><strong>AD_ID:</strong> publicidad (Android 13+)</li>
     <li><strong>Notificaciones (POST_NOTIFICATIONS):</strong> solo si activas el recordatorio diario (Android 13+)</li>
-    <li><strong>Vibración:</strong> feedback al jugar (si la app lo usa)</li>
+    <li><strong>Vibración:</strong> feedback al jugar (opcional en Ajustes, si aplica)</li>
   </ul>
-
-  <h2>Google Play Games (opcional)</h2>
-  <p>Si en el futuro activamos clasificaciones de Play Games, Google podría procesar puntuaciones asociadas a tu cuenta de Google Play según su política. La versión actual puede funcionar sin este servicio.</p>
 
   <h2>Menores</h2>
   <p>El juego está pensado para público general. No recopilamos datos de menores de forma consciente.</p>
@@ -77,6 +85,8 @@
   <h2>Eliminación de datos</h2>
   <ul>
     <li>Desinstalar la app elimina los datos guardados en el dispositivo.</li>
+    <li>En Ajustes puedes reiniciar estadísticas y logros locales.</li>
+    <li>Los datos en Google Play Games (puntuaciones/logros en la nube) se gestionan según las opciones de tu cuenta de Google Play.</li>
   </ul>
 
   <h2>Cambios</h2>
