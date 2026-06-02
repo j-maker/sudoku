@@ -205,7 +205,14 @@ Generar AAB (con `signing.properties` configurado):
 
 ## Paso 9 — Consentimiento UMP (GDPR / EEE)
 
-La app ya implementa UMP en `ads/AdConsentManager.kt` antes de inicializar AdMob. Falta configurarlo en consola:
+> **PENDIENTE (Buscaminas + Sudoku):** configurar en AdMob → **Privacidad y mensajes** → **Reglamentos europeos**. Un mensaje por app (o mensajes separados con la URL de privacidad correcta en cada uno). Opciones recomendadas: Consentimiento ON, Gestionar opciones ON, No consentir ON, Cerrar (no consentir) ON. Publicar y vincular la app en **Tus aplicaciones**.
+
+| App | Paquete | URL privacidad |
+|-----|---------|----------------|
+| **Buscaminas** | `com.jmaker.buscaminasarcade` | https://j-maker.github.io/busccaminas-arcade/ |
+| **Sudoku** | `com.jmaker.sudoku` | https://j-maker.github.io/sudoku/ |
+
+La app ya implementa UMP en `ads/AdConsentManager.kt` antes de inicializar AdMob. Falta terminar la configuración en consola:
 
 1. AdMob → **Privacidad y mensajes** (Privacy & messaging) — nivel de cuenta.
 2. **Crear mensaje** → GDPR / regulaciones europeas (+ Reino Unido y Suiza si aplica).

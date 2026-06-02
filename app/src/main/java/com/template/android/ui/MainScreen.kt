@@ -1,7 +1,10 @@
 package com.template.android.ui
 
 import androidx.activity.ComponentActivity
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -17,6 +20,7 @@ import com.template.android.engagement.DailyReminderScheduler
 import com.template.android.ui.onboarding.OnboardingTutorialOverlay
 import com.template.android.ui.onboarding.ReminderOptInDialog
 import com.template.android.ui.settings.SettingsSheet
+import com.template.android.ui.sudoku.SudokuScreen
 import com.template.android.util.rememberNotificationPermissionRequest
 
 @Composable
@@ -57,12 +61,25 @@ fun MainScreen(
         }
     }
 
-    when {
-        showTutorial -> {
+    val showGame = !showTutorial && !showReminderPrompt
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        if (showGame) {
+            LaunchedEffect(Unit) { AppAnalytics.logScreenView("game") }
+            SudokuScreen(
+                dataStore = dataStore,
+                settings = settings,
+                onSettingsChange = onSettingsChange,
+                onOpenSettings = { showSettings = true },
+                interstitialAdManager = interstitialAdManager,
+            )
+        }
+
+        if (showTutorial) {
             OnboardingTutorialOverlay(onFinished = ::finishTutorial)
         }
 
-        showReminderPrompt -> {
+        if (showReminderPrompt) {
             ReminderOptInDialog(
                 onEnable = { requestNotificationPermission() },
                 onDismiss = {
@@ -72,18 +89,11 @@ fun MainScreen(
             )
             LaunchedEffect(Unit) { AppAnalytics.logScreenView("reminder_prompt") }
         }
-
-        else -> {
-            LaunchedEffect(Unit) { AppAnalytics.logScreenView("home") }
-            TemplateHomeScreen(
-                interstitialAdManager = interstitialAdManager,
-                onOpenSettings = { showSettings = true },
-            )
-        }
     }
 
-    if (showSettings && !showTutorial) {
+    if (showSettings && showGame) {
         SettingsSheet(
+            dataStore = dataStore,
             settings = settings,
             onSettingsChange = onSettingsChange,
             onDismiss = { showSettings = false },

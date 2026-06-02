@@ -87,10 +87,20 @@ Reinstala la app y prueba: **Ajustes → Política de privacidad** debe abrir es
 
 ## Paso 6 — AdMob UMP (consentimiento GDPR)
 
-1. [AdMob](https://apps.admob.com/) → **Privacidad y mensajes**.
-2. Crea o edita el mensaje GDPR.
-3. Enlace a política de privacidad: **https://j-maker.github.io/sudoku/**
-4. Publica y asocia el mensaje a la app **Sudoku** / `com.jmaker.sudoku`.
+> **PENDIENTE:** mismo flujo para **Sudoku** y **Buscaminas** (mensajes y apps vinculadas por separado en AdMob).
+
+| App | URL en el mensaje GDPR |
+|-----|------------------------|
+| Sudoku | https://j-maker.github.io/sudoku/ |
+| Buscaminas | https://j-maker.github.io/busccaminas-arcade/ |
+
+1. [AdMob](https://apps.admob.com/) → **Privacidad y mensajes** → **Reglamentos europeos**.
+2. Crea o edita el mensaje GDPR (recomendado: **un mensaje por app** con su URL).
+3. **Tus aplicaciones:** vincula la app correspondiente (`com.jmaker.sudoku` o `com.jmaker.buscaminasarcade`).
+4. Opciones: Consentimiento, Gestionar opciones y **No consentir** activados; **Cerrar (no consentir)** activado.
+5. **Publicar** el mensaje.
+
+Para Sudoku, enlace: **https://j-maker.github.io/sudoku/**
 
 Ver también: [ADMOB.md](ADMOB.md) — Paso 9.
 
@@ -105,7 +115,7 @@ Ver también: [ADMOB.md](ADMOB.md) — Paso 9.
 - [ ] `legal.xml` con la misma URL y email
 - [ ] App: Ajustes → Política de privacidad abre la URL
 - [ ] Play Console: URL pegada (cuando exista la ficha)
-- [ ] AdMob UMP: URL en el mensaje de consentimiento
+- [ ] AdMob UMP (Reglamentos europeos): mensaje publicado y app vinculada — **Sudoku** y **Buscaminas** (pendiente)
 
 ---
 

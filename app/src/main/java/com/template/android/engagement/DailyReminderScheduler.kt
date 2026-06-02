@@ -3,7 +3,9 @@ package com.template.android.engagement
 import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.core.app.NotificationCompat
@@ -14,6 +16,7 @@ import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.Worker
 import androidx.work.WorkerParameters
+import com.template.android.MainActivity
 import com.template.android.R
 import com.template.android.analytics.AppAnalytics
 import com.template.android.data.AppDataStore
@@ -25,6 +28,8 @@ object DailyReminderScheduler {
 
     private const val WORK_NAME = "daily_reminder"
     const val CHANNEL_ID = "app_reminders"
+    const val REMINDER_NOTIFICATION_ID = 1001
+    private const val REMINDER_REQUEST_CODE = 1001
 
     fun ensureChannel(context: Context) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return
@@ -58,6 +63,30 @@ object DailyReminderScheduler {
         AppAnalytics.logDailyReminderEnabled(true)
     }
 
+    /** Quita el recordatorio del panel y el contador del icono al abrir la app. */
+    fun clearReminderNotification(context: Context) {
+        NotificationManagerCompat.from(context).cancel(REMINDER_NOTIFICATION_ID)
+    }
+
+    internal fun openAppPendingIntent(context: Context): PendingIntent {
+        val launchIntent = Intent(context, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+            putExtra(EXTRA_FROM_DAILY_REMINDER, true)
+        }
+        val flags = PendingIntent.FLAG_UPDATE_CURRENT or
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                PendingIntent.FLAG_IMMUTABLE
+            } else {
+                0
+            }
+        return PendingIntent.getActivity(
+            context,
+            REMINDER_REQUEST_CODE,
+            launchIntent,
+            flags,
+        )
+    }
+
     private fun millisUntilHour(targetHour: Int): Long {
         val now = Calendar.getInstance()
         val target = Calendar.getInstance().apply {
@@ -69,6 +98,8 @@ object DailyReminderScheduler {
         }
         return (target.timeInMillis - now.timeInMillis).coerceAtLeast(0L)
     }
+
+    const val EXTRA_FROM_DAILY_REMINDER = "from_daily_reminder"
 }
 
 class DailyReminderWorker(
@@ -92,19 +123,20 @@ class DailyReminderWorker(
 
         val localized = LocaleHelper.wrap(appContext, settings.languageCode)
         DailyReminderScheduler.ensureChannel(localized)
+        val contentIntent = DailyReminderScheduler.openAppPendingIntent(localized)
         val notification = NotificationCompat.Builder(localized, DailyReminderScheduler.CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_notification)
             .setContentTitle(localized.getString(R.string.notification_daily_title))
             .setContentText(localized.getString(R.string.notification_daily_body))
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setContentIntent(contentIntent)
             .setAutoCancel(true)
             .build()
 
-        NotificationManagerCompat.from(localized).notify(NOTIFICATION_ID, notification)
+        NotificationManagerCompat.from(localized).notify(
+            DailyReminderScheduler.REMINDER_NOTIFICATION_ID,
+            notification,
+        )
         return Result.success()
-    }
-
-    companion object {
-        private const val NOTIFICATION_ID = 1001
     }
 }

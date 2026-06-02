@@ -1,6 +1,5 @@
 package com.template.android.ads
 
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -32,17 +31,13 @@ fun BannerAdView(modifier: Modifier = Modifier) {
 
     if (!adsReady) {
         androidx.compose.foundation.layout.Spacer(
-            modifier = modifier
-                .fillMaxWidth()
-                .height(50.dp),
+            modifier = modifier.height(50.dp),
         )
         return
     }
 
     AndroidView(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(50.dp),
+        modifier = modifier.height(50.dp),
         factory = { ctx ->
             AdView(ctx).apply {
                 setAdSize(AdSize.BANNER)

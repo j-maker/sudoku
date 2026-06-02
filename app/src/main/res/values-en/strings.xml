@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">App Template</string>
+    <string name="app_name">Sudoku</string>
     <string name="home_open_settings">Settings</string>
-    <string name="home_title">Android Template</string>
-    <string name="home_subtitle">Replace this screen with your app. All 14 languages are ready.</string>
-    <string name="home_test_interstitial">Test interstitial</string>
+    <string name="a11y_sound_on">Turn sound on</string>
+    <string name="a11y_sound_off">Turn sound off</string>
+    <string name="a11y_close">Close</string>
     <string name="notification_channel_name">Reminders</string>
-    <string name="notification_channel_desc">Optional app notifications</string>
-    <string name="notification_daily_title">We miss you!</string>
-    <string name="notification_daily_body">Come back and open the app anytime.</string>
+    <string name="notification_channel_desc">Optional Sudoku notifications</string>
+    <string name="notification_daily_title">Sudoku time!</string>
+    <string name="notification_daily_body">Your daily puzzle is waiting. Ready to play?</string>
 </resources>

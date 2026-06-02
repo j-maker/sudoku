@@ -7,20 +7,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
 private val TemplateDarkColorScheme = darkColorScheme(
-    primary = TemplatePrimary,
-    onPrimary = TemplateOnPrimary,
-    primaryContainer = Color(0xFF4F378B),
-    onPrimaryContainer = Color(0xFFE8DEF8),
-    secondary = TemplateSecondary,
-    onSecondary = Color.White,
-    tertiary = TemplateTertiary,
-    background = TemplateBackground,
-    onBackground = Color(0xFFE6E1E5),
-    surface = TemplateSurface,
-    onSurface = Color(0xFFE6E1E5),
-    surfaceVariant = Color(0xFF2D2D2D),
-    onSurfaceVariant = Color(0xFFCAC4D0),
-    outline = TemplatePrimary.copy(alpha = 0.5f),
+    primary = SudokuPrimary,
+    onPrimary = Color(0xFF001A22),
+    primaryContainer = Color(0xFF006978),
+    onPrimaryContainer = Color(0xFFB2EBFF),
+    secondary = SudokuAccent,
+    onSecondary = Color(0xFF2A2000),
+    tertiary = SudokuNeonPink,
+    background = SudokuBackgroundStart,
+    onBackground = Color(0xFFF5F8FF),
+    surface = SudokuChromeBg,
+    onSurface = Color(0xFFF0F4FF),
+    surfaceVariant = Color(0xFF2A1858),
+    onSurfaceVariant = Color(0xFFB8C5E8),
+    outline = SudokuPrimary.copy(alpha = 0.7f),
 )
 
 private val TemplateLightColorScheme = lightColorScheme(

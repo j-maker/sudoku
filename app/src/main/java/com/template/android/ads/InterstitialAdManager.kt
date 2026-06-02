@@ -16,6 +16,7 @@ class InterstitialAdManager(context: Context) {
     private var interstitialAd: InterstitialAd? = null
     private var isLoading = false
     private var lastShownAtMs = 0L
+    private var clicksSinceLastAd = 0
 
     private val adUnitId: String
         get() = AdIds.interstitialId(appContext.getString(R.string.admob_interstitial_unit_id))
@@ -41,6 +42,18 @@ class InterstitialAdManager(context: Context) {
                 }
             },
         )
+    }
+
+    /** Cuenta toques de juego (celda, teclado, borrar, notas). Muestra intersticial cada [CLICKS_PER_INTERSTITIAL]. */
+    fun registerGameplayClick(activity: Activity) {
+        clicksSinceLastAd++
+        if (clicksSinceLastAd < CLICKS_PER_INTERSTITIAL) return
+        MobileAdsInitializer.whenReady {
+            showIfReady(
+                activity,
+                onAdShown = { clicksSinceLastAd = 0 },
+            )
+        }
     }
 
     fun showIfReady(
@@ -103,5 +116,6 @@ class InterstitialAdManager(context: Context) {
 
     companion object {
         private const val MIN_INTERVAL_MS = 90_000L
+        const val CLICKS_PER_INTERSTITIAL = 50
     }
 }

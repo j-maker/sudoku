@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.template.android.BuildConfig
+import com.template.android.ui.sudoku.SocialPlatform
 
 /**
  * Analytics para un proyecto Firebase/GA4 compartido entre varias apps.
@@ -52,6 +53,12 @@ object AppAnalytics {
     fun logButtonClick(buttonId: String) {
         log("button_click") {
             putString("button_id", buttonId)
+        }
+    }
+
+    fun logShare(platform: SocialPlatform) {
+        log("share") {
+            putString("platform", platform.name.lowercase())
         }
     }
 

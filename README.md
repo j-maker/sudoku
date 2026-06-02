@@ -37,6 +37,8 @@ En PowerShell, desde la raíz del proyecto:
 | AAB firmado | `.\scripts\build-release-aab.ps1` |
 | Icono 512 px y capturas | `store-assets/icons/`, `store-assets/screenshots/` |
 
+Checklist completo (incluye **app del juego aún no hecha**): **[docs/CHECKLIST-PUBLICACION.md](docs/CHECKLIST-PUBLICACION.md)**
+
 ---
 
 ## Qué archivo reemplazar

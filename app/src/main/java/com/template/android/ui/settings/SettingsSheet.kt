@@ -2,11 +2,15 @@ package com.template.android.ui.settings
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.ui.Alignment
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.HorizontalDivider
@@ -18,13 +22,20 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.template.android.R
 import com.template.android.analytics.AppAnalytics
+import com.template.android.data.AppDataStore
 import com.template.android.data.AppSettings
+import com.template.android.ui.components.ModalHeaderActionsLight
+import com.template.android.ui.sudoku.InstructionsDialog
 import com.template.android.util.LocaleHelper
 import com.template.android.util.PrivacyHelper
 import com.template.android.util.rememberNotificationPermissionRequest
@@ -32,12 +43,15 @@ import com.template.android.util.rememberNotificationPermissionRequest
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun SettingsSheet(
+    dataStore: AppDataStore,
     settings: AppSettings,
     onSettingsChange: (AppSettings) -> Unit,
     onDismiss: () -> Unit,
 ) {
     val context = LocalContext.current
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    var showInstructions by remember { mutableStateOf(false) }
+
     val requestNotificationPermission = rememberNotificationPermissionRequest { granted ->
         if (granted) {
             onSettingsChange(settings.copy(dailyReminderEnabled = true))
@@ -49,16 +63,48 @@ fun SettingsSheet(
         onDismissRequest = onDismiss,
         sheetState = sheetState,
     ) {
+        val scrollState = rememberScrollState()
         Column(
             modifier = Modifier
                 .fillMaxWidth()
+                .navigationBarsPadding()
+                .verticalScroll(scrollState)
                 .padding(horizontal = 24.dp, vertical = 8.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
-            Text(
-                text = stringResource(R.string.settings_title),
-                style = MaterialTheme.typography.titleLarge,
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    text = stringResource(R.string.settings_title),
+                    style = MaterialTheme.typography.titleLarge,
+                    modifier = Modifier.weight(1f),
+                )
+                ModalHeaderActionsLight(onDone = onDismiss)
+            }
+
+            TextButton(
+                onClick = {
+                    AppAnalytics.logButtonClick("settings_instructions")
+                    showInstructions = true
+                },
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                Text(stringResource(R.string.settings_instructions))
+            }
+
+            TextButton(
+                onClick = {
+                    AppAnalytics.logButtonClick("privacy_policy")
+                    PrivacyHelper.openPrivacyPolicy(context)
+                },
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                Text(stringResource(R.string.settings_privacy_policy))
+            }
+
+            HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp))
 
             Text(
                 text = stringResource(R.string.settings_language_section),
@@ -81,6 +127,43 @@ fun SettingsSheet(
                     )
                 }
             }
+
+            HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp))
+
+            Text(
+                text = stringResource(R.string.settings_accessibility_section),
+                style = MaterialTheme.typography.titleSmall,
+            )
+            SettingsSwitch(
+                label = stringResource(R.string.settings_large_cells),
+                checked = settings.largeCells,
+                onCheckedChange = { onSettingsChange(settings.copy(largeCells = it)) },
+            )
+            SettingsSwitch(
+                label = stringResource(R.string.settings_high_contrast),
+                checked = settings.highContrast,
+                onCheckedChange = { onSettingsChange(settings.copy(highContrast = it)) },
+            )
+            SettingsSwitch(
+                label = stringResource(R.string.settings_reduce_motion),
+                checked = settings.reduceMotion,
+                onCheckedChange = { onSettingsChange(settings.copy(reduceMotion = it)) },
+            )
+            SettingsSwitch(
+                label = stringResource(R.string.settings_highlight_errors),
+                checked = settings.highlightErrors,
+                onCheckedChange = { onSettingsChange(settings.copy(highlightErrors = it)) },
+            )
+            SettingsSwitch(
+                label = stringResource(R.string.settings_sound),
+                checked = settings.soundEnabled,
+                onCheckedChange = { onSettingsChange(settings.copy(soundEnabled = it)) },
+            )
+            SettingsSwitch(
+                label = stringResource(R.string.settings_vibration),
+                checked = settings.vibrationEnabled,
+                onCheckedChange = { onSettingsChange(settings.copy(vibrationEnabled = it)) },
+            )
 
             HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp))
 
@@ -132,23 +215,37 @@ fun SettingsSheet(
 
             TextButton(
                 onClick = {
-                    AppAnalytics.logButtonClick("privacy_policy")
-                    PrivacyHelper.openPrivacyPolicy(context)
+                    AppAnalytics.logButtonClick("reset_stats")
+                    dataStore.resetStats()
                 },
                 modifier = Modifier.fillMaxWidth(),
             ) {
-                Text(stringResource(R.string.settings_privacy_policy))
+                Text(
+                    text = stringResource(R.string.settings_reset_stats),
+                    color = MaterialTheme.colorScheme.error,
+                )
             }
 
-            TextButton(
-                onClick = onDismiss,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 24.dp),
-            ) {
-                Text(stringResource(R.string.settings_done))
-            }
         }
+    }
+
+    if (showInstructions) {
+        InstructionsDialog(onDismiss = { showInstructions = false })
+    }
+}
+
+@Composable
+private fun SettingsSwitch(
+    label: String,
+    checked: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+    ) {
+        Text(label, modifier = Modifier.weight(1f).padding(end = 8.dp))
+        Switch(checked = checked, onCheckedChange = onCheckedChange)
     }
 }
 

@@ -2,19 +2,17 @@
 <!-- Español (por defecto). AdMob → admob.xml · Legal → legal.xml -->
 <resources>
 
-    <!-- app_name en ES; otros idiomas en values-XX. Sin app_name → usa appDisplayName de app.template.properties -->
-    <string name="app_name">Plantilla de app</string>
+    <string name="app_name">Sudoku</string>
     <string name="home_open_settings">Ajustes</string>
-    <string name="home_title">Plantilla Android</string>
-    <string name="home_subtitle">Sustituye esta pantalla por tu app. Ver README.md para configurar.</string>
-    <string name="home_test_interstitial">Probar intersticial</string>
+    <string name="a11y_sound_on">Activar sonido</string>
+    <string name="a11y_sound_off">Desactivar sonido</string>
+    <string name="a11y_close">Cerrar</string>
 
     <string name="notification_channel_name">Recordatorios</string>
-    <string name="notification_channel_desc">Avisos opcionales de la app</string>
-    <string name="notification_daily_title">¡Te echamos de menos!</string>
-    <string name="notification_daily_body">Vuelve a abrir la app cuando quieras.</string>
+    <string name="notification_channel_desc">Avisos opcionales de Sudoku</string>
+    <string name="notification_daily_title">¡Hora de Sudoku!</string>
+    <string name="notification_daily_body">Tu desafío diario te espera. ¿Listo para jugar?</string>
 
-    <!-- Etiquetas selector de idioma (iniciales, no traducir) -->
     <string name="language_es">ES</string>
     <string name="language_en">EN</string>
     <string name="language_pt">PT</string>
