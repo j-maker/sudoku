@@ -102,8 +102,9 @@ fun SudokuScreen(
     val freeHintsUsed = (freeHintsMax - freeHintsRemaining).coerceIn(0, freeHintsMax)
     val hintRefillIntervalMs = 10 * 60 * 1000L // 10 minutos
     val nextHintInSeconds: Int? = run {
-        // Mostrar contador solo cuando ya se consumieron todas las pistas gratis
+        // Mostrar contador solo cuando NO hay pistas disponibles (ni gratis ni ganadas)
         if (freeHintsRemaining > 0) return@run null
+        if (earnedHints > 0) return@run null
         val base = if (hintState.lastRefillAtMs > 0L) hintState.lastRefillAtMs else nowMs
         val remainingMs = (hintRefillIntervalMs - (nowMs - base)).coerceAtLeast(0L)
         (remainingMs / 1000L).toInt()
