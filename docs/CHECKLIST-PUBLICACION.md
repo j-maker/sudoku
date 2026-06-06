@@ -37,10 +37,13 @@ Marca cada ítem cuando lo completes.
 | 1.2 | Firebase (`google-services.json`) | Hecho — [FIREBASE.md](FIREBASE.md) |
 | 1.3 | Analytics (`app_slug=sudoku`) | Hecho — probado en DebugView |
 | 1.4 | AdMob (`admob.xml`) | Hecho — [ADMOB.md](ADMOB.md) |
+| 1.5 | SHA-1 en Firebase (`com.jmaker.sudoku`) | Debug hecho — release pendiente al firmar AAB |
 
 - [x] Paquete, slug, nombre
-- [x] Firebase compartido
+- [x] Firebase (`app/google-services.json`) — debug y release comparten el mismo JSON
 - [x] AdMob IDs producción
+- [x] SHA-1 debug en Firebase (app `com.jmaker.sudoku`)
+- [ ] SHA-1 release en Firebase (tras generar AAB)
 
 ---
 
@@ -71,7 +74,7 @@ Configurar UMP para **Sudoku** (mensaje por app recomendado).
 - [ ] No consentir + Cerrar (no consentir) activados
 - [ ] (Opcional) Normativas EE. UU.
 
-Ver [ADMOB.md](ADMOB.md) — Paso 9 · [PUBLICAR-PRIVACIDAD.md](PUBLICAR-PRIVACIDAD.md) — Paso 6.
+Ver [CONSENTIMIENTO-ADMOB.md](CONSENTIMIENTO-ADMOB.md) · [ADMOB.md](ADMOB.md) Paso 9 · [PUBLICAR-PRIVACIDAD.md](PUBLICAR-PRIVACIDAD.md) Paso 6.
 
 ---
 
@@ -81,7 +84,7 @@ Ver [ADMOB.md](ADMOB.md) — Paso 9 · [PUBLICAR-PRIVACIDAD.md](PUBLICAR-PRIVACI
 |---|--------|------------|
 | 4.1 | `keystore/release.keystore` + copia de seguridad | Crear y respaldar (NO subir a git) |
 | 4.2 | `signing.properties` (no git) | `signing.properties.example` |
-| 4.3 | AAB: `.\scripts\build-release-aab.ps1` | `app\build\outputs\bundle\release\app-release.aab` |
+| 4.3 | AAB: `.\scripts\stage-release-aab.ps1` | Copia a `store-assets\release\<version>\` |
 
 - [ ] Keystore creado y respaldado
 - [ ] AAB genera sin errores

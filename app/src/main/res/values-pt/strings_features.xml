@@ -1,13 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="tutorial_title">Bem-vindo</string>
-    <string name="tutorial_progress">%1$d / %2$d</string>
-    <string name="tutorial_step1">Este modelo inclui anúncios (AdMob), Firebase Analytics e 14 idiomas.</string>
-    <string name="tutorial_step2">Altere o idioma e o lembrete com o botão Ajustes (canto superior direito).</string>
-    <string name="tutorial_step3">Substitua a tela principal pelo seu app antes de publicar na Play Store.</string>
-    <string name="tutorial_step4">Opcional: ative um lembrete diário para os utilizadores voltarem.</string>
-    <string name="tutorial_skip">Ignorar</string>
-    <string name="tutorial_next">Seguinte</string>
+    <string name="instructions_title">Como jogar</string>
+    <string name="instructions_body">Preenche a grelha 9×9 com os números de 1 a 9.\n\n• Cada linha, coluna e bloco 3×3 deve ter todos os dígitos sem repetir.\n\n• Toca numa célula vazia e escolhe um número no teclado inferior.\n\n• Usa «Notas» para anotar candidatos.\n\n• Escolhe a dificuldade (Fácil, Médio, Difícil) e toca em «Nova» para um novo puzzle.\n\n• Estatísticas, ajustes e idioma: ícones no topo.</string>
     <string name="tutorial_start">Começar</string>
     <string name="reminder_prompt_title">Lembrete diário?</string>
     <string name="reminder_prompt_message">Uma notificação por dia à hora escolhida. Pode alterar em Ajustes.</string>
@@ -21,4 +16,6 @@
     <string name="settings_daily_reminder_desc">Notificação diária para voltar à app</string>
     <string name="settings_reminder_hour">Hora do lembrete: %1$d:00</string>
     <string name="settings_privacy_policy">Política de privacidade</string>
+    <string name="settings_ad_consent">Gerenciar consentimento de anúncios</string>
+    <string name="hint_video_daily_limit">Limite diário de vídeos atingido. Aguarde a dica grátis.</string>
 </resources>

@@ -27,6 +27,8 @@ import com.template.android.util.rememberNotificationPermissionRequest
 fun MainScreen(
     dataStore: AppDataStore,
     settings: AppSettings,
+    openFromDailyReminder: Boolean = false,
+    onConsumedDailyReminderOpen: () -> Unit = {},
     onSettingsChange: (AppSettings) -> Unit,
     interstitialAdManager: InterstitialAdManager? = null,
 ) {
@@ -34,6 +36,17 @@ fun MainScreen(
     var showTutorial by remember { mutableStateOf(!dataStore.isTutorialCompleted()) }
     var showReminderPrompt by rememberSaveable { mutableStateOf(false) }
     var showSettings by rememberSaveable { mutableStateOf(false) }
+
+    LaunchedEffect(openFromDailyReminder) {
+        if (!openFromDailyReminder) return@LaunchedEffect
+        if (dataStore.isTutorialCompleted()) {
+            showTutorial = false
+        }
+        showReminderPrompt = false
+        showSettings = false
+        AppAnalytics.logScreenView("game_from_notification")
+        onConsumedDailyReminderOpen()
+    }
 
     val requestNotificationPermission = rememberNotificationPermissionRequest { granted ->
         if (granted) {
@@ -55,7 +68,6 @@ fun MainScreen(
     }
 
     LaunchedEffect(Unit) {
-        AppAnalytics.logSplashFinished()
         if (showTutorial) {
             AppAnalytics.logScreenView("tutorial")
         }
@@ -72,6 +84,7 @@ fun MainScreen(
                 onSettingsChange = onSettingsChange,
                 onOpenSettings = { showSettings = true },
                 interstitialAdManager = interstitialAdManager,
+                openFromDailyReminder = openFromDailyReminder,
             )
         }
 

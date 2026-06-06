@@ -3,6 +3,7 @@
 Guía para conectar esta app a Firebase Analytics. Incluye cuándo usar un **proyecto compartido** (varias apps en el mismo Firebase) o uno **independiente** (un Firebase por app).
 
 **Archivo que debes sustituir:** `app/google-services.json`  
+**Debug y release** comparten el mismo paquete y el mismo JSON (listo para producción).  
 **Debe coincidir con:** `applicationId` en `app.template.properties`
 
 ---
@@ -200,17 +201,28 @@ Así separas Sudoku de Buscaminas u otras apps en el mismo Firebase.
 
 ---
 
-## SHA-1 (solo si usas Play Games o Google Sign-In)
+## SHA-1 (recomendado al publicar)
 
-Para Analytics y AdMob básicos **no hace falta** al inicio.
+Debug y release usan **`com.jmaker.sudoku`** y el mismo `app/google-services.json`.
 
-Si activas Play Games (`legal.xml`):
+En Firebase → ⚙️ Configuración → app **`com.jmaker.sudoku`** → **Agregar huella digital**:
 
-1. Firebase → ⚙️ Configuración → tu app Android → **Agregar huella digital**.
-2. Añade SHA-1 de debug y de release (keystore).
-3. Vuelve a descargar `google-services.json` y reemplázalo en `app/`.
+| Huella | Origen | Estado Sudoku |
+|--------|--------|---------------|
+| SHA-1 debug | `.\scripts\print-firebase-sha1.ps1` (sección DEBUG) | Hecho en consola |
+| SHA-1 release | Mismo script (sección RELEASE, tras `signing.properties`) | Pendiente al firmar AAB |
 
-Obtener SHA-1 de debug:
+Huella debug de esta PC:
+
+```
+12:B4:90:05:1C:98:62:53:0B:92:46:51:56:99:26:CC:D3:68:1C:5B
+```
+
+**Código:** no hace falta pegar el SHA-1 en el repo; Gradle y Firebase Analytics ya están integrados (`TemplateApp` → `AppAnalytics.init`, plugin `google-services`, `firebase-analytics`).
+
+**JSON:** Analytics funciona con el `google-services.json` actual. Si más adelante activas **Play Games**, vuelve a descargar el JSON desde Firebase (el bloque `oauth_client` de Sudoku se rellenará solo) y reemplaza `app/google-services.json`.
+
+Obtener SHA-1 manualmente (debug):
 
 ```powershell
 keytool -list -v -keystore "$env:USERPROFILE\.android\debug.keystore" -alias androiddebugkey -storepass android -keypass android

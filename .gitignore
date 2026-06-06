@@ -17,7 +17,7 @@ app/build/
 bin/
 gen/
 out/
-release/
+/release/
 keystore/*.keystore
 keystore/*.jks
 !keystore/.gitkeep

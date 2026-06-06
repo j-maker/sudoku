@@ -1,7 +1,9 @@
 package com.template.android.ads
 
 import android.app.Activity
+import android.content.Context
 import com.google.android.gms.ads.MobileAds
+import com.google.android.ump.ConsentDebugSettings
 import com.google.android.ump.ConsentInformation
 import com.google.android.ump.ConsentRequestParameters
 import com.google.android.ump.UserMessagingPlatform
@@ -17,26 +19,50 @@ object AdConsentManager {
         if (MobileAdsInitializer.isReady) return
 
         val consentInformation = UserMessagingPlatform.getConsentInformation(activity)
-        val params = ConsentRequestParameters.Builder()
-            .setTagForUnderAgeOfConsent(false)
-            .build()
+        val params = buildConsentRequestParameters(activity)
 
         consentInformation.requestConsentInfoUpdate(
             activity,
             params,
             {
-                if (consentInformation.isConsentFormAvailable) {
-                    UserMessagingPlatform.loadAndShowConsentFormIfRequired(activity) { _ ->
+                UserMessagingPlatform.loadAndShowConsentFormIfRequired(activity) { _ ->
+                    if (consentInformation.canRequestAds() || BuildConfig.DEBUG) {
                         initializeMobileAds(activity)
+                    } else {
+                        android.util.Log.d("AdConsent", "Anuncios no permitidos (consentimiento denegado)")
                     }
-                } else {
+                }
+            },
+            { error ->
+                if (BuildConfig.DEBUG) {
+                    android.util.Log.w("AdConsent", "requestConsentInfoUpdate: ${error.message}")
+                }
+                if (consentInformation.canRequestAds() || BuildConfig.DEBUG) {
                     initializeMobileAds(activity)
                 }
             },
-            { _ ->
-                initializeMobileAds(activity)
-            },
         )
+    }
+
+    fun showPrivacyOptionsForm(activity: Activity, onDismiss: () -> Unit = {}) {
+        UserMessagingPlatform.showPrivacyOptionsForm(activity) { _ -> onDismiss() }
+    }
+
+    fun isPrivacyOptionsRequired(context: Context): Boolean {
+        return UserMessagingPlatform.getConsentInformation(context).privacyOptionsRequirementStatus ==
+            ConsentInformation.PrivacyOptionsRequirementStatus.REQUIRED
+    }
+
+    private fun buildConsentRequestParameters(context: Context): ConsentRequestParameters {
+        val builder = ConsentRequestParameters.Builder()
+            .setTagForUnderAgeOfConsent(false)
+        if (BuildConfig.DEBUG) {
+            val debugSettings = ConsentDebugSettings.Builder(context)
+                .setDebugGeography(ConsentDebugSettings.DebugGeography.DEBUG_GEOGRAPHY_EEA)
+                .build()
+            builder.setConsentDebugSettings(debugSettings)
+        }
+        return builder.build()
     }
 
     private fun initializeMobileAds(activity: Activity) {
@@ -46,16 +72,6 @@ object AdConsentManager {
             if (BuildConfig.DEBUG) {
                 android.util.Log.d("AdConsent", "Mobile Ads SDK listo")
             }
-        }
-    }
-
-    /** Para depuración: estado del consentimiento (no bloquea la app). */
-    fun consentStatusLabel(activity: Activity): String {
-        return when (UserMessagingPlatform.getConsentInformation(activity).consentStatus) {
-            ConsentInformation.ConsentStatus.OBTAINED -> "obtained"
-            ConsentInformation.ConsentStatus.REQUIRED -> "required"
-            ConsentInformation.ConsentStatus.NOT_REQUIRED -> "not_required"
-            else -> "unknown"
         }
     }
 }

@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Sudoku</string>
+    <string name="splash_title">Sudoku Neon</string>
+    <string name="splash_tagline">Light up your mind. Master the 9×9.</string>
+
     <string name="home_open_settings">Settings</string>
     <string name="a11y_sound_on">Turn sound on</string>
     <string name="a11y_sound_off">Turn sound off</string>
     <string name="a11y_close">Close</string>
     <string name="notification_channel_name">Reminders</string>
     <string name="notification_channel_desc">Optional Sudoku notifications</string>
-    <string name="notification_daily_title">Sudoku time!</string>
-    <string name="notification_daily_body">Your daily puzzle is waiting. Ready to play?</string>
+    <string name="notification_daily_title">🎯 Today\'s challenge</string>
+    <string name="notification_daily_body">Not completed yet: %1$s</string>
 </resources>

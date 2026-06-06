@@ -1,13 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="tutorial_title">Добро пожаловать</string>
-    <string name="tutorial_progress">%1$d / %2$d</string>
-    <string name="tutorial_step1">В шаблоне есть реклама (AdMob), Firebase Analytics и 14 языков.</string>
-    <string name="tutorial_step2">Язык и напоминание — кнопка «Настройки» (справа сверху).</string>
-    <string name="tutorial_step3">Замените главный экран своим приложением перед публикацией в Play Store.</string>
-    <string name="tutorial_step4">По желанию: ежедневное напоминание, чтобы пользователи возвращались.</string>
-    <string name="tutorial_skip">Пропустить</string>
-    <string name="tutorial_next">Далее</string>
+    <string name="instructions_title">Как играть</string>
+    <string name="instructions_body">Заполните сетку 9×9 цифрами от 1 до 9.\n\n• В каждой строке, столбце и блоке 3×3 все цифры должны встречаться по одному разу.\n\n• Нажмите на пустую ячейку и выберите цифру на клавиатуре внизу.\n\n• Используйте «Заметки» для кандидатов.\n\n• Выберите сложность (Лёгкий, Средний, Сложный) и нажмите «Новая» для новой головоломки.\n\n• Статистика, настройки и язык — иконки вверху экранa.</string>
     <string name="tutorial_start">Начать</string>
     <string name="reminder_prompt_title">Ежедневное напоминание?</string>
     <string name="reminder_prompt_message">Одно уведомление в день в выбранное время. Можно изменить в настройках.</string>
@@ -21,4 +16,6 @@
     <string name="settings_daily_reminder_desc">Ежедневное уведомление для возврата в приложение</string>
     <string name="settings_reminder_hour">Время: %1$d:00</string>
     <string name="settings_privacy_policy">Политика конфиденциальности</string>
+    <string name="settings_ad_consent">Управление согласием на рекламу</string>
+    <string name="hint_video_daily_limit">Дневной лимит видео исчерпан. Подождите бесплатную подсказку.</string>
 </resources>

@@ -136,6 +136,40 @@ object AppAnalytics {
         logAdEvent("ad_inter_click", adUnitId, "interstitial")
     }
 
+    fun logAdRewardedLoaded(adUnitId: String) {
+        logAdEvent("ad_reward_load", adUnitId, "rewarded")
+    }
+
+    fun logAdRewardedFailed(adUnitId: String, errorCode: Int, stage: String) {
+        logAdEvent("ad_reward_fail", adUnitId, "rewarded") {
+            putInt("error_code", errorCode)
+            putString("stage", stage)
+        }
+    }
+
+    fun logAdRewardedShown(adUnitId: String) {
+        logAdEvent("ad_reward_show", adUnitId, "rewarded")
+    }
+
+    fun logAdRewardedEarned(adUnitId: String) {
+        logAdEvent("ad_reward_earn", adUnitId, "rewarded")
+    }
+
+    fun logAdRewardedDismissed(adUnitId: String) {
+        logAdEvent("ad_reward_close", adUnitId, "rewarded")
+    }
+
+    fun logAdRewardedSkipped(reason: String) {
+        log("ad_reward_skip") {
+            putString("ad_format", "rewarded")
+            putString("reason", reason)
+        }
+    }
+
+    fun logAdRewardedClicked(adUnitId: String) {
+        logAdEvent("ad_reward_click", adUnitId, "rewarded")
+    }
+
     private fun logAdEvent(
         eventSuffix: String,
         adUnitId: String,

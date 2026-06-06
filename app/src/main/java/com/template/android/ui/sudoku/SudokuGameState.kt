@@ -74,29 +74,35 @@ data class SudokuGameState(
     fun toggleNotesMode(): SudokuGameState = copy(notesMode = !notesMode)
 
     /**
-     * Pista: rellena la celda seleccionada con el valor correcto.
-     * Devuelve el nuevo estado y si se aplicó realmente.
+     * Pista: rellena una celda con el valor correcto.
+     * Usa la celda seleccionada si es válida; si no, la primera vacía/incorrecta.
      */
     fun applyHint(): Pair<SudokuGameState, Boolean> {
         if (status != GameStatus.PLAYING) return this to false
-        if (selectedIndex !in 0..80) return this to false
-        if (fixed[selectedIndex]) return this to false
-        val correct = solution[selectedIndex]
+        val targetIndex = hintTargetIndex() ?: return this to false
+        val correct = solution[targetIndex]
         if (correct == 0) return this to false
-        val before = userValues[selectedIndex]
-        if (before == correct) return this to false
 
         val updated = userValues.copyOf()
-        updated[selectedIndex] = correct
+        updated[targetIndex] = correct
         val newNotes = notes.copyOf()
-        newNotes[selectedIndex] = mutableSetOf()
+        newNotes[targetIndex] = mutableSetOf()
         val won = SudokuEngine.isComplete(updated, solution)
         return copy(
             userValues = updated,
             notes = newNotes,
+            selectedIndex = targetIndex,
             status = if (won) GameStatus.WON else status,
         ) to true
     }
+
+    private fun hintTargetIndex(): Int? {
+        if (selectedIndex in 0..80 && isHintableCell(selectedIndex)) return selectedIndex
+        return (0..80).firstOrNull { isHintableCell(it) }
+    }
+
+    private fun isHintableCell(index: Int): Boolean =
+        !fixed[index] && userValues[index] != solution[index]
 
     fun isCellError(index: Int): Boolean {
         if (index !in 0..80 || fixed[index]) return false
@@ -109,10 +115,6 @@ data class SudokuGameState(
 
     fun isDigitSaturated(digit: Int): Boolean = digitCount(digit) >= 9
 
-    /** Permite volver a pulsar el mismo dígito en la celda seleccionada sin sumar otro. */
-    fun canEnterDigit(digit: Int): Boolean {
-        if (digit !in 1..9) return false
-        if (!isDigitSaturated(digit)) return true
-        return selectedIndex in 0..80 && userValues[selectedIndex] == digit
-    }
+    fun canEnterDigit(digit: Int): Boolean =
+        digit in 1..9 && !isDigitSaturated(digit)
 }

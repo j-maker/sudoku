@@ -133,6 +133,23 @@ Va en `admob_banner_unit_id`.
 
 ---
 
+## Paso 5b — Crear unidad Recompensado (pistas)
+
+1. **Bloques de anuncios** → **Añadir bloque de anuncios**.
+2. Configuración:
+
+| Campo | Valor |
+|-------|--------|
+| Formato | **Recompensado** (Rewarded) |
+| Nombre | `Sudoku Rewarded Hint` |
+| **Puja de partner** | **No marcar** |
+
+3. Copia el ID → `admob_rewarded_unit_id` en `admob.xml`.
+
+La app otorga **1 pista** solo si el usuario **termina** el video (`RewardedAdManager` + pistas en `SudokuScreen.kt`).
+
+---
+
 ## Paso 6 — Pegar IDs en el proyecto
 
 Edita `app/src/main/res/values/admob.xml`:
@@ -142,6 +159,7 @@ Edita `app/src/main/res/values/admob.xml`:
     <string name="admob_app_id" translatable="false">ca-app-pub-TU_EDITOR~TU_APP_ID</string>
     <string name="admob_banner_unit_id" translatable="false">ca-app-pub-TU_EDITOR/TU_BANNER</string>
     <string name="admob_interstitial_unit_id" translatable="false">ca-app-pub-TU_EDITOR/TU_INTERSTITIAL</string>
+    <string name="admob_rewarded_unit_id" translatable="false">ca-app-pub-TU_EDITOR/TU_REWARDED</string>
 </resources>
 ```
 
@@ -152,6 +170,7 @@ Edita `app/src/main/res/values/admob.xml`:
 | `admob_app_id` | `ca-app-pub-8047251441069780~1265100923` |
 | `admob_banner_unit_id` | `ca-app-pub-8047251441069780/3845208403` |
 | `admob_interstitial_unit_id` | `ca-app-pub-8047251441069780/8105841448` |
+| `admob_rewarded_unit_id` | Crear en AdMob → pegar en `admob.xml` |
 
 No uses IDs de prueba de Google (`ca-app-pub-3940256099942544...`) en release.
 
@@ -282,6 +301,7 @@ Privacidad y mensajes  ← UMP (cuenta, luego asociar a Sudoku)
 - [ ] App ID → `admob_app_id`
 - [ ] Unidad Banner → `admob_banner_unit_id`
 - [ ] Unidad Intersticial → `admob_interstitial_unit_id`
+- [ ] Unidad Recompensado → `admob_rewarded_unit_id` (pistas)
 - [ ] `admob.xml` actualizado (sin IDs de prueba `3940256099942544` en release)
 - [ ] (Opcional) Firebase vinculado en AdMob
 - [ ] Mensaje UMP publicado y asociado a la app
@@ -295,11 +315,12 @@ Privacidad y mensajes  ← UMP (cuenta, luego asociar a Sudoku)
 
 | Archivo | Rol |
 |---------|-----|
-| `app/src/main/res/values/admob.xml` | App ID, banner, intersticial |
+| `app/src/main/res/values/admob.xml` | App ID, banner, intersticial, recompensado |
 | `app/src/main/java/.../ads/AdIds.kt` | IDs de prueba en DEBUG |
 | `app/src/main/java/.../ads/AdConsentManager.kt` | UMP / consentimiento |
 | `app/src/main/java/.../ads/BannerAdView.kt` | Banner |
 | `app/src/main/java/.../ads/InterstitialAdManager.kt` | Intersticial |
+| `app/src/main/java/.../ads/RewardedAdManager.kt` | Recompensado (pistas) |
 | `app/src/main/res/values/legal.xml` | URL política de privacidad (UMP y Play) |
 | `app.template.properties` | `applicationId` |
 

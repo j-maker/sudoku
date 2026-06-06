@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">앱 템플릿</string>
     <string name="home_open_settings">설정</string>
-    <string name="home_title">Android 템플릿</string>
-    <string name="home_subtitle">이 화면을 앱으로 바꾸세요. 14개 언어가 준비되어 있습니다.</string>
-    <string name="home_test_interstitial">전면 광고 테스트</string>
     <string name="notification_channel_name">알림</string>
     <string name="notification_channel_desc">선택적 앱 알림</string>
-    <string name="notification_daily_title">보고 싶어요!</string>
-    <string name="notification_daily_body">언제든 앱을 다시 열어 보세요.</string>
+    <string name="notification_daily_title">🎯 오늘의 도전</string>
+    <string name="notification_daily_body">아직 미완료: %1$s</string>
 </resources>

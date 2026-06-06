@@ -1,13 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="tutorial_title">Benvenuto</string>
-    <string name="tutorial_progress">%1$d / %2$d</string>
-    <string name="tutorial_step1">Questo modello include annunci (AdMob), Firebase Analytics e 14 lingue.</string>
-    <string name="tutorial_step2">Cambia lingua e promemoria con il pulsante Impostazioni (in alto a destra).</string>
-    <string name="tutorial_step3">Sostituisci la schermata principale con la tua app prima di pubblicare.</string>
-    <string name="tutorial_step4">Opzionale: attiva un promemoria giornaliero per far tornare gli utenti.</string>
-    <string name="tutorial_skip">Salta</string>
-    <string name="tutorial_next">Avanti</string>
+    <string name="instructions_title">Come si gioca</string>
+    <string name="instructions_body">Completa la griglia 9×9 con i numeri da 1 a 9.\n\n• Ogni riga, colonna e blocco 3×3 deve contenere tutte le cifre senza ripetizioni.\n\n• Tocca una cella vuota e scegli un numero dalla tastiera in basso.\n\n• Usa «Note» per segnare i candidati.\n\n• Scegli la difficoltà (Facile, Medio, Difficile) e tocca «Nuova» per un nuovo puzzle.\n\n• Statistiche, impostazioni e lingua: icone in alto.</string>
     <string name="tutorial_start">Inizia</string>
     <string name="reminder_prompt_title">Promemoria giornaliero?</string>
     <string name="reminder_prompt_message">Una notifica al giorno all\'ora scelta. Modificabile in Impostazioni.</string>
@@ -21,4 +16,6 @@
     <string name="settings_daily_reminder_desc">Notifica giornaliera per tornare all\'app</string>
     <string name="settings_reminder_hour">Ora del promemoria: %1$d:00</string>
     <string name="settings_privacy_policy">Informativa sulla privacy</string>
+    <string name="settings_ad_consent">Gestisci consenso annunci</string>
+    <string name="hint_video_daily_limit">Limite giornaliero video raggiunto. Attendi il suggerimento gratuito.</string>
 </resources>

@@ -3,6 +3,8 @@ package com.template.android.ui.sudoku
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,10 +27,10 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Lightbulb
 import androidx.compose.material.icons.filled.OndemandVideo
 import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material.icons.filled.LocalFireDepartment
 import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Share
+import com.template.android.ui.layout.NonScalingContent
 import com.template.android.ui.layout.SudokuLayoutInfo
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -66,7 +68,6 @@ private val ChromeCaptionStyle = TextStyle(
 @Composable
 fun SudokuGameHeader(
     audioEnabled: Boolean,
-    consecutiveDays: Int,
     layout: SudokuLayoutInfo,
     onOpenShare: () -> Unit,
     onOpenStats: () -> Unit,
@@ -105,7 +106,9 @@ fun SudokuGameHeader(
                 size = headerIconSize,
                 accent = SudokuPrimary,
             ) {
-                HeaderGlyph(Icons.Filled.Share, headerIconContentSize, SudokuPrimary)
+                NonScalingContent {
+                    HeaderGlyph(Icons.Filled.Share, headerIconContentSize, SudokuPrimary)
+                }
             }
             HeaderIconButton(
                 onClick = onOpenStats,
@@ -113,7 +116,9 @@ fun SudokuGameHeader(
                 size = headerIconSize,
                 accent = SudokuAccent,
             ) {
-                HeaderGlyph(Icons.Filled.BarChart, headerIconContentSize, SudokuAccent)
+                NonScalingContent {
+                    HeaderGlyph(Icons.Filled.BarChart, headerIconContentSize, SudokuAccent)
+                }
             }
         }
 
@@ -159,11 +164,6 @@ fun SudokuGameHeader(
                     .fillMaxWidth()
                     .padding(top = 4.dp),
             )
-            DailyStreakChip(
-                consecutiveDays = consecutiveDays,
-                layout = layout,
-                modifier = Modifier.padding(top = 4.dp),
-            )
         }
 
         Column(
@@ -177,7 +177,9 @@ fun SudokuGameHeader(
                 size = headerIconSize,
                 accent = SudokuAccent,
             ) {
-                HeaderGlyph(Icons.Filled.Settings, headerIconContentSize, SudokuAccent)
+                NonScalingContent {
+                    HeaderGlyph(Icons.Filled.Settings, headerIconContentSize, SudokuAccent)
+                }
             }
             HeaderIconButton(
                 onClick = onToggleAudio,
@@ -185,67 +187,19 @@ fun SudokuGameHeader(
                 size = headerIconSize,
                 accent = if (audioEnabled) SudokuNeonGreen else SudokuNeonPink,
             ) {
-                HeaderGlyph(
-                    imageVector = if (audioEnabled) {
-                        Icons.AutoMirrored.Filled.VolumeUp
-                    } else {
-                        Icons.AutoMirrored.Filled.VolumeOff
-                    },
-                    size = headerIconContentSize,
-                    tint = if (audioEnabled) SudokuNeonGreen else SudokuNeonPink,
-                )
+                NonScalingContent {
+                    HeaderGlyph(
+                        imageVector = if (audioEnabled) {
+                            Icons.AutoMirrored.Filled.VolumeUp
+                        } else {
+                            Icons.AutoMirrored.Filled.VolumeOff
+                        },
+                        size = headerIconContentSize,
+                        tint = if (audioEnabled) SudokuNeonGreen else SudokuNeonPink,
+                    )
+                }
             }
         }
-    }
-}
-
-@Composable
-private fun DailyStreakChip(
-    consecutiveDays: Int,
-    layout: SudokuLayoutInfo,
-    modifier: Modifier = Modifier,
-) {
-    val streakValue = if (consecutiveDays == 1) {
-        stringResource(R.string.streak_day, consecutiveDays)
-    } else {
-        stringResource(R.string.streak_days, consecutiveDays)
-    }
-    val captionSize = (layout.subtitleFontSize.value * 0.95f).sp
-
-    Row(
-        modifier = modifier
-            .clip(RoundedCornerShape(12.dp))
-            .background(Color(0xFF1A1038).copy(alpha = 0.9f))
-            .border(1.dp, SudokuNeonPink.copy(alpha = 0.4f), RoundedCornerShape(12.dp))
-            .padding(horizontal = 10.dp, vertical = 4.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center,
-    ) {
-        Icon(
-            imageVector = Icons.Filled.LocalFireDepartment,
-            contentDescription = null,
-            tint = SudokuNeonPink,
-            modifier = Modifier.size(14.dp),
-        )
-        Text(
-            text = stringResource(R.string.status_daily_streak_label),
-            style = ChromeCaptionStyle.copy(
-                fontSize = captionSize,
-                fontWeight = FontWeight.SemiBold,
-                lineHeight = captionSize * 1.1f,
-                color = Color.White.copy(alpha = 0.8f),
-            ),
-            modifier = Modifier.padding(start = 4.dp, end = 6.dp),
-        )
-        Text(
-            text = streakValue,
-            style = ChromeCaptionStyle.copy(
-                fontSize = layout.subtitleFontSize,
-                fontWeight = FontWeight.Bold,
-                lineHeight = layout.subtitleFontSize * 1.1f,
-                color = SudokuNeonPink,
-            ),
-        )
     }
 }
 
@@ -258,10 +212,12 @@ fun SudokuStatusCard(
     freeHints: Int,
     earnedHintsAvailable: Int,
     showHintVideo: Boolean,
+    nextHintSeconds: Int?,
     onReset: () -> Unit,
     onToggleNotes: () -> Unit,
     onHint: () -> Unit,
     isCompact: Boolean = false,
+    scrollStatusBar: Boolean = false,
     chipHeight: Dp = if (isCompact) 54.dp else 58.dp,
     captionFontSize: TextUnit = if (isCompact) 12.sp else 13.sp,
     valueFontSize: TextUnit = if (isCompact) 18.sp else 19.sp,
@@ -276,8 +232,14 @@ fun SudokuStatusCard(
     }
     val notesContentDescription = "$notesBtnLabel — $notesStateLabel"
     val hintsLabel = stringResource(R.string.status_hints_label)
+    val hintCountdownSeconds = if (showHintVideo) nextHintSeconds else null
+    val waitingRefill = hintCountdownSeconds != null
     val hintsValue = when {
-        showHintVideo -> ""
+        waitingRefill -> {
+            val mm = hintCountdownSeconds / 60
+            val ss = hintCountdownSeconds % 60
+            "%02d:%02d".format(mm, ss)
+        }
         earnedHintsAvailable > 0 -> earnedHintsAvailable.toString()
         else -> "${hintsUsed.coerceAtMost(freeHints)}/$freeHints"
     }
@@ -287,6 +249,7 @@ fun SudokuStatusCard(
         else -> SudokuAccent
     }
     val hintsIcon = if (showHintVideo) Icons.Filled.OndemandVideo else Icons.Filled.Lightbulb
+    val statusScroll = rememberScrollState()
 
     Row(
         modifier = modifier
@@ -295,8 +258,13 @@ fun SudokuStatusCard(
             .clip(RoundedCornerShape(12.dp))
             .background(Color(0xFF140830).copy(alpha = 0.92f))
             .border(1.dp, SudokuPrimary.copy(alpha = 0.35f), RoundedCornerShape(12.dp))
-            .padding(horizontal = 8.dp, vertical = 8.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
+            .padding(horizontal = 8.dp, vertical = 8.dp)
+            .then(if (scrollStatusBar) Modifier.horizontalScroll(statusScroll) else Modifier),
+        horizontalArrangement = if (scrollStatusBar) {
+            Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally)
+        } else {
+            Arrangement.spacedBy(8.dp)
+        },
         verticalAlignment = Alignment.CenterVertically,
     ) {
         StatusCounterChip(
@@ -307,7 +275,7 @@ fun SudokuStatusCard(
             height = chipHeight,
             captionFontSize = captionFontSize,
             valueFontSize = valueFontSize,
-            modifier = Modifier.weight(1f),
+            modifier = if (scrollStatusBar) Modifier.width(72.dp) else Modifier.weight(1f),
         )
         StatusCounterChip(
             icon = Icons.Filled.Close,
@@ -317,7 +285,7 @@ fun SudokuStatusCard(
             height = chipHeight,
             captionFontSize = captionFontSize,
             valueFontSize = valueFontSize,
-            modifier = Modifier.weight(1f),
+            modifier = if (scrollStatusBar) Modifier.width(72.dp) else Modifier.weight(1f),
         )
         StatusHintChip(
             icon = hintsIcon,
@@ -326,11 +294,12 @@ fun SudokuStatusCard(
             accent = hintsAccent,
             videoMode = showHintVideo,
             readyHint = earnedHintsAvailable > 0,
+            countdownMode = waitingRefill,
             height = chipHeight,
             captionFontSize = captionFontSize,
             valueFontSize = valueFontSize,
             onClick = onHint,
-            modifier = Modifier.weight(0.95f),
+            modifier = if (scrollStatusBar) Modifier.width(80.dp) else Modifier.weight(0.95f),
         )
         StatusActionChip(
             icon = Icons.Filled.Refresh,
@@ -340,7 +309,7 @@ fun SudokuStatusCard(
             height = chipHeight,
             captionFontSize = captionFontSize,
             onClick = onReset,
-            modifier = Modifier.weight(0.9f),
+            modifier = if (scrollStatusBar) Modifier.width(68.dp) else Modifier.weight(0.9f),
         )
         StatusActionChip(
             icon = Icons.Filled.Edit,
@@ -351,7 +320,7 @@ fun SudokuStatusCard(
             captionFontSize = captionFontSize,
             contentDescription = notesContentDescription,
             onClick = onToggleNotes,
-            modifier = Modifier.weight(0.9f),
+            modifier = if (scrollStatusBar) Modifier.width(68.dp) else Modifier.weight(0.9f),
         )
     }
 }
@@ -364,6 +333,7 @@ private fun StatusHintChip(
     accent: Color,
     videoMode: Boolean,
     readyHint: Boolean,
+    countdownMode: Boolean = false,
     height: Dp,
     captionFontSize: TextUnit,
     valueFontSize: TextUnit,
@@ -412,12 +382,17 @@ private fun StatusHintChip(
             textAlign = TextAlign.Center,
         )
         if (value.isNotEmpty()) {
+            val valueSize = when {
+                countdownMode -> (valueFontSize.value * 0.62f).sp
+                value.contains('/') -> (valueFontSize.value * 0.72f).sp
+                else -> (valueFontSize.value * 0.78f).sp
+            }
             Text(
                 text = value,
                 style = ChromeCaptionStyle.copy(
-                    fontSize = (valueFontSize.value * 0.78f).sp,
+                    fontSize = valueSize,
                     fontWeight = FontWeight.Bold,
-                    lineHeight = (valueFontSize.value * 0.78f).sp * 1.05f,
+                    lineHeight = valueSize * 1.05f,
                     color = Color.White.copy(alpha = 0.9f),
                 ),
                 maxLines = 1,

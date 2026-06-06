@@ -20,6 +20,7 @@ import com.template.android.MainActivity
 import com.template.android.R
 import com.template.android.analytics.AppAnalytics
 import com.template.android.data.AppDataStore
+import com.template.android.data.DailyChallengeRules
 import com.template.android.util.LocaleHelper
 import java.util.Calendar
 import java.util.concurrent.TimeUnit
@@ -123,11 +124,15 @@ class DailyReminderWorker(
 
         val localized = LocaleHelper.wrap(appContext, settings.languageCode)
         DailyReminderScheduler.ensureChannel(localized)
+        val stats = dataStore.loadStats()
+        val dailyInfo = DailyChallengeRules.infoFor(stats)
+        if (dailyInfo.completed) return Result.success()
+        val challengeTitle = localized.getString(DailyChallengeRules.titleRes(dailyInfo.type))
         val contentIntent = DailyReminderScheduler.openAppPendingIntent(localized)
         val notification = NotificationCompat.Builder(localized, DailyReminderScheduler.CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_notification)
             .setContentTitle(localized.getString(R.string.notification_daily_title))
-            .setContentText(localized.getString(R.string.notification_daily_body))
+            .setContentText(localized.getString(R.string.notification_daily_body, challengeTitle))
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setContentIntent(contentIntent)
             .setAutoCancel(true)

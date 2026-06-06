@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">应用模板</string>
     <string name="home_open_settings">设置</string>
-    <string name="home_title">Android 模板</string>
-    <string name="home_subtitle">将此界面替换为您的应用。已支持 14 种语言。</string>
-    <string name="home_test_interstitial">测试插页广告</string>
     <string name="notification_channel_name">提醒</string>
     <string name="notification_channel_desc">可选的应用通知</string>
-    <string name="notification_daily_title">我们想你了！</string>
-    <string name="notification_daily_body">随时再次打开应用。</string>
+    <string name="notification_daily_title">🎯 今日挑战</string>
+    <string name="notification_daily_body">尚未完成：%1$s</string>
 </resources>

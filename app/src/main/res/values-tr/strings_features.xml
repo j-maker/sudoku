@@ -1,13 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="tutorial_title">Hoş geldiniz</string>
-    <string name="tutorial_progress">%1$d / %2$d</string>
-    <string name="tutorial_step1">Bu şablon reklamlar (AdMob), Firebase Analytics ve 14 dil içerir.</string>
-    <string name="tutorial_step2">Dil ve hatırlatıcıyı sağ üstteki Ayarlar düğmesiyle değiştirin.</string>
-    <string name="tutorial_step3">Yayınlamadan önce ana ekranı uygulamanızla değiştirin.</string>
-    <string name="tutorial_step4">İsteğe bağlı: kullanıcıların geri dönmesi için günlük hatırlatıcı.</string>
-    <string name="tutorial_skip">Atla</string>
-    <string name="tutorial_next">İleri</string>
+    <string name="instructions_title">Nasıl oynanır</string>
+    <string name="instructions_body">9×9 ızgarayı 1–9 arası rakamlarla doldur.\n\n• Her satır, sütun ve 3×3 kutu tüm rakamları tekrarsız içermeli.\n\n• Boş bir hücreye dokun ve alttaki tuş takımından bir rakam seç.\n\n• Adayları yazmak için «Notlar»ı kullan.\n\n• Zorluk seç (Kolay, Orta, Zor) ve yeni bulmaca için «Yeni»ye dokun.\n\n• İstatistikler, ayarlar ve dil: üstteki simgeler.</string>
     <string name="tutorial_start">Başla</string>
     <string name="reminder_prompt_title">Günlük hatırlatıcı?</string>
     <string name="reminder_prompt_message">Seçtiğiniz saatte günde bir bildirim. Ayarlardan değiştirilebilir.</string>
@@ -21,4 +16,6 @@
     <string name="settings_daily_reminder_desc">Uygulamaya dönmek için günlük bildirim</string>
     <string name="settings_reminder_hour">Hatırlatma saati: %1$d:00</string>
     <string name="settings_privacy_policy">Gizlilik politikası</string>
+    <string name="settings_ad_consent">Reklam onayını yönet</string>
+    <string name="hint_video_daily_limit">Günlük video limitine ulaşıldı. Ücretsiz ipucunu bekleyin.</string>
 </resources>

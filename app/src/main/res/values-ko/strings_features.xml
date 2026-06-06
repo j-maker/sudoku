@@ -1,13 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="tutorial_title">환영합니다</string>
-    <string name="tutorial_progress">%1$d / %2$d</string>
-    <string name="tutorial_step1">이 템플릿에는 광고(AdMob), Firebase Analytics, 14개 언어가 포함됩니다.</string>
-    <string name="tutorial_step2">언어와 알림은 오른쪽 상단 설정 버튼에서 변경하세요.</string>
-    <string name="tutorial_step3">게시 전에 메인 화면을 앱으로 바꾸세요.</string>
-    <string name="tutorial_step4">선택: 사용자가 돌아오도록 일일 알림을 켤 수 있습니다.</string>
-    <string name="tutorial_skip">건너뛰기</string>
-    <string name="tutorial_next">다음</string>
+    <string name="instructions_title">플레이 방법</string>
+    <string name="instructions_body">9×9 격자를 1~9 숫자로 채우세요.\n\n• 각 행, 열, 3×3 블록에 1~9가 중복 없이 들어가야 합니다.\n\n• 빈 칸을 탭하고 아래 키패드에서 숫자를 선택하세요.\n\n• «메모»로 후보 숫자를 적을 수 있습니다.\n\n• 난이도(쉬움, 보통, 어려움)를 고르고 «새 게임»으로 새 퍼즐을 시작하세요.\n\n• 통계, 설정, 언어는 상단 아이콘에서.</string>
     <string name="tutorial_start">시작</string>
     <string name="reminder_prompt_title">매일 알림?</string>
     <string name="reminder_prompt_message">선택한 시간에 하루 한 번 알림을 보냅니다. 설정에서 변경할 수 있습니다.</string>
@@ -21,4 +16,6 @@
     <string name="settings_daily_reminder_desc">앱으로 돌아오도록 매일 알림</string>
     <string name="settings_reminder_hour">알림 시간: %1$d:00</string>
     <string name="settings_privacy_policy">개인정보 처리방침</string>
+    <string name="settings_ad_consent">광고 동의 관리</string>
+    <string name="hint_video_daily_limit">일일 동영상 한도에 도달했습니다. 무료 힌트를 기다리세요.</string>
 </resources>

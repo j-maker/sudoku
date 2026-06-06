@@ -1,13 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="tutorial_title">स्वागत है</string>
-    <string name="tutorial_progress">%1$d / %2$d</string>
-    <string name="tutorial_step1">इस टेम्पलेट में विज्ञापन (AdMob), Firebase Analytics और 14 भाषाएँ हैं।</string>
-    <string name="tutorial_step2">भाषा और रिमाइंडर ऊपर दाएँ सेटिंग बटन से बदलें।</string>
-    <string name="tutorial_step3">प्रकाशन से पहले मुख्य स्क्रीन को अपने ऐप से बदलें।</string>
-    <string name="tutorial_step4">वैकल्पिक: दैनिक रिमाइंडर ताकि उपयोगकर्ता वापस आएँ।</string>
-    <string name="tutorial_skip">छोड़ें</string>
-    <string name="tutorial_next">आगे</string>
+    <string name="instructions_title">कैसे खेलें</string>
+    <string name="instructions_body">9×9 ग्रिड को 1 से 9 तक के अंकों से भरें।\n\n• हर पंक्ति, स्तंभ और 3×3 बॉक्स में सभी अंक बिना दोहराए होने चाहिए।\n\n• खाली सेल पर टैप करें और नीचे की कीपैड से अंक चुनें।\n\n• उम्मीदवार लिखने के लिए «नोट्स» का उपयोग करें।\n\n• कठिनाई चुनें (आसान, मध्यम, कठिन) और नया पहेली के लिए «नया» टैप करें।\n\n• आँकड़े, सेटिंग और भाषा: ऊपर के आइकन।</string>
     <string name="tutorial_start">शुरू करें</string>
     <string name="reminder_prompt_title">दैनिक रिमाइंडर?</string>
     <string name="reminder_prompt_message">चुने समय पर दिन में एक सूचना। सेटिंग में बदल सकते हैं।</string>
@@ -21,4 +16,6 @@
     <string name="settings_daily_reminder_desc">ऐप पर लौटने के लिए दैनिक सूचना</string>
     <string name="settings_reminder_hour">समय: %1$d:00</string>
     <string name="settings_privacy_policy">गोपनीयता नीति</string>
+    <string name="settings_ad_consent">विज्ञापन सहमति प्रबंधित करें</string>
+    <string name="hint_video_daily_limit">दैनिक वीडियो सीमा पूरी हो गई। मुफ़्त संकेत की प्रतीक्षा करें।</string>
 </resources>

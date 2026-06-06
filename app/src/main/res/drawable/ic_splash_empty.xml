@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-  Splash del sistema (Android 12+): vector TRANSPARENTE con tamaño válido.
-  Si el recurso es “demasiado pequeño” o vacío, algunos dispositivos muestran el icono por defecto.
--->
+<!-- Sin icono visible: el logo completo lo muestra BrandedSplashScreen (Compose). -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp"
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
-
     <path
         android:fillColor="#00000000"
-        android:pathData="M0,0h108v108h-108z" />
+        android:pathData="M0,0h108v108H0z" />
 </vector>

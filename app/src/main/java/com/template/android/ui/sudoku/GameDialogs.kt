@@ -43,10 +43,17 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import com.template.android.R
+import com.template.android.data.DailyChallengeInfo
+import com.template.android.data.DailyChallengeRules
 import com.template.android.data.PlayerStats
 import com.template.android.ui.components.ModalHeaderActions
 import com.template.android.ui.components.ModalHeaderActionsLight
+import com.template.android.ui.layout.AppDialogDefaults
+import com.template.android.ui.layout.AppDialogScrollColumn
+import com.template.android.ui.layout.AppModalScaffold
+import com.template.android.ui.layout.surfaceModifier
 import com.template.android.ui.theme.SudokuAccent
 import com.template.android.ui.theme.SudokuNeonGreen
 import com.template.android.ui.theme.SudokuNeonPink
@@ -60,8 +67,76 @@ private val StatsCardShape = RoundedCornerShape(14.dp)
 private val StatsDialogShape = RoundedCornerShape(22.dp)
 
 @Composable
+fun SudokuStyledDialog(
+    icon: ImageVector,
+    iconAccent: Color,
+    title: String,
+    onDismiss: () -> Unit,
+    size: AppDialogDefaults.Size = AppDialogDefaults.Size.Content,
+    borderColors: List<Color> = listOf(SudokuPrimary, SudokuNeonPink, SudokuAccent),
+    content: @Composable () -> Unit,
+) {
+    Dialog(
+        onDismissRequest = onDismiss,
+        properties = DialogProperties(usePlatformDefaultWidth = false),
+    ) {
+        Column(
+            modifier = Modifier
+                .then(AppDialogDefaults.surfaceModifier(size))
+                .clip(StatsDialogShape)
+                .background(
+                    Brush.verticalGradient(
+                        listOf(Color(0xFF1A1038), Color(0xFF12082A)),
+                    ),
+                )
+                .border(
+                    width = 1.5.dp,
+                    brush = Brush.linearGradient(borderColors),
+                    shape = StatsDialogShape,
+                )
+                .padding(20.dp),
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(44.dp)
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(iconAccent.copy(alpha = 0.18f))
+                        .border(1.dp, iconAccent.copy(alpha = 0.45f), RoundedCornerShape(12.dp)),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Icon(
+                        imageVector = icon,
+                        contentDescription = null,
+                        tint = iconAccent,
+                        modifier = Modifier.size(26.dp),
+                    )
+                }
+                Text(
+                    text = title,
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(horizontal = 12.dp),
+                    style = DialogTextStyle.copy(
+                        fontSize = 22.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White,
+                    ),
+                )
+                ModalHeaderActions(onDone = onDismiss)
+            }
+            content()
+        }
+    }
+}
+
+@Composable
 fun StatsDialog(
     stats: PlayerStats,
+    dailyInfo: DailyChallengeInfo = DailyChallengeRules.infoFor(stats),
     onDismiss: () -> Unit,
 ) {
     val winRate = if (stats.gamesPlayed > 0) {
@@ -76,60 +151,32 @@ fun StatsDialog(
     }
     val noTime = stringResource(R.string.stats_no_time)
 
-    Dialog(onDismissRequest = onDismiss) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(StatsDialogShape)
-                .background(
-                    Brush.verticalGradient(
-                        listOf(Color(0xFF1A1038), Color(0xFF12082A)),
-                    ),
-                )
-                .border(
-                    width = 1.5.dp,
-                    brush = Brush.linearGradient(
-                        listOf(SudokuPrimary, SudokuNeonPink, SudokuAccent),
-                    ),
-                    shape = StatsDialogShape,
-                )
-                .padding(20.dp),
+    SudokuStyledDialog(
+        icon = Icons.Filled.BarChart,
+        iconAccent = SudokuPrimary,
+        title = stringResource(R.string.stats_title),
+        onDismiss = onDismiss,
+    ) {
+        AppDialogScrollColumn(
+            size = AppDialogDefaults.Size.Content,
+            modifier = Modifier.padding(top = 20.dp),
+            verticalArrangement = Arrangement.spacedBy(0.dp),
         ) {
-            Row(
+            StatsSectionTitle(stringResource(R.string.stats_daily))
+            Spacer(modifier = Modifier.height(10.dp))
+            StatsMetricCard(
+                label = stringResource(R.string.stats_daily),
+                value = if (dailyInfo.completed) {
+                    stringResource(R.string.stats_daily_done)
+                } else {
+                    stringResource(DailyChallengeRules.titleRes(dailyInfo.type))
+                },
+                accent = if (dailyInfo.completed) SudokuNeonGreen else SudokuNeonPink,
+                icon = Icons.Filled.EmojiEvents,
                 modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Box(
-                    modifier = Modifier
-                        .size(44.dp)
-                        .clip(RoundedCornerShape(12.dp))
-                        .background(SudokuPrimary.copy(alpha = 0.18f))
-                        .border(1.dp, SudokuPrimary.copy(alpha = 0.45f), RoundedCornerShape(12.dp)),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.BarChart,
-                        contentDescription = null,
-                        tint = SudokuPrimary,
-                        modifier = Modifier.size(26.dp),
-                    )
-                }
-                Text(
-                    text = stringResource(R.string.stats_title),
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(horizontal = 12.dp),
-                    style = DialogTextStyle.copy(
-                        fontSize = 22.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.White,
-                    ),
-                )
-                ModalHeaderActions(onDone = onDismiss)
-            }
+            )
 
-            Spacer(modifier = Modifier.height(20.dp))
-
+            Spacer(modifier = Modifier.height(18.dp))
             StatsSectionTitle(stringResource(R.string.stats_section_progress))
             Spacer(modifier = Modifier.height(10.dp))
             Row(
@@ -330,28 +377,36 @@ private fun StatsTimeRow(
 fun InstructionsDialog(
     onDismiss: () -> Unit,
 ) {
-    AlertDialog(
+    Dialog(
         onDismissRequest = onDismiss,
-        title = {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
+        properties = DialogProperties(usePlatformDefaultWidth = false),
+    ) {
+        AppModalScaffold(
+            title = {
                 Text(
                     text = stringResource(R.string.instructions_title),
-                    modifier = Modifier.weight(1f),
+                    color = MaterialTheme.colorScheme.primary,
+                    fontWeight = FontWeight.Bold,
+                    modifier = AppDialogDefaults.titlePadding(),
                 )
-                ModalHeaderActionsLight(onDone = onDismiss)
-            }
-        },
-        text = {
-            Text(
-                text = stringResource(R.string.instructions_body),
-                style = MaterialTheme.typography.bodyMedium,
-            )
-        },
-        confirmButton = {},
-    )
+            },
+            footer = {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End,
+                ) {
+                    ModalHeaderActionsLight(onDone = onDismiss)
+                }
+            },
+            content = {
+                Text(
+                    text = stringResource(R.string.instructions_body),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = AppDialogDefaults.textColor,
+                )
+            },
+        )
+    }
 }
 
 @Composable
@@ -362,10 +417,13 @@ fun WinDialog(
     onShare: () -> Unit,
     onNewGame: () -> Unit,
 ) {
-    Dialog(onDismissRequest = onDismiss) {
+    Dialog(
+        onDismissRequest = onDismiss,
+        properties = DialogProperties(usePlatformDefaultWidth = false),
+    ) {
         Column(
             modifier = Modifier
-                .fillMaxWidth()
+                .then(AppDialogDefaults.surfaceModifier(AppDialogDefaults.Size.Content))
                 .clip(StatsDialogShape)
                 .background(
                     Brush.verticalGradient(
@@ -414,8 +472,10 @@ fun WinDialog(
                 ModalHeaderActions(onDone = onDismiss)
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
-
+            AppDialogScrollColumn(
+                size = AppDialogDefaults.Size.Content,
+                modifier = Modifier.padding(top = 16.dp),
+            ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(10.dp),
@@ -436,7 +496,19 @@ fun WinDialog(
                 )
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(12.dp))
+
+            Text(
+                text = stringResource(R.string.win_share_subtitle),
+                style = DialogTextStyle.copy(
+                    fontSize = 13.sp,
+                    color = Color.White.copy(alpha = 0.75f),
+                    textAlign = TextAlign.Center,
+                ),
+                modifier = Modifier.fillMaxWidth(),
+            )
+
+            Spacer(modifier = Modifier.height(14.dp))
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -448,7 +520,7 @@ fun WinDialog(
                         .clip(RoundedCornerShape(14.dp))
                         .background(
                             Brush.horizontalGradient(
-                                listOf(SudokuPrimary, Color(0xFF0097A7)),
+                                listOf(SudokuNeonPink, SudokuAccent),
                             ),
                         )
                         .clickable(onClick = onShare)
@@ -486,6 +558,7 @@ fun WinDialog(
                         ),
                     )
                 }
+            }
             }
         }
     }

@@ -1,13 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="tutorial_title">欢迎</string>
-    <string name="tutorial_progress">%1$d / %2$d</string>
-    <string name="tutorial_step1">此模板包含广告（AdMob）、Firebase Analytics 和 14 种语言。</string>
-    <string name="tutorial_step2">使用右上角“设置”按钮更改语言和每日提醒。</string>
-    <string name="tutorial_step3">发布前请将主界面替换为您的应用。</string>
-    <string name="tutorial_step4">可选：开启每日提醒，让用户回到应用。</string>
-    <string name="tutorial_skip">跳过</string>
-    <string name="tutorial_next">下一步</string>
+    <string name="instructions_title">如何游玩</string>
+    <string name="instructions_body">用 1 到 9 的数字填满 9×9 网格。\n\n• 每行、每列和每个 3×3 宫格都必须包含 1–9 且不重复。\n\n• 点击空格，从下方键盘选择数字。\n\n• 使用「笔记」记录候选数字。\n\n• 选择难度（简单、中等、困难），点「新局」开始新谜题。\n\n• 统计、设置和语言：顶部图标。</string>
     <string name="tutorial_start">开始</string>
     <string name="reminder_prompt_title">每日提醒？</string>
     <string name="reminder_prompt_message">每天在您选择的时间发送一次通知。可在设置中更改。</string>
@@ -21,4 +16,6 @@
     <string name="settings_daily_reminder_desc">每日通知，提醒用户返回应用</string>
     <string name="settings_reminder_hour">提醒时间：%1$d:00</string>
     <string name="settings_privacy_policy">隐私政策</string>
+    <string name="settings_ad_consent">管理广告同意</string>
+    <string name="hint_video_daily_limit">已达每日视频上限。请等待免费提示。</string>
 </resources>

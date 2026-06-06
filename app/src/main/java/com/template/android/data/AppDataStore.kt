@@ -11,7 +11,6 @@ import java.util.Locale
 import java.util.concurrent.TimeUnit
 
 data class AppSettings(
-    val darkMode: Boolean = true,
     val languageCode: String = "es",
     val dailyReminderEnabled: Boolean = false,
     val dailyReminderHour: Int = 18,
@@ -36,6 +35,8 @@ data class PlayerStats(
     val bestTimeEasy: Int? = null,
     val bestTimeMedium: Int? = null,
     val bestTimeHard: Int? = null,
+    val dailyChallengeDate: String? = null,
+    val dailyChallengeCompleted: Boolean = false,
 )
 
 data class HintState(
@@ -64,7 +65,6 @@ class AppDataStore(context: Context) {
     }
 
     fun loadSettings(): AppSettings = AppSettings(
-        darkMode = prefs.getBoolean(K_DARK_MODE, true),
         languageCode = resolvedLanguageCode(),
         dailyReminderEnabled = prefs.getBoolean(K_DAILY_REMINDER, false),
         dailyReminderHour = prefs.getInt(K_DAILY_REMINDER_HOUR, 18).coerceIn(6, 22),
@@ -78,7 +78,6 @@ class AppDataStore(context: Context) {
 
     fun saveSettings(settings: AppSettings, sync: Boolean = false) {
         prefs.edit()
-            .putBoolean(K_DARK_MODE, settings.darkMode)
             .putString(K_LANGUAGE, settings.languageCode)
             .putBoolean(K_DAILY_REMINDER, settings.dailyReminderEnabled)
             .putInt(K_DAILY_REMINDER_HOUR, settings.dailyReminderHour.coerceIn(6, 22))
@@ -111,13 +110,33 @@ class AppDataStore(context: Context) {
             bestTimeEasy = prefs.getInt(K_BEST_EASY, -1).takeIf { it >= 0 },
             bestTimeMedium = prefs.getInt(K_BEST_MEDIUM, -1).takeIf { it >= 0 },
             bestTimeHard = prefs.getInt(K_BEST_HARD, -1).takeIf { it >= 0 },
+            dailyChallengeDate = prefs.getString(K_DAILY_DATE, null),
+            dailyChallengeCompleted = prefs.getBoolean(K_DAILY_DONE, false),
         )
+    }
+
+    fun loadUnlockedAchievements(): Set<AchievementId> {
+        val raw = prefs.getStringSet(K_ACHIEVEMENTS, emptySet()) ?: emptySet()
+        return raw.mapNotNull { runCatching { AchievementId.valueOf(it) }.getOrNull() }.toSet()
+    }
+
+    fun unlockAchievement(id: AchievementId) {
+        val current = loadUnlockedAchievements().toMutableSet()
+        if (current.add(id)) {
+            prefs.edit().putStringSet(K_ACHIEVEMENTS, current.map { it.name }.toSet()).apply()
+        }
     }
 
     fun loadHintState(): HintState {
         val remaining = prefs.getInt(K_HINTS_FREE_REMAINING, 2).coerceIn(0, 2)
         val lastRefill = prefs.getLong(K_HINTS_LAST_REFILL_MS, 0L)
-        return HintState(freeHintsRemaining = remaining, lastRefillAtMs = lastRefill)
+        val pausedElapsed = prefs.getLong(K_HINTS_REFILL_ELAPSED_MS, -1L)
+        val effectiveLastRefill = if (pausedElapsed >= 0L && lastRefill > 0L) {
+            System.currentTimeMillis() - pausedElapsed
+        } else {
+            lastRefill
+        }
+        return HintState(freeHintsRemaining = remaining, lastRefillAtMs = effectiveLastRefill)
     }
 
     fun saveHintState(state: HintState) {
@@ -127,10 +146,58 @@ class AppDataStore(context: Context) {
             .apply()
     }
 
-    fun isReviewRequested(): Boolean = prefs.getBoolean(K_REVIEW_REQUESTED, false)
+    fun saveHintRefillPaused(elapsedMs: Long) {
+        prefs.edit()
+            .putLong(K_HINTS_REFILL_ELAPSED_MS, elapsedMs.coerceAtLeast(0L))
+            .apply()
+    }
 
-    fun setReviewRequested() {
-        prefs.edit().putBoolean(K_REVIEW_REQUESTED, true).apply()
+    fun loadHintRefillPausedElapsedMs(): Long? {
+        val elapsed = prefs.getLong(K_HINTS_REFILL_ELAPSED_MS, -1L)
+        return elapsed.takeIf { it >= 0L }
+    }
+
+    fun clearHintRefillPaused() {
+        prefs.edit().remove(K_HINTS_REFILL_ELAPSED_MS).apply()
+    }
+
+    fun canShowRewardedAdToday(maxPerDay: Int = REWARDED_ADS_DAILY_MAX): Boolean {
+        return rewardedAdsShownToday() < maxPerDay
+    }
+
+    fun recordRewardedAdShown(): Int {
+        val today = todayString()
+        val count = if (prefs.getString(K_REWARDED_ADS_DATE, null) == today) {
+            prefs.getInt(K_REWARDED_ADS_COUNT, 0)
+        } else {
+            0
+        } + 1
+        prefs.edit()
+            .putString(K_REWARDED_ADS_DATE, today)
+            .putInt(K_REWARDED_ADS_COUNT, count)
+            .apply()
+        return count
+    }
+
+    fun rewardedAdsShownToday(): Int {
+        val today = todayString()
+        if (prefs.getString(K_REWARDED_ADS_DATE, null) != today) return 0
+        return prefs.getInt(K_REWARDED_ADS_COUNT, 0)
+    }
+
+    fun wasReviewPrompted(): Boolean =
+        prefs.getBoolean(K_REVIEW_PROMPTED, false) ||
+            prefs.getBoolean(K_REVIEW_REQUESTED, false)
+
+    fun setReviewPrompted() {
+        prefs.edit().putBoolean(K_REVIEW_PROMPTED, true).apply()
+    }
+
+    /** Solo llamar tras una victoria; el prompt no debe mostrarse en derrotas. */
+    fun shouldRequestReviewAfterWin(stats: PlayerStats): Boolean {
+        if (wasReviewPrompted()) return false
+        return stats.gamesWon >= REVIEW_AFTER_WINS ||
+            (stats.dailyChallengeDate == todayString() && stats.dailyChallengeCompleted)
     }
 
     private fun migrateDifficultyWinCounts() {
@@ -171,12 +238,29 @@ class AppDataStore(context: Context) {
             .putInt(K_BEST_EASY, stats.bestTimeEasy ?: -1)
             .putInt(K_BEST_MEDIUM, stats.bestTimeMedium ?: -1)
             .putInt(K_BEST_HARD, stats.bestTimeHard ?: -1)
+            .putString(K_DAILY_DATE, stats.dailyChallengeDate)
+            .putBoolean(K_DAILY_DONE, stats.dailyChallengeCompleted)
             .apply()
     }
 
-    fun recordWin(difficulty: SudokuDifficulty, elapsedSeconds: Int) {
+    fun recordWin(
+        difficulty: SudokuDifficulty,
+        elapsedSeconds: Int,
+        mistakes: Int,
+    ): GameEndResult {
+        val today = todayString()
         val stats = loadStats()
+        val newUnlocks = mutableListOf<AchievementId>()
+        var beatBestTime = false
+        var bestTimeDifficulty: SudokuDifficulty? = null
+        val wasDailyDone = stats.dailyChallengeDate == today && stats.dailyChallengeCompleted
+
         val newStreak = stats.winStreak + 1
+        val beforeBest = when (difficulty) {
+            SudokuDifficulty.EASY -> stats.bestTimeEasy
+            SudokuDifficulty.MEDIUM -> stats.bestTimeMedium
+            SudokuDifficulty.HARD -> stats.bestTimeHard
+        }
         var updated = stats.copy(
             gamesWon = stats.gamesWon + 1,
             gamesPlayed = stats.gamesPlayed + 1,
@@ -189,8 +273,57 @@ class AppDataStore(context: Context) {
             bestTimeMedium = updateBest(stats.bestTimeMedium, elapsedSeconds, difficulty, SudokuDifficulty.MEDIUM),
             bestTimeHard = updateBest(stats.bestTimeHard, elapsedSeconds, difficulty, SudokuDifficulty.HARD),
         )
-        updated = updatePlayStreak(updated, todayString())
+        val afterBest = when (difficulty) {
+            SudokuDifficulty.EASY -> updated.bestTimeEasy
+            SudokuDifficulty.MEDIUM -> updated.bestTimeMedium
+            SudokuDifficulty.HARD -> updated.bestTimeHard
+        }
+        if (afterBest != null && (beforeBest == null || afterBest < beforeBest)) {
+            beatBestTime = true
+            bestTimeDifficulty = difficulty
+        }
+        updated = updatePlayStreak(updated, today)
+        updated = updateDailyChallenge(updated, today, difficulty, elapsedSeconds, mistakes)
         saveStats(updated)
+
+        val unlocked = loadUnlockedAchievements()
+        if (AchievementId.FIRST_WIN !in unlocked) {
+            unlockAchievement(AchievementId.FIRST_WIN)
+            newUnlocks.add(AchievementId.FIRST_WIN)
+        }
+        if (updated.gamesWon >= 10 && AchievementId.WINS_10 !in unlocked) {
+            unlockAchievement(AchievementId.WINS_10)
+            newUnlocks.add(AchievementId.WINS_10)
+        }
+        if (difficulty == SudokuDifficulty.HARD && AchievementId.WIN_HARD !in unlocked) {
+            unlockAchievement(AchievementId.WIN_HARD)
+            newUnlocks.add(AchievementId.WIN_HARD)
+        }
+        if (updated.winStreak >= 3 && AchievementId.STREAK_3 !in unlocked) {
+            unlockAchievement(AchievementId.STREAK_3)
+            newUnlocks.add(AchievementId.STREAK_3)
+        }
+        if (updated.consecutiveDays >= 7 && AchievementId.PLAY_7_DAYS !in unlocked) {
+            unlockAchievement(AchievementId.PLAY_7_DAYS)
+            newUnlocks.add(AchievementId.PLAY_7_DAYS)
+        }
+        if (updated.dailyChallengeDate == today && updated.dailyChallengeCompleted &&
+            AchievementId.DAILY_CHALLENGE !in unlocked
+        ) {
+            unlockAchievement(AchievementId.DAILY_CHALLENGE)
+            newUnlocks.add(AchievementId.DAILY_CHALLENGE)
+        }
+
+        val dailyJustCompleted = !wasDailyDone &&
+            updated.dailyChallengeDate == today &&
+            updated.dailyChallengeCompleted
+
+        return GameEndResult(
+            newUnlocks = newUnlocks,
+            beatBestTime = beatBestTime,
+            bestTimeDifficulty = bestTimeDifficulty,
+            dailyChallengeJustCompleted = dailyJustCompleted,
+        )
     }
 
     /** Actualiza la racha diaria al abrir la app o jugar (una vez por sesión en pantalla). */
@@ -207,6 +340,7 @@ class AppDataStore(context: Context) {
 
     fun resetStats() {
         saveStats(PlayerStats())
+        prefs.edit().remove(K_ACHIEVEMENTS).apply()
     }
 
     fun saveGame(json: String) {
@@ -217,6 +351,13 @@ class AppDataStore(context: Context) {
 
     fun clearSavedGame() {
         prefs.edit().remove(K_SAVED_GAME).apply()
+    }
+
+    /** Nueva partida desde el tablero (reiniciar / cambiar dificultad). No cuenta el botón del diálogo de victoria. */
+    fun incrementBoardNewGameCount(): Int {
+        val next = prefs.getInt(K_BOARD_NEW_GAME_COUNT, 0) + 1
+        prefs.edit().putInt(K_BOARD_NEW_GAME_COUNT, next).apply()
+        return next
     }
 
     fun isTutorialCompleted(): Boolean = prefs.getBoolean(K_TUTORIAL_DONE, false)
@@ -267,6 +408,26 @@ class AppDataStore(context: Context) {
 
     private fun parseDate(value: String): Long? =
         runCatching { dateFormat.parse(value)?.time }.getOrNull()
+
+    private fun updateDailyChallenge(
+        stats: PlayerStats,
+        today: String,
+        difficulty: SudokuDifficulty,
+        elapsedSeconds: Int,
+        mistakes: Int,
+    ): PlayerStats {
+        var s = stats
+        if (s.dailyChallengeDate != today) {
+            s = s.copy(dailyChallengeDate = today, dailyChallengeCompleted = false)
+        }
+        if (!s.dailyChallengeCompleted) {
+            val challenge = DailyChallengeRules.challengeForDate(today)
+            if (DailyChallengeRules.isCompleted(challenge, true, difficulty, elapsedSeconds, mistakes)) {
+                s = s.copy(dailyChallengeCompleted = true)
+            }
+        }
+        return s
+    }
 
     companion object {
         private val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
@@ -319,7 +480,6 @@ class AppDataStore(context: Context) {
 
         private const val K_LANGUAGE = "language"
         private const val K_LANGUAGE_AUTO_CONFIGURED = "language_auto"
-        private const val K_DARK_MODE = "dark_mode"
         private const val K_DAILY_REMINDER = "daily_reminder"
         private const val K_DAILY_REMINDER_HOUR = "daily_reminder_hour"
         private const val K_SOUND = "sound_enabled"
@@ -341,10 +501,21 @@ class AppDataStore(context: Context) {
         private const val K_BEST_MEDIUM = "best_time_medium"
         private const val K_BEST_HARD = "best_time_hard"
         private const val K_SAVED_GAME = "saved_game"
+        private const val K_BOARD_NEW_GAME_COUNT = "board_new_game_count"
         private const val K_TUTORIAL_DONE = "tutorial_done"
         private const val K_REMINDER_PROMPT = "reminder_prompt_shown"
         private const val K_HINTS_FREE_REMAINING = "hints_free_remaining"
         private const val K_HINTS_LAST_REFILL_MS = "hints_last_refill_ms"
+        private const val K_HINTS_REFILL_ELAPSED_MS = "hints_refill_elapsed_ms"
+        private const val K_REWARDED_ADS_DATE = "rewarded_ads_date"
+        private const val K_REWARDED_ADS_COUNT = "rewarded_ads_count"
+        private const val K_REVIEW_PROMPTED = "review_prompted"
         private const val K_REVIEW_REQUESTED = "review_requested"
+        private const val K_DAILY_DATE = "daily_date"
+        private const val K_DAILY_DONE = "daily_done"
+        private const val K_ACHIEVEMENTS = "achievements"
+
+        const val REWARDED_ADS_DAILY_MAX = 12
+        const val REVIEW_AFTER_WINS = 3
     }
 }

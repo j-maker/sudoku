@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">ऐप टेम्पलेट</string>
     <string name="home_open_settings">सेटिंग</string>
-    <string name="home_title">Android टेम्पलेट</string>
-    <string name="home_subtitle">इस स्क्रीन को अपने ऐप से बदलें। 14 भाषाएँ तैयार हैं।</string>
-    <string name="home_test_interstitial">इंटरस्टिशियल टेस्ट</string>
     <string name="notification_channel_name">रिमाइंडर</string>
     <string name="notification_channel_desc">ऐप की वैकल्पिक सूचनाएँ</string>
-    <string name="notification_daily_title">हमें आपकी याद आती है!</string>
-    <string name="notification_daily_body">जब चाहें ऐप फिर खोलें।</string>
+    <string name="notification_daily_title">🎯 आज की चुनौती</string>
+    <string name="notification_daily_body">अभी पूरी नहीं: %1$s</string>
 </resources>

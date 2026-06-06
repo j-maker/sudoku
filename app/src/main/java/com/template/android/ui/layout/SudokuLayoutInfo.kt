@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.BoxWithConstraintsScope
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
@@ -12,6 +13,7 @@ import androidx.compose.ui.unit.sp
 @Stable
 data class SudokuLayoutInfo(
     val isCompact: Boolean,
+    val isVeryCompact: Boolean,
     val isShortScreen: Boolean,
     val isTallScreen: Boolean,
     val horizontalPadding: Dp,
@@ -34,18 +36,27 @@ data class SudokuLayoutInfo(
     val keySpacing: Dp,
     val numpadHeight: Dp,
     val fixedChromeHeight: Dp,
+    val scrollStatusBar: Boolean,
 )
 
 @Composable
 fun BoxWithConstraintsScope.rememberSudokuLayoutInfo(
     largeCells: Boolean = false,
-): SudokuLayoutInfo =
-    remember(maxWidth, maxHeight, largeCells) {
+): SudokuLayoutInfo {
+    val systemFontScale = LocalConfiguration.current.fontScale
+    return remember(maxWidth, maxHeight, largeCells, systemFontScale) {
         val boardScale = if (largeCells) 1.12f else 1f
-        val isCompact = maxWidth < 360.dp
+        val prefersLargeSystemFont = systemFontScale > 1.05f
+        val isVeryCompact = maxWidth < 340.dp || (prefersLargeSystemFont && maxWidth < 380.dp)
+        val isCompact = maxWidth < 360.dp || (prefersLargeSystemFont && maxWidth < 400.dp)
         val isShortScreen = maxHeight < 700.dp
         val isVeryShortScreen = maxHeight < 600.dp
         val isTallScreen = maxHeight >= 780.dp
+        val chromeScale = when {
+            isVeryCompact -> 0.88f
+            prefersLargeSystemFont -> 0.92f
+            else -> 1f
+        }
 
         val horizontalPadding = if (isCompact) 10.dp else 14.dp
         val sectionSpacing = when {
@@ -68,11 +79,11 @@ fun BoxWithConstraintsScope.rememberSudokuLayoutInfo(
             isCompact -> 92.dp
             else -> 98.dp
         } + streakRowHeight
-        val statusHeight = when {
+        val statusHeight = ((when {
             isVeryShortScreen -> 58.dp
             isCompact -> 62.dp
             else -> 66.dp
-        }
+        }.value * chromeScale).dp).coerceAtLeast(54.dp)
         val difficultyHeight = if (isCompact) 32.dp else 36.dp
         val numpadHeight = when {
             isVeryShortScreen -> 44.dp
@@ -95,8 +106,15 @@ fun BoxWithConstraintsScope.rememberSudokuLayoutInfo(
         val boardMaxSize = (minOf(maxBoardByWidth, maxBoardByHeight, boardCap) * boardScale)
             .coerceIn(210.dp, boardCap)
 
+        val chipFontSize = when {
+            prefersLargeSystemFont && isCompact -> 11.sp
+            isCompact -> 12.sp
+            else -> 13.sp
+        }
+
         SudokuLayoutInfo(
             isCompact = isCompact,
+            isVeryCompact = isVeryCompact,
             isShortScreen = isShortScreen || isVeryShortScreen,
             isTallScreen = isTallScreen,
             horizontalPadding = horizontalPadding,
@@ -117,11 +135,19 @@ fun BoxWithConstraintsScope.rememberSudokuLayoutInfo(
             },
             headerIconContentSize = if (isCompact) 20.dp else 22.dp,
             statusChipHeight = statusHeight - 16.dp,
-            statusCaptionFontSize = if (isCompact) 12.sp else 13.sp,
-            statusValueFontSize = if (isCompact) 18.sp else 19.sp,
+            statusCaptionFontSize = when {
+                prefersLargeSystemFont && isCompact -> 11.sp
+                isCompact -> 12.sp
+                else -> 13.sp
+            },
+            statusValueFontSize = when {
+                prefersLargeSystemFont && isCompact -> 17.sp
+                isCompact -> 18.sp
+                else -> 19.sp
+            },
             chipHorizontalPadding = if (isCompact) 10.dp else 12.dp,
             chipVerticalPadding = if (isCompact) 5.dp else 6.dp,
-            chipFontSize = if (isCompact) 12.sp else 13.sp,
+            chipFontSize = chipFontSize,
             keyFontSize = ((if (isCompact) 15.sp else 16.sp).value * if (largeCells) 1.2f else 1f).sp,
             keyVerticalPadding = when {
                 largeCells -> if (isVeryShortScreen) 9.dp else if (isCompact) 10.dp else 11.dp
@@ -132,8 +158,10 @@ fun BoxWithConstraintsScope.rememberSudokuLayoutInfo(
             keySpacing = if (isCompact) 3.dp else 4.dp,
             numpadHeight = numpadHeight,
             fixedChromeHeight = fixedChromeHeight,
+            scrollStatusBar = isVeryCompact || prefersLargeSystemFont,
         )
     }
+}
 
 fun SudokuLayoutInfo.boardSizeFor(availableHeight: Dp): Dp {
     val belowBoard = numpadHeight + sectionSpacing * 2

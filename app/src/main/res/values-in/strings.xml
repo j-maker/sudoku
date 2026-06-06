@@ -1,12 +1,8 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Templat aplikasi</string>
     <string name="home_open_settings">Pengaturan</string>
-    <string name="home_title">Templat Android</string>
-    <string name="home_subtitle">Ganti layar ini dengan aplikasi Anda. 14 bahasa sudah siap.</string>
-    <string name="home_test_interstitial">Uji interstisial</string>
     <string name="notification_channel_name">Pengingat</string>
     <string name="notification_channel_desc">Notifikasi opsional aplikasi</string>
-    <string name="notification_daily_title">Kami merindukanmu!</string>
-    <string name="notification_daily_body">Buka kembali aplikasi kapan saja.</string>
+    <string name="notification_daily_title">🎯 Tantanganmu hari ini</string>
+    <string name="notification_daily_body">Belum selesai: %1$s</string>
 </resources>

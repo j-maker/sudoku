@@ -55,7 +55,9 @@ android {
             }
         }
         debug {
-            // applicationId = templateProp("applicationId") — debe coincidir con google-services.json
+            // Mismo applicationId que release → un solo google-services.json (producción).
+            // AdMob sigue usando IDs de prueba en debug (AdIds.kt).
+            versionNameSuffix = "-debug"
         }
     }
 

@@ -9,6 +9,13 @@ val TemplateOnPrimary = Color(0xFF001A22)
 val TemplateSecondary = Color(0xFFFFD54F)
 val TemplateTertiary = Color(0xFFFF4081)
 
+/** Fondo del icono / splash (degradado radial navy del logo, no el púrpura del tablero). */
+val SplashBackground = Color(0xFF0A1829)
+val SplashBackgroundCenter = Color(0xFF1A3A66)
+val SplashBackgroundMid = Color(0xFF0F2747)
+val SplashBackgroundEdge = Color(0xFF06101F)
+val SplashGlowCyan = Color(0xFF00E5FF)
+
 val SudokuBackgroundStart = Color(0xFF080018)
 val SudokuBackgroundMid = Color(0xFF150840)
 val SudokuBackgroundEnd = Color(0xFF221060)

@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">App-Vorlage</string>
     <string name="home_open_settings">Einstellungen</string>
-    <string name="home_title">Android-Vorlage</string>
-    <string name="home_subtitle">Ersetzen Sie diesen Bildschirm durch Ihre App. Alle 14 Sprachen sind bereit.</string>
-    <string name="home_test_interstitial">Interstitial testen</string>
     <string name="notification_channel_name">Erinnerungen</string>
     <string name="notification_channel_desc">Optionale App-Benachrichtigungen</string>
-    <string name="notification_daily_title">Wir vermissen Sie!</string>
-    <string name="notification_daily_body">Öffnen Sie die App wieder, wann Sie möchten.</string>
+    <string name="notification_daily_title">🎯 Deine Herausforderung heute</string>
+    <string name="notification_daily_body">Noch nicht abgeschlossen: %1$s</string>
 </resources>

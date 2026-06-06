@@ -6,4 +6,13 @@
 
     <string name="play_games_project_id" translatable="false"></string>
     <string name="play_games_leaderboard_default" translatable="false"></string>
+    <string name="play_games_leaderboard_easy" translatable="false"></string>
+    <string name="play_games_leaderboard_medium" translatable="false"></string>
+    <string name="play_games_leaderboard_hard" translatable="false"></string>
+    <string name="play_games_achievement_first_win" translatable="false"></string>
+    <string name="play_games_achievement_wins_10" translatable="false"></string>
+    <string name="play_games_achievement_win_hard" translatable="false"></string>
+    <string name="play_games_achievement_streak_3" translatable="false"></string>
+    <string name="play_games_achievement_play_7_days" translatable="false"></string>
+    <string name="play_games_achievement_daily" translatable="false"></string>
 </resources>

@@ -1,13 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="tutorial_title">مرحبًا</string>
-    <string name="tutorial_progress">%1$d / %2$d</string>
-    <string name="tutorial_step1">يتضمن هذا القالب إعلانات (AdMob) وFirebase Analytics و14 لغة.</string>
-    <string name="tutorial_step2">غيّر اللغة والتذكير بزر «الإعدادات» (أعلى اليمين).</string>
-    <string name="tutorial_step3">استبدل الشاشة الرئيسية بتطبيقك قبل النشر على Play Store.</string>
-    <string name="tutorial_step4">اختياري: تذكير يومي ليعود المستخدمون إلى التطبيق.</string>
-    <string name="tutorial_skip">تخطي</string>
-    <string name="tutorial_next">التالي</string>
+    <string name="instructions_title">كيفية اللعب</string>
+    <string name="instructions_body">املأ شبكة 9×9 بالأرقام من 1 إلى 9.\n\n• يجب أن يحتوي كل صف وعمود ومربع 3×3 على جميع الأرقام دون تكرار.\n\n• اضغط على خلية فارغة واختر رقمًا من لوحة المفاتيح بالأسفل.\n\n• استخدم «ملاحظات» لتدوين المرشحين.\n\n• اختر الصعوبة (سهل، متوسط، صعب) واضغط «جديد» لأحجية جديدة.\n\n• الإحصائيات والإعدادات واللغة: الأيقونات في الأعلى.</string>
     <string name="tutorial_start">ابدأ</string>
     <string name="reminder_prompt_title">تذكير يومي؟</string>
     <string name="reminder_prompt_message">إشعار واحد يوميًا في الوقت الذي تختاره. يمكن تغييره من الإعدادات.</string>
@@ -21,4 +16,6 @@
     <string name="settings_daily_reminder_desc">إشعار يومي للعودة إلى التطبيق</string>
     <string name="settings_reminder_hour">وقت التذكير: %1$d:00</string>
     <string name="settings_privacy_policy">سياسة الخصوصية</string>
+    <string name="settings_ad_consent">إدارة موافقة الإعلانات</string>
+    <string name="hint_video_daily_limit">تم الوصول إلى الحد اليومي للفيديو. انتظر التلميح المجاني.</string>
 </resources>

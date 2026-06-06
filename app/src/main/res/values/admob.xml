@@ -7,4 +7,6 @@
     <string name="admob_app_id" translatable="false">ca-app-pub-8047251441069780~1265100923</string>
     <string name="admob_banner_unit_id" translatable="false">ca-app-pub-8047251441069780/3845208403</string>
     <string name="admob_interstitial_unit_id" translatable="false">ca-app-pub-8047251441069780/8105841448</string>
+    <!-- Crear unidad Recompensado en AdMob (app Sudoku) y pegar el ID aquí -->
+    <string name="admob_rewarded_unit_id" translatable="false">ca-app-pub-8047251441069780/2470285668</string>
 </resources>

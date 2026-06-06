@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Modello app</string>
     <string name="home_open_settings">Impostazioni</string>
-    <string name="home_title">Modello Android</string>
-    <string name="home_subtitle">Sostituisci questa schermata con la tua app. Tutte le 14 lingue sono pronte.</string>
-    <string name="home_test_interstitial">Prova interstitial</string>
     <string name="notification_channel_name">Promemoria</string>
     <string name="notification_channel_desc">Notifiche opzionali dell\'app</string>
-    <string name="notification_daily_title">Ci manchi!</string>
-    <string name="notification_daily_body">Torna ad aprire l\'app quando vuoi.</string>
+    <string name="notification_daily_title">🎯 La tua sfida di oggi</string>
+    <string name="notification_daily_body">Non ancora completata: %1$s</string>
 </resources>

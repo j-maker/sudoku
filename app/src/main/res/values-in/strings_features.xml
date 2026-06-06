@@ -1,13 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="tutorial_title">Selamat datang</string>
-    <string name="tutorial_progress">%1$d / %2$d</string>
-    <string name="tutorial_step1">Template ini mencakup iklan (AdMob), Firebase Analytics, dan 14 bahasa.</string>
-    <string name="tutorial_step2">Ubah bahasa dan pengingat lewat tombol Pengaturan (kanan atas).</string>
-    <string name="tutorial_step3">Ganti layar utama dengan aplikasi Anda sebelum publikasi.</string>
-    <string name="tutorial_step4">Opsional: pengingat harian agar pengguna kembali.</string>
-    <string name="tutorial_skip">Lewati</string>
-    <string name="tutorial_next">Berikutnya</string>
+    <string name="instructions_title">Cara bermain</string>
+    <string name="instructions_body">Isi grid 9×9 dengan angka 1 sampai 9.\n\n• Setiap baris, kolom, dan kotak 3×3 harus berisi semua angka tanpa pengulangan.\n\n• Ketuk sel kosong dan pilih angka dari keypad di bawah.\n\n• Gunakan «Catatan» untuk menulis kandidat.\n\n• Pilih tingkat kesulitan (Mudah, Sedang, Sulit) dan ketuk «Baru» untuk puzzle baru.\n\n• Statistik, pengaturan, dan bahasa: ikon di atas.</string>
     <string name="tutorial_start">Mulai</string>
     <string name="reminder_prompt_title">Pengingat harian?</string>
     <string name="reminder_prompt_message">Satu notifikasi per hari pada waktu yang Anda pilih. Dapat diubah di Pengaturan.</string>
@@ -21,4 +16,6 @@
     <string name="settings_daily_reminder_desc">Notifikasi harian untuk kembali ke aplikasi</string>
     <string name="settings_reminder_hour">Waktu pengingat: %1$d:00</string>
     <string name="settings_privacy_policy">Kebijakan privasi</string>
+    <string name="settings_ad_consent">Kelola persetujuan iklan</string>
+    <string name="hint_video_daily_limit">Batas video harian tercapai. Tunggu petunjuk gratis.</string>
 </resources>

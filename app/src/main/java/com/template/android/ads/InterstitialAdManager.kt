@@ -17,7 +17,10 @@ class InterstitialAdManager(context: Context) {
     private var isLoading = false
     private var sessionStartedAtMs = 0L
     private var lastShownAtMs = 0L
+    private var lastRewardedAtMs = 0L
     private var isShowing = false
+    private var clockPauseCount = 0
+    private var clockPausedAtMs = 0L
 
     private val adUnitId: String
         get() = AdIds.interstitialId(appContext.getString(R.string.admob_interstitial_unit_id))
@@ -48,31 +51,53 @@ class InterstitialAdManager(context: Context) {
     /** Llama al entrar a la pantalla principal del juego (NO al iniciar una nueva partida). */
     fun markGameSessionStart(nowMs: Long = System.currentTimeMillis()) {
         sessionStartedAtMs = nowMs
-        // Inicializa el cooldown base para que el primer anuncio sea 90s después de entrar al juego.
-        if (lastShownAtMs == 0L) {
-            lastShownAtMs = nowMs
+        lastShownAtMs = nowMs
+    }
+
+    /** Pausa el reloj de cooldown (app en segundo plano o vídeo a pantalla completa). */
+    fun pauseClock(nowMs: Long = System.currentTimeMillis()) {
+        if (clockPauseCount++ == 0) {
+            clockPausedAtMs = nowMs
         }
     }
 
-    /** Intenta mostrar intersticial usando cooldown (90s) y disponibilidad del ad. */
-    fun maybeShowTimed(
+    /** Reanuda el reloj de cooldown tras [pauseClock]. */
+    fun resumeClock(nowMs: Long = System.currentTimeMillis()) {
+        if (clockPauseCount <= 0) return
+        clockPauseCount--
+        if (clockPauseCount > 0) return
+        val pausedMs = nowMs - clockPausedAtMs
+        clockPausedAtMs = 0L
+        if (sessionStartedAtMs > 0L) sessionStartedAtMs += pausedMs
+        if (lastShownAtMs > 0L) lastShownAtMs += pausedMs
+        if (lastRewardedAtMs > 0L) lastRewardedAtMs += pausedMs
+    }
+
+    /** Evita intersticial justo después de un vídeo recompensado. */
+    fun markRewardedShown(nowMs: Long = System.currentTimeMillis()) {
+        lastRewardedAtMs = nowMs
+    }
+
+    private fun effectiveNowMs(): Long {
+        if (clockPauseCount > 0 && clockPausedAtMs > 0L) {
+            return clockPausedAtMs
+        }
+        return System.currentTimeMillis()
+    }
+
+    /** Tras completar un sudoku (natural break). Ignora cooldown de sesión; no encadena tras rewarded. */
+    fun showAfterVictory(
         activity: Activity,
         onAdStarted: (() -> Unit)? = null,
-        onFinished: (() -> Unit)? = null,
-    ) {
-        // Primer anuncio solo 90s después de ENTRAR al juego.
-        if (sessionStartedAtMs == 0L) markGameSessionStart()
-        val now = System.currentTimeMillis()
-        if (now - sessionStartedAtMs < MIN_INTERVAL_MS) return
-        MobileAdsInitializer.whenReady {
-            showIfReady(
-                activity = activity,
-                ignoreCooldown = false,
-                onAdStarted = onAdStarted,
-                onFinished = { onFinished?.invoke() },
-            )
-        }
-    }
+        onAdShown: (() -> Unit)? = null,
+        onFinished: () -> Unit = {},
+    ): Boolean = showIfReady(
+        activity = activity,
+        ignoreCooldown = true,
+        onAdStarted = onAdStarted,
+        onAdShown = onAdShown,
+        onFinished = onFinished,
+    )
 
     fun showIfReady(
         activity: Activity,
@@ -93,12 +118,32 @@ class InterstitialAdManager(context: Context) {
             return false
         }
 
-        val now = System.currentTimeMillis()
-        if (!ignoreCooldown && now - lastShownAtMs < MIN_INTERVAL_MS) {
-            AppAnalytics.logAdInterstitialSkipped("cooldown")
+        val now = effectiveNowMs()
+        if (lastRewardedAtMs > 0L && now - lastRewardedAtMs < MIN_INTERVAL_MS) {
+            AppAnalytics.logAdInterstitialSkipped("after_rewarded")
             onFinished()
             preload()
             return false
+        }
+        if (!ignoreCooldown) {
+            val sessionStart = sessionStartedAtMs
+            if (sessionStart > 0L && now < sessionStart + MIN_INTERVAL_MS) {
+                AppAnalytics.logAdInterstitialSkipped("session_warmup")
+                onFinished()
+                preload()
+                return false
+            }
+            val cooldownAnchor = when {
+                lastShownAtMs > 0L -> lastShownAtMs
+                sessionStart > 0L -> sessionStart
+                else -> now
+            }
+            if (now - cooldownAnchor < MIN_INTERVAL_MS) {
+                AppAnalytics.logAdInterstitialSkipped("cooldown")
+                onFinished()
+                preload()
+                return false
+            }
         }
 
         val ad = interstitialAd

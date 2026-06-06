@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Español (por defecto). AdMob → admob.xml · Legal → legal.xml -->
+<!-- Español (por defecto). Nombre app → app.template.properties · AdMob → admob.xml · Legal → legal.xml -->
 <resources>
 
-    <string name="app_name">Sudoku</string>
+    <!-- Splash: marca del juego (app_name en launcher sigue en app.template.properties) -->
+    <string name="splash_title">Sudoku Neon</string>
+    <string name="splash_tagline">Enciende tu mente. Domina el 9×9.</string>
+
     <string name="home_open_settings">Ajustes</string>
     <string name="a11y_sound_on">Activar sonido</string>
     <string name="a11y_sound_off">Desactivar sonido</string>
@@ -10,8 +13,8 @@
 
     <string name="notification_channel_name">Recordatorios</string>
     <string name="notification_channel_desc">Avisos opcionales de Sudoku</string>
-    <string name="notification_daily_title">¡Hora de Sudoku!</string>
-    <string name="notification_daily_body">Tu desafío diario te espera. ¿Listo para jugar?</string>
+    <string name="notification_daily_title">🎯 Tu reto de hoy</string>
+    <string name="notification_daily_body">Aún no completaste: %1$s</string>
 
     <string name="language_es">ES</string>
     <string name="language_en">EN</string>

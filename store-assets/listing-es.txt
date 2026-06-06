@@ -1,0 +1,39 @@
+=== TÍTULO (máx. 30 caracteres) ===
+Sudoku Neon
+
+=== DESCRIPCIÓN CORTA (máx. 80 caracteres) ===
+Sudoku 9×9 clásico: reto diario, 3 niveles y 14 idiomas. ¡Gratis!
+
+=== DESCRIPCIÓN LARGA ===
+🧩 Sudoku Neon — el sudoku clásico con estilo neón, retos diarios y progreso que te engancha.
+
+🎮 JUEGA AL CLÁSICO 9×9
+• Toca una celda y elige el número en el teclado inferior
+• Modo Notas para anotar candidatos
+• Tres dificultades: Fácil, Medio y Alto (desbloquea niveles al ganar)
+• Partida guardada automáticamente
+
+🎯 RETO DIARIO Y PROGRESO
+• Un desafío nuevo cada día (tiempo, dificultad, sin errores…)
+• Racha diaria, récords y logros
+• Estadísticas detalladas en un solo toque
+
+💡 PISTAS
+• Pista gratuita con temporizador
+• Pista extra opcional con vídeo (anuncio recompensado)
+
+🔔 RECORDATORIO OPCIONAL
+Activa el recordatorio diario en Ajustes (solo si quieres; puedes desactivarlo cuando quieras).
+
+🌐 14 IDIOMAS
+Español, inglés, portugués, francés, alemán, italiano, ruso, turco, árabe, hindi, indonesio, japonés, coreano y chino.
+
+♿ ACCESIBLE
+Celdas grandes, alto contraste y menos animaciones en Ajustes.
+
+📲 COMPARTE TUS VICTORIAS
+Invita a amigos con un enlace a Google Play.
+
+Gratis con anuncios. Sin registro. Juega offline (el tablero funciona sin internet; los anuncios requieren conexión).
+
+¿Listo para completar el 9×9?
