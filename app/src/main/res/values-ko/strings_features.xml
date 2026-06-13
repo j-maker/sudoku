@@ -17,5 +17,9 @@
     <string name="settings_reminder_hour">알림 시간: %1$d:00</string>
     <string name="settings_privacy_policy">개인정보 처리방침</string>
     <string name="settings_ad_consent">광고 동의 관리</string>
+    <string name="stats_play_games_section">Google Play Games</string>
+    <string name="play_games_leaderboards">리더보드</string>
+    <string name="play_games_achievements">업적</string>
+    <string name="settings_rate_app">앱 평가하기</string>
     <string name="hint_video_daily_limit">일일 동영상 한도에 도달했습니다. 무료 힌트를 기다리세요.</string>
 </resources>

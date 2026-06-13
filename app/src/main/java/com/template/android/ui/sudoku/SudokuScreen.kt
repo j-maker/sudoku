@@ -91,6 +91,7 @@ fun SudokuScreen(
 ) {
     val context = LocalContext.current
     val activity = context as? ComponentActivity
+    val playGamesEnabled = remember(context) { PlayGamesHelper.isEnabled(context) }
     val lifecycleOwner = LocalLifecycleOwner.current
     val feedback = remember { GameFeedback(context) }
     val rewardedAds = remember { RewardedAdManager(context) }
@@ -652,6 +653,19 @@ fun SudokuScreen(
             stats = playerStats,
             dailyInfo = dailyChallengeInfo,
             onDismiss = { showStats = false },
+            showPlayGamesActions = playGamesEnabled && activity != null,
+            onOpenLeaderboard = activity?.let { act ->
+                {
+                    AppAnalytics.logButtonClick("play_games_leaderboard")
+                    PlayGamesHelper.showLeaderboard(act)
+                }
+            },
+            onOpenAchievements = activity?.let { act ->
+                {
+                    AppAnalytics.logButtonClick("play_games_achievements")
+                    PlayGamesHelper.showAchievements(act)
+                }
+            },
         )
     }
 

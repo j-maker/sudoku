@@ -17,5 +17,9 @@
     <string name="settings_reminder_hour">Ora del promemoria: %1$d:00</string>
     <string name="settings_privacy_policy">Informativa sulla privacy</string>
     <string name="settings_ad_consent">Gestisci consenso annunci</string>
+    <string name="stats_play_games_section">Google Play Games</string>
+    <string name="play_games_leaderboards">Classifiche</string>
+    <string name="play_games_achievements">Obiettivi</string>
+    <string name="settings_rate_app">Valuta l\'app</string>
     <string name="hint_video_daily_limit">Limite giornaliero video raggiunto. Attendi il suggerimento gratuito.</string>
 </resources>

@@ -9,5 +9,9 @@
 
 -keep class com.google.android.play.core.integrity.** { *; }
 
+-keep class com.google.android.gms.games.** { *; }
+-keep class com.google.android.gms.games.leaderboard.** { *; }
+-keep class com.google.android.gms.games.achievement.** { *; }
+
 -keep class com.google.firebase.** { *; }
 -keep class com.google.android.gms.measurement.** { *; }

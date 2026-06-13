@@ -25,6 +25,7 @@
     <string name="settings_reminder_hour">Reminder time: %1$d:00</string>
     <string name="settings_privacy_policy">Privacy policy</string>
     <string name="settings_ad_consent">Manage ad consent</string>
+    <string name="settings_rate_app">Rate the app</string>
     <string name="settings_reset_stats">Reset statistics</string>
     <string name="game_title">Sudoku</string>
     <string name="game_subtitle">9×9 · Classic logic</string>
@@ -57,6 +58,9 @@
     <string name="stats_section_progress">Progress</string>
     <string name="stats_section_streaks">Streaks</string>
     <string name="stats_section_records">Best times</string>
+    <string name="stats_play_games_section">Google Play Games</string>
+    <string name="play_games_leaderboards">Leaderboards</string>
+    <string name="play_games_achievements">Achievements</string>
     <string name="stats_label_won">Won</string>
     <string name="stats_label_played">Played</string>
     <string name="stats_label_win_rate">Win rate</string>

@@ -17,5 +17,9 @@
     <string name="settings_reminder_hour">Uhrzeit: %1$d:00</string>
     <string name="settings_privacy_policy">Datenschutzrichtlinie</string>
     <string name="settings_ad_consent">Werbeeinwilligung verwalten</string>
+    <string name="stats_play_games_section">Google Play Games</string>
+    <string name="play_games_leaderboards">Bestenlisten</string>
+    <string name="play_games_achievements">Erfolge</string>
+    <string name="settings_rate_app">App bewerten</string>
     <string name="hint_video_daily_limit">Tägliches Videolimit erreicht. Warte auf den Gratis-Tipp.</string>
 </resources>

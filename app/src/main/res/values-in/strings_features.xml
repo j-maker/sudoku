@@ -17,5 +17,9 @@
     <string name="settings_reminder_hour">Waktu pengingat: %1$d:00</string>
     <string name="settings_privacy_policy">Kebijakan privasi</string>
     <string name="settings_ad_consent">Kelola persetujuan iklan</string>
+    <string name="stats_play_games_section">Google Play Games</string>
+    <string name="play_games_leaderboards">Papan peringkat</string>
+    <string name="play_games_achievements">Pencapaian</string>
+    <string name="settings_rate_app">Nilai aplikasi</string>
     <string name="hint_video_daily_limit">Batas video harian tercapai. Tunggu petunjuk gratis.</string>
 </resources>

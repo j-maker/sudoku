@@ -13,9 +13,11 @@ import com.template.android.ui.sudoku.SudokuDifficulty
 
 /**
  * Play Games opcional: configura IDs en legal.xml (play_games_*).
- * Si están vacíos, todas las llamadas son no-op.
+ * Si [play_games_project_id] está vacío, todas las llamadas son no-op.
  */
 object PlayGamesHelper {
+
+    fun isEnabled(context: Context): Boolean = isConfigured(context)
 
     fun initialize(context: Context) {
         if (!isConfigured(context)) return
@@ -54,10 +56,38 @@ object PlayGamesHelper {
     }
 
     fun showLeaderboard(activity: Activity) {
+        if (!isConfigured(activity)) return
         val id = activity.getString(R.string.play_games_leaderboard_default).trim()
         if (id.isEmpty()) return
-        PlayGames.getLeaderboardsClient(activity).getLeaderboardIntent(id)
-            .addOnSuccessListener { intent -> activity.startActivity(intent) }
+        runWhenSignedIn(activity) {
+            PlayGames.getLeaderboardsClient(activity).getLeaderboardIntent(id)
+                .addOnSuccessListener { intent -> activity.startActivity(intent) }
+        }
+    }
+
+    fun showAchievements(activity: Activity) {
+        if (!isConfigured(activity)) return
+        runWhenSignedIn(activity) {
+            PlayGames.getAchievementsClient(activity).achievementsIntent
+                .addOnSuccessListener { intent -> activity.startActivity(intent) }
+        }
+    }
+
+    private fun runWhenSignedIn(activity: Activity, action: () -> Unit) {
+        if (!isGooglePlayServicesAvailable(activity)) return
+        val signInClient = PlayGames.getGamesSignInClient(activity)
+        signInClient.isAuthenticated.addOnCompleteListener { authTask ->
+            if (authTask.isSuccessful && authTask.result.isAuthenticated) {
+                action()
+                return@addOnCompleteListener
+            }
+            signInClient.signIn().addOnCompleteListener { signInTask ->
+                if (signInTask.isSuccessful) {
+                    AppAnalytics.logPlayGamesSignIn("interactive")
+                    action()
+                }
+            }
+        }
     }
 
     private fun achievementResFor(id: AchievementId): Int? = when (id) {

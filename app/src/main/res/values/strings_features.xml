@@ -25,6 +25,7 @@
     <string name="settings_reminder_hour">Hora del aviso: %1$d:00</string>
     <string name="settings_privacy_policy">Política de privacidad</string>
     <string name="settings_ad_consent">Gestionar consentimiento de anuncios</string>
+    <string name="settings_rate_app">Valorar la app</string>
     <string name="settings_reset_stats">Reiniciar estadísticas</string>
     <string name="game_title">Sudoku</string>
     <string name="game_subtitle">9×9 · Lógica clásica</string>
@@ -57,6 +58,9 @@
     <string name="stats_section_progress">Progreso</string>
     <string name="stats_section_streaks">Rachas</string>
     <string name="stats_section_records">Mejores tiempos</string>
+    <string name="stats_play_games_section">Google Play Games</string>
+    <string name="play_games_leaderboards">Clasificaciones</string>
+    <string name="play_games_achievements">Logros</string>
     <string name="stats_label_won">Ganadas</string>
     <string name="stats_label_played">Jugadas</string>
     <string name="stats_label_win_rate">% de victorias</string>

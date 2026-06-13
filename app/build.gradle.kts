@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.google.services)
+    alias(libs.plugins.firebase.crashlytics)
 }
 
 val templateConfig = Properties().apply {
@@ -116,6 +117,7 @@ dependencies {
     implementation(libs.play.integrity)
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
+    implementation(libs.firebase.crashlytics)
     implementation(libs.play.review)
     implementation(libs.play.games)
     implementation(libs.androidx.work)

@@ -17,5 +17,9 @@
     <string name="settings_reminder_hour">Hatırlatma saati: %1$d:00</string>
     <string name="settings_privacy_policy">Gizlilik politikası</string>
     <string name="settings_ad_consent">Reklam onayını yönet</string>
+    <string name="stats_play_games_section">Google Play Games</string>
+    <string name="play_games_leaderboards">Lider tabloları</string>
+    <string name="play_games_achievements">Başarımlar</string>
+    <string name="settings_rate_app">Uygulamayı değerlendir</string>
     <string name="hint_video_daily_limit">Günlük video limitine ulaşıldı. Ücretsiz ipucunu bekleyin.</string>
 </resources>

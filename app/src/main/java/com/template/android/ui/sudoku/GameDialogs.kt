@@ -138,6 +138,9 @@ fun StatsDialog(
     stats: PlayerStats,
     dailyInfo: DailyChallengeInfo = DailyChallengeRules.infoFor(stats),
     onDismiss: () -> Unit,
+    showPlayGamesActions: Boolean = false,
+    onOpenLeaderboard: (() -> Unit)? = null,
+    onOpenAchievements: (() -> Unit)? = null,
 ) {
     val winRate = if (stats.gamesPlayed > 0) {
         (stats.gamesWon * 100) / stats.gamesPlayed
@@ -259,6 +262,29 @@ fun StatsDialog(
                 accent = SudokuNeonPink,
             )
 
+            if (showPlayGamesActions && onOpenLeaderboard != null && onOpenAchievements != null) {
+                Spacer(modifier = Modifier.height(18.dp))
+                StatsSectionTitle(stringResource(R.string.stats_play_games_section))
+                Spacer(modifier = Modifier.height(10.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(10.dp),
+                ) {
+                    StatsActionButton(
+                        label = stringResource(R.string.play_games_leaderboards),
+                        accent = SudokuPrimary,
+                        onClick = onOpenLeaderboard,
+                        modifier = Modifier.weight(1f),
+                    )
+                    StatsActionButton(
+                        label = stringResource(R.string.play_games_achievements),
+                        accent = SudokuAccent,
+                        onClick = onOpenAchievements,
+                        modifier = Modifier.weight(1f),
+                    )
+                }
+            }
+
         }
     }
 }
@@ -274,6 +300,32 @@ private fun StatsSectionTitle(title: String) {
             color = Color.White.copy(alpha = 0.55f),
         ),
     )
+}
+
+@Composable
+private fun StatsActionButton(
+    label: String,
+    accent: Color,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    TextButton(
+        onClick = onClick,
+        modifier = modifier
+            .clip(StatsCardShape)
+            .background(Color(0xFF0E0820).copy(alpha = 0.85f))
+            .border(1.dp, accent.copy(alpha = 0.45f), StatsCardShape),
+    ) {
+        Text(
+            text = label,
+            style = DialogTextStyle.copy(
+                fontSize = 14.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = accent,
+            ),
+            textAlign = TextAlign.Center,
+        )
+    }
 }
 
 @Composable
