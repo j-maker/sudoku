@@ -1,0 +1,140 @@
+<en-US>
+• Unified menu: stats, leaderboards, how to play, settings, and sound in one place
+• Play Games leaderboards and achievements from stats and after winning
+• Better layout on tall and compact screens
+• Sound off by default (enable anytime)
+• UI polish and stability improvements
+</en-US>
+<ar>
+• قائمة موحّدة: الإحصائيات، لوائح المتصدرين، طريقة اللعب، الإعدادات والصوت في مكان واحد
+• لوائح المتصدرين والإنجازات من Play Games من الإحصائيات وبعد الفوز
+• توزيع أفضل على الشاشات الطويلة والمضغوطة
+• الصوت معطّل افتراضيًا (فعّله متى شئت)
+• تحسينات واجهة واستقرار
+</ar>
+<de-DE>
+• Einheitliches Menü: Statistik, Bestenlisten, Spielanleitung, Einstellungen und Ton an einem Ort
+• Play-Games-Bestenlisten und Erfolge in Statistik und nach dem Sieg
+• Bessere Anordnung auf hohen und kompakten Bildschirmen
+• Ton standardmäßig aus (jederzeit aktivierbar)
+• UI-Verbesserungen und mehr Stabilität
+</de-DE>
+<es-419>
+• Menú unificado: estadísticas, clasificaciones, cómo jugar, ajustes y sonido en un solo lugar
+• Clasificaciones y logros de Play Games desde estadísticas y al ganar
+• Mejor distribución en pantallas altas y compactas
+• Sonido desactivado por defecto (actívalo cuando quieras)
+• Mejoras de interfaz y estabilidad
+</es-419>
+<es-ES>
+• Menú unificado: estadísticas, clasificaciones, cómo jugar, ajustes y sonido en un solo lugar
+• Clasificaciones y logros de Play Games desde estadísticas y al ganar
+• Mejor distribución en pantallas altas y compactas
+• Sonido desactivado por defecto (actívalo cuando quieras)
+• Mejoras de interfaz y estabilidad
+</es-ES>
+<es-US>
+• Menú unificado: estadísticas, clasificaciones, cómo jugar, ajustes y sonido en un solo lugar
+• Clasificaciones y logros de Play Games desde estadísticas y al ganar
+• Mejor distribución en pantallas altas y compactas
+• Sonido desactivado por defecto (actívalo cuando quieras)
+• Mejoras de interfaz y estabilidad
+</es-US>
+<fr-CA>
+• Menu unifié : statistiques, classements, comment jouer, paramètres et son au même endroit
+• Classements et succès Play Games depuis les statistiques et après une victoire
+• Meilleure disposition sur écrans grands et compacts
+• Son désactivé par défaut (activez-le quand vous voulez)
+• Améliorations d'interface et stabilité
+</fr-CA>
+<fr-FR>
+• Menu unifié : statistiques, classements, comment jouer, réglages et son au même endroit
+• Classements et succès Play Games depuis les statistiques et après une victoire
+• Meilleure disposition sur écrans grands et compacts
+• Son désactivé par défaut (activez-le quand vous voulez)
+• Améliorations d'interface et stabilité
+</fr-FR>
+<hi-IN>
+• एकीकृत मेनू: आँकड़े, लीडरबोर्ड, कैसे खेलें, सेटिंग्स और ध्वनि एक ही जगह
+• Play Games लीडरबोर्ड और उपलब्धियाँ आँकड़ों से और जीत के बाद
+• लंबी और छोटी स्क्रीन पर बेहतर लेआउट
+• ध्वनि डिफ़ॉल्ट रूप से बंद (कभी भी चालू करें)
+• UI सुधार और स्थिरता
+</hi-IN>
+<id>
+• Menu terpadu: statistik, papan peringkat, cara bermain, pengaturan, dan suara di satu tempat
+• Papan peringkat dan pencapaian Play Games dari statistik dan setelah menang
+• Tata letak lebih baik di layar tinggi dan kompak
+• Suara nonaktif secara default (aktifkan kapan saja)
+• Penyempurnaan UI dan stabilitas
+</id>
+<it-IT>
+• Menu unificato: statistiche, classifiche, come giocare, impostazioni e audio in un unico posto
+• Classifiche e obiettivi Play Games da statistiche e dopo la vittoria
+• Migliore disposizione su schermi alti e compatti
+• Audio disattivato di default (attivalo quando vuoi)
+• Miglioramenti interfaccia e stabilità
+</it-IT>
+<ja-JP>
+• 統合メニュー：統計、ランキング、遊び方、設定、サウンドを一か所に
+• Play Gamesのランキングと実績を統計画面とクリア後から利用可能
+• 縦長・コンパクト画面でのレイアウトを改善
+• サウンドはデフォルトでオフ（いつでもオンにできます）
+• UIの改善と安定性向上
+</ja-JP>
+<ko-KR>
+• 통합 메뉴: 통계, 순위, 플레이 방법, 설정, 사운드를 한곳에서
+• Play Games 순위표와 업적을 통계 및 승리 후에 이용
+• 긴 화면과 작은 화면에서 더 나은 레이아웃
+• 사운드 기본 꺼짐(언제든 켤 수 있음)
+• UI 개선 및 안정성 향상
+</ko-KR>
+<pt-BR>
+• Menu unificado: estatísticas, rankings, como jogar, configurações e som em um só lugar
+• Rankings e conquistas do Play Games nas estatísticas e ao vencer
+• Melhor layout em telas altas e compactas
+• Som desativado por padrão (ative quando quiser)
+• Melhorias de interface e estabilidade
+</pt-BR>
+<pt-PT>
+• Menu unificado: estatísticas, classificações, como jogar, definições e som num só sítio
+• Classificações e conquistas do Play Games nas estatísticas e ao vencer
+• Melhor disposição em ecrãs altos e compactos
+• Som desativado por predefinição (ative quando quiser)
+• Melhorias de interface e estabilidade
+</pt-PT>
+<ru-RU>
+• Единое меню: статистика, таблицы лидеров, как играть, настройки и звук в одном месте
+• Таблицы лидеров и достижения Play Games из статистики и после победы
+• Улучшенная раскладка на высоких и компактных экранах
+• Звук выключен по умолчанию (включите в любой момент)
+• Улучшения интерфейса и стабильность
+</ru-RU>
+<tr-TR>
+• Birleşik menü: istatistikler, sıralamalar, nasıl oynanır, ayarlar ve ses tek yerde
+• Play Games sıralamaları ve başarımları istatistiklerden ve kazandıktan sonra
+• Uzun ve kompakt ekranlarda daha iyi düzen
+• Ses varsayılan olarak kapalı (istediğiniz zaman açın)
+• Arayüz iyileştirmeleri ve kararlılık
+</tr-TR>
+<zh-CN>
+• 统一菜单：统计、排行榜、玩法说明、设置和声音集中一处
+• 通过统计和获胜后可查看 Play Games 排行榜与成就
+• 优化高屏和紧凑屏幕上的布局
+• 声音默认关闭（可随时开启）
+• 界面优化与稳定性提升
+</zh-CN>
+<zh-HK>
+• 統一選單：統計、排行榜、玩法說明、設定和聲音集中一處
+• 可從統計及獲勝後查看 Play Games 排行榜與成就
+• 優化高屏和緊湊螢幕上的佈局
+• 聲音預設關閉（可隨時開啟）
+• 介面優化與穩定性提升
+</zh-HK>
+<zh-TW>
+• 統一選單：統計、排行榜、玩法說明、設定和聲音集中一處
+• 可從統計及獲勝後查看 Play Games 排行榜與成就
+• 優化高屏和緊湊螢幕上的配置
+• 聲音預設關閉（可隨時開啟）
+• 介面優化與穩定性提升
+</zh-TW>

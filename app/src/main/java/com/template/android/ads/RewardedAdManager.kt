@@ -64,11 +64,12 @@ class RewardedAdManager(context: Context) {
             return false
         }
 
+        onAdStarted?.invoke()
+
         ad.fullScreenContentCallback = object : FullScreenContentCallback() {
             override fun onAdShowedFullScreenContent() {
                 isShowing = true
                 AppAnalytics.logAdRewardedShown(adUnitId)
-                onAdStarted?.invoke()
             }
 
             override fun onAdDismissedFullScreenContent() {

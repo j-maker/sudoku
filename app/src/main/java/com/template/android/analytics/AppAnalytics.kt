@@ -4,11 +4,14 @@ import android.content.Context
 import android.os.Bundle
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.template.android.BuildConfig
+import com.template.android.data.AchievementId
 import com.template.android.ui.sudoku.SocialPlatform
+import com.template.android.ui.sudoku.SudokuDifficulty
 
 /**
  * Analytics para un proyecto Firebase/GA4 compartido entre varias apps.
  * Valores en [app.template.properties] → appSlug, appDisplayName.
+ * Límite Firebase: 40 caracteres por nombre de evento → sufijos largos usan abreviaturas.
  */
 object AppAnalytics {
 
@@ -44,10 +47,26 @@ object AppAnalytics {
         val screenName = "${appSlug}_$screen"
         val bundle = Bundle().apply {
             putString("app_slug", appSlug)
+            putString("screen", screen)
             putString(FirebaseAnalytics.Param.SCREEN_NAME, screenName)
             putString(FirebaseAnalytics.Param.SCREEN_CLASS, screenName)
         }
         analytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle)
+    }
+
+    fun logGameStart(difficulty: SudokuDifficulty, source: String) {
+        log("game_start") {
+            putString("difficulty", difficulty.name.lowercase())
+            putString("source", source)
+        }
+    }
+
+    fun logGameWon(difficulty: SudokuDifficulty, elapsedSeconds: Int, mistakes: Int) {
+        log("game_won") {
+            putString("difficulty", difficulty.name.lowercase())
+            putLong("elapsed_seconds", elapsedSeconds.toLong())
+            putInt("mistakes", mistakes)
+        }
     }
 
     fun logButtonClick(buttonId: String) {
@@ -66,19 +85,48 @@ object AppAnalytics {
         log("tutorial_complete")
     }
 
+    fun logMenuOpen(menu: String) {
+        log("menu_open") {
+            putString("menu", menu)
+        }
+    }
+
+    fun logAchievementUnlock(achievement: AchievementId) {
+        log("achievement_unlock") {
+            putString("achievement_id", achievement.name.lowercase())
+        }
+    }
+
+    fun logStatsReset() {
+        log("stats_reset")
+    }
+
     fun logReviewRequested() {
         log("review_requested")
     }
 
     fun logPlayGamesSignIn(source: String) {
-        log("play_games_signin") {
+        log("pg_signin") {
             putString("source", source)
         }
     }
 
-    fun logPlayGamesScoreSubmit(leaderboardKey: String) {
-        log("play_games_score") {
-            putString("leaderboard", leaderboardKey)
+    fun logPlayGamesScoreSubmit(difficulty: String) {
+        log("pg_score") {
+            putString("difficulty", difficulty)
+        }
+    }
+
+    fun logPlayGamesLeaderboardFailed(stage: String, errorCode: Int? = null) {
+        log("pg_lb_fail") {
+            putString("stage", stage)
+            if (errorCode != null) putInt("error_code", errorCode)
+        }
+    }
+
+    fun logPlayGamesLeaderboardOpened(source: String) {
+        log("pg_lb_open") {
+            putString("source", source)
         }
     }
 
@@ -86,6 +134,46 @@ object AppAnalytics {
         log("daily_reminder") {
             putString("enabled", enabled.toString())
         }
+    }
+
+    fun logPostGameShare(fromVictory: Boolean) {
+        log("post_game_share") {
+            putString("from_victory", fromVictory.toString())
+        }
+    }
+
+    fun logHintUsed(source: String, success: Boolean) {
+        log("hint_used") {
+            putString("source", source)
+            putString("success", success.toString())
+        }
+    }
+
+    fun logHintVideoBlocked(reason: String) {
+        log("hint_video_block") {
+            putString("reason", reason)
+        }
+    }
+
+    fun logSoundToggled(enabled: Boolean) {
+        log("sound_toggle") {
+            putString("enabled", enabled.toString())
+        }
+    }
+
+    fun syncEngagementUserProperties(
+        gamesWon: Int,
+        gamesPlayed: Int,
+        soundEnabled: Boolean,
+        dailyReminderEnabled: Boolean,
+        lastDifficulty: SudokuDifficulty,
+    ) {
+        val analytics = firebase ?: return
+        analytics.setUserProperty("games_won_bucket", gamesWonBucket(gamesWon))
+        analytics.setUserProperty("games_played_bucket", gamesPlayedBucket(gamesPlayed))
+        analytics.setUserProperty("sound_enabled", soundEnabled.toString())
+        analytics.setUserProperty("daily_reminder", dailyReminderEnabled.toString())
+        analytics.setUserProperty("last_difficulty", lastDifficulty.name.lowercase())
     }
 
     fun logAdBannerLoaded(adUnitId: String) {
@@ -168,6 +256,21 @@ object AppAnalytics {
 
     fun logAdRewardedClicked(adUnitId: String) {
         logAdEvent("ad_reward_click", adUnitId, "rewarded")
+    }
+
+    private fun gamesWonBucket(gamesWon: Int): String = when {
+        gamesWon == 0 -> "0"
+        gamesWon < 5 -> "1-4"
+        gamesWon < 20 -> "5-19"
+        gamesWon < 50 -> "20-49"
+        else -> "50+"
+    }
+
+    private fun gamesPlayedBucket(gamesPlayed: Int): String = when {
+        gamesPlayed == 0 -> "0"
+        gamesPlayed < 10 -> "1-9"
+        gamesPlayed < 50 -> "10-49"
+        else -> "50+"
     }
 
     private fun logAdEvent(

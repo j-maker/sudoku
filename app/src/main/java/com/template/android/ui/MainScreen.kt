@@ -111,5 +111,6 @@ fun MainScreen(
             onSettingsChange = onSettingsChange,
             onDismiss = { showSettings = false },
         )
+        LaunchedEffect(Unit) { AppAnalytics.logScreenView("settings") }
     }
 }

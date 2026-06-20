@@ -55,12 +55,16 @@
     <string name="difficulty_lock_medium">Win %2$d games on Easy to unlock Medium (%1$d/%2$d)</string>
     <string name="difficulty_lock_hard">Win %2$d games on Medium to unlock Hard (%1$d/%2$d)</string>
     <string name="stats_title">Statistics</string>
+    <string name="stats_view_leaderboards">View leaderboards (Play Games)</string>
     <string name="stats_section_progress">Progress</string>
     <string name="stats_section_streaks">Streaks</string>
     <string name="stats_section_records">Best times</string>
     <string name="stats_play_games_section">Google Play Games</string>
     <string name="play_games_leaderboards">Leaderboards</string>
     <string name="play_games_achievements">Achievements</string>
+    <string name="play_games_unavailable">Google Play Games is not available on this device</string>
+    <string name="play_games_sign_in_failed">Could not sign in to Play Games. Check your Google account.</string>
+    <string name="play_games_leaderboards_failed">Could not open leaderboards. Please try again.</string>
     <string name="stats_label_won">Won</string>
     <string name="stats_label_played">Played</string>
     <string name="stats_label_win_rate">Win rate</string>

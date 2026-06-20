@@ -1,6 +1,8 @@
 package com.template.android.ui.sudoku
 
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -10,6 +12,7 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -54,6 +57,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.template.android.R
@@ -69,7 +73,7 @@ import com.template.android.data.HintState
 import com.template.android.engagement.PlayGamesHelper
 import com.template.android.engagement.PlayReviewHelper
 import com.template.android.ui.layout.SudokuLayoutInfo
-import com.template.android.ui.layout.boardSizeFor
+import com.template.android.ui.layout.distributedBoardMaxHeight
 import com.template.android.ui.layout.rememberSudokuLayoutInfo
 import com.template.android.ui.theme.SudokuAccent
 import com.template.android.ui.theme.SudokuBackgroundEnd
@@ -78,6 +82,7 @@ import com.template.android.ui.theme.SudokuBackgroundStart
 import com.template.android.ui.theme.SudokuChromeBg
 import com.template.android.ui.theme.SudokuNeonPink
 import com.template.android.ui.theme.SudokuPrimary
+import com.template.android.util.FullscreenAdWindowHelper
 import kotlinx.coroutines.delay
 
 @Composable
@@ -91,7 +96,19 @@ fun SudokuScreen(
 ) {
     val context = LocalContext.current
     val activity = context as? ComponentActivity
-    val playGamesEnabled = remember(context) { PlayGamesHelper.isEnabled(context) }
+    val playGamesLeaderboardsEnabled = remember(context) { PlayGamesHelper.hasLeaderboards(context) }
+    val leaderboardLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.StartActivityForResult(),
+    ) { /* Play Games UI; no result needed */ }
+
+    fun openPlayGamesLeaderboards(preferredDifficulty: SudokuDifficulty? = null) {
+        val act = activity ?: return
+        PlayGamesHelper.showAllLeaderboards(
+            activity = act,
+            preferredDifficulty = preferredDifficulty,
+            startLeaderboardUi = { leaderboardLauncher.launch(it) },
+        )
+    }
     val lifecycleOwner = LocalLifecycleOwner.current
     val feedback = remember { GameFeedback(context) }
     val rewardedAds = remember { RewardedAdManager(context) }
@@ -101,14 +118,11 @@ fun SudokuScreen(
         mutableStateOf(loadInitialGameState(dataStore, playerStats))
     }
     var showStats by remember { mutableStateOf(false) }
+    var showInstructions by remember { mutableStateOf(false) }
     var showWin by remember { mutableStateOf(false) }
     var showShare by remember { mutableStateOf(false) }
     var hintState by remember {
-        val loaded = dataStore.loadHintState()
-        if (dataStore.loadHintRefillPausedElapsedMs() != null) {
-            dataStore.clearHintRefillPaused()
-        }
-        mutableStateOf(loaded)
+        mutableStateOf(dataStore.loadHintState().copy(lastRefillAtMs = 0L))
     }
     var earnedHints by remember { mutableStateOf(0) }
     var nowMs by remember { mutableStateOf(System.currentTimeMillis()) }
@@ -123,34 +137,17 @@ fun SudokuScreen(
     var victoryProcessed by remember { mutableStateOf(false) }
     val dailyChallengeInfo = remember(playerStats) { DailyChallengeRules.infoFor(playerStats) }
 
-    fun freezeHintRefillTimer() {
-        if (hintState.lastRefillAtMs <= 0L || hintState.freeHintsRemaining > 0) return
-        if (dataStore.loadHintRefillPausedElapsedMs() != null) return
-        val elapsed = (nowMs - hintState.lastRefillAtMs).coerceIn(0L, 10 * 60 * 1000L)
-        dataStore.saveHintRefillPaused(elapsed)
-    }
-
-    fun resumeHintRefillTimer() {
-        if (!appInForeground || interstitialActive) return
-        val pausedElapsed = dataStore.loadHintRefillPausedElapsedMs() ?: return
-        val updated = hintState.copy(lastRefillAtMs = System.currentTimeMillis() - pausedElapsed)
-        hintState = updated
-        dataStore.saveHintState(updated)
-        dataStore.clearHintRefillPaused()
-        nowMs = System.currentTimeMillis()
-    }
-
     fun beginFullscreenAd() {
         interstitialActive = true
+        activity?.let { FullscreenAdWindowHelper.enter(it) }
         interstitialAdManager?.pauseClock()
-        freezeHintRefillTimer()
     }
 
     fun endFullscreenAd() {
         interstitialActive = false
+        activity?.let { FullscreenAdWindowHelper.exit(it) }
         lastFullscreenAdEndMs = System.currentTimeMillis()
         interstitialAdManager?.resumeClock()
-        resumeHintRefillTimer()
     }
 
     DisposableEffect(lifecycleOwner) {
@@ -159,12 +156,10 @@ fun SudokuScreen(
                 Lifecycle.Event.ON_PAUSE -> {
                     appInForeground = false
                     interstitialAdManager?.pauseClock()
-                    freezeHintRefillTimer()
                 }
                 Lifecycle.Event.ON_RESUME -> {
                     appInForeground = true
                     interstitialAdManager?.resumeClock()
-                    resumeHintRefillTimer()
                 }
                 else -> Unit
             }
@@ -176,28 +171,16 @@ fun SudokuScreen(
     val audioEnabled = settings.soundEnabled
     val freeHintsMax = 2
     val freeHintsRemaining = hintState.freeHintsRemaining
-    val freeHintsUsed = (freeHintsMax - freeHintsRemaining).coerceIn(0, freeHintsMax)
-    val hintRefillIntervalMs = 10 * 60 * 1000L
-    val nextHintInSeconds: Int? = run {
-        if (freeHintsRemaining > 0) return@run null
-        if (earnedHints > 0) return@run null
-        if (hintState.lastRefillAtMs <= 0L) return@run null
-        val remainingMs = (hintRefillIntervalMs - (nowMs - hintState.lastRefillAtMs)).coerceAtLeast(0L)
-        (remainingMs / 1000L).toInt()
-    }
 
     fun consumeFreeHintIfNeeded(applied: Boolean) {
         if (!applied) return
         val remainingAfter = (hintState.freeHintsRemaining - 1).coerceAtLeast(0)
         val updated = hintState.copy(
             freeHintsRemaining = remainingAfter,
-            lastRefillAtMs = if (remainingAfter == 0) nowMs else 0L,
+            lastRefillAtMs = 0L,
         )
         hintState = updated
         dataStore.saveHintState(updated)
-        if (remainingAfter == 0) {
-            dataStore.clearHintRefillPaused()
-        }
     }
 
     fun applyHintWithEffects(): Boolean {
@@ -213,19 +196,22 @@ fun SudokuScreen(
 
     fun onHintClick() {
         if (freeHintsRemaining > 0) {
-            AppAnalytics.logButtonClick("hint_free")
-            if (applyHintWithEffects()) consumeFreeHintIfNeeded(true)
+            val success = applyHintWithEffects()
+            AppAnalytics.logHintUsed("free", success)
+            if (success) consumeFreeHintIfNeeded(true)
             return
         }
         if (earnedHints > 0) {
-            AppAnalytics.logButtonClick("hint_earned")
-            if (applyHintWithEffects()) {
+            val success = applyHintWithEffects()
+            AppAnalytics.logHintUsed("earned", success)
+            if (success) {
                 earnedHints = (earnedHints - 1).coerceAtLeast(0)
             }
             return
         }
 
         if (!dataStore.canShowRewardedAdToday()) {
+            AppAnalytics.logHintVideoBlocked("daily_limit")
             Toast.makeText(
                 context,
                 context.getString(R.string.hint_video_daily_limit),
@@ -235,7 +221,6 @@ fun SudokuScreen(
         }
 
         val act = context as? Activity ?: return
-        AppAnalytics.logButtonClick("hint_video_request")
         val shown = rewardedAds.showIfReady(
             activity = act,
             onAdStarted = { beginFullscreenAd() },
@@ -243,11 +228,12 @@ fun SudokuScreen(
                 earnedHints = 1
                 dataStore.recordRewardedAdShown()
                 interstitialAdManager?.markRewardedShown()
-                AppAnalytics.logButtonClick("hint_video_reward")
+                AppAnalytics.logHintUsed("video_reward", true)
             },
             onFinished = { endFullscreenAd() },
         )
         if (!shown) {
+            AppAnalytics.logHintVideoBlocked("ad_not_ready")
             Toast.makeText(context, context.getString(R.string.hint_ad_loading), Toast.LENGTH_SHORT).show()
             rewardedAds.preload()
         }
@@ -318,7 +304,19 @@ fun SudokuScreen(
         )
         dataStore.clearSavedGame()
         playerStats = dataStore.loadStats()
-        AppAnalytics.logButtonClick("puzzle_complete_${gameState.difficulty.name.lowercase()}")
+        AppAnalytics.logGameWon(
+            difficulty = gameState.difficulty,
+            elapsedSeconds = gameState.elapsedSeconds,
+            mistakes = gameState.mistakes,
+        )
+        result.newUnlocks.forEach { AppAnalytics.logAchievementUnlock(it) }
+        AppAnalytics.syncEngagementUserProperties(
+            gamesWon = playerStats.gamesWon,
+            gamesPlayed = playerStats.gamesPlayed,
+            soundEnabled = settings.soundEnabled,
+            dailyReminderEnabled = settings.dailyReminderEnabled,
+            lastDifficulty = gameState.difficulty,
+        )
 
         achievementToasts = buildAchievementToastMessages(
             unlocks = result.newUnlocks,
@@ -367,6 +365,14 @@ fun SudokuScreen(
     }
 
     LaunchedEffect(Unit) {
+        AppAnalytics.logGameStart(gameState.difficulty, "session_start")
+        AppAnalytics.syncEngagementUserProperties(
+            gamesWon = playerStats.gamesWon,
+            gamesPlayed = playerStats.gamesPlayed,
+            soundEnabled = settings.soundEnabled,
+            dailyReminderEnabled = settings.dailyReminderEnabled,
+            lastDifficulty = gameState.difficulty,
+        )
         MobileAdsInitializer.whenReady {
             rewardedAds.preload()
         }
@@ -392,18 +398,6 @@ fun SudokuScreen(
             nowMs = System.currentTimeMillis()
             gameState = gameState.tickSecond()
         }
-    }
-
-    LaunchedEffect(nowMs, hintState.freeHintsRemaining, hintState.lastRefillAtMs) {
-        if (hintState.freeHintsRemaining > 0) return@LaunchedEffect
-        if (hintState.lastRefillAtMs <= 0L) return@LaunchedEffect
-        if (nowMs - hintState.lastRefillAtMs < hintRefillIntervalMs) return@LaunchedEffect
-        val updated = HintState(
-            freeHintsRemaining = (hintState.freeHintsRemaining + 1).coerceAtMost(freeHintsMax),
-            lastRefillAtMs = 0L,
-        )
-        hintState = updated
-        dataStore.saveHintState(updated)
     }
 
     fun applyNewGame(difficulty: SudokuDifficulty = gameState.difficulty) {
@@ -450,7 +444,38 @@ fun SudokuScreen(
     fun toggleAudio() {
         val updated = settings.copy(soundEnabled = !audioEnabled)
         onSettingsChange(updated)
-        AppAnalytics.logButtonClick(if (updated.soundEnabled) "audio_on" else "audio_off")
+        AppAnalytics.logSoundToggled(updated.soundEnabled)
+    }
+
+    fun onBoardDigit(digit: Int) {
+        val before = gameState.userValues[gameState.selectedIndex]
+        gameState = gameState.enterDigit(digit)
+        if (gameState.selectedIndex in 0..80 && !gameState.fixed[gameState.selectedIndex]) {
+            val after = gameState.userValues[gameState.selectedIndex]
+            if (after != before && after != 0) {
+                feedback.onCellFilled(after == gameState.solution[gameState.selectedIndex])
+            }
+        }
+    }
+
+    fun onDifficultySelect(diff: SudokuDifficulty) {
+        if (!playerStats.isDifficultyUnlocked(diff)) {
+            val progress = playerStats.winsTowardUnlock(diff) ?: return
+            val messageRes = when (diff) {
+                SudokuDifficulty.MEDIUM -> R.string.difficulty_lock_medium
+                SudokuDifficulty.HARD -> R.string.difficulty_lock_hard
+                else -> return
+            }
+            Toast.makeText(
+                context,
+                context.getString(messageRes, progress.first, progress.second),
+                Toast.LENGTH_SHORT,
+            ).show()
+            return
+        }
+        if (diff != gameState.difficulty) {
+            startNewGameFromBoard(diff)
+        }
     }
 
     BoxWithConstraints(
@@ -463,120 +488,136 @@ fun SudokuScreen(
             ),
     ) {
         val layout = rememberSudokuLayoutInfo(largeCells = settings.largeCells)
+        val screenHeight = maxHeight
+        val useSpaceBetween = layout.isTallScreen
 
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .statusBarsPadding()
-                .navigationBarsPadding(),
-            verticalArrangement = Arrangement.Top,
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            SudokuGameHeader(
-                audioEnabled = audioEnabled,
-                layout = layout,
-                onOpenShare = {
-                    showShare = true
-                    AppAnalytics.logButtonClick("open_share")
-                },
-                onOpenStats = {
-                    showStats = true
-                    AppAnalytics.logButtonClick("open_stats")
-                },
-                onOpenSettings = onOpenSettings,
-                onToggleAudio = ::toggleAudio,
-                headerIconSize = layout.headerIconSize,
-                headerSideWidth = layout.headerSideWidth,
-                titleFontSize = layout.titleFontSize,
-                subtitleFontSize = layout.subtitleFontSize,
-                headerIconContentSize = layout.headerIconContentSize,
-                verticalPadding = if (layout.isShortScreen) 4.dp else 6.dp,
-                modifier = Modifier.fillMaxWidth(),
-            )
-
-            DailyChallengeCard(
-                info = dailyChallengeInfo,
-                layout = layout,
-                consecutiveDays = playerStats.consecutiveDays,
-                onTap = {
-                    showStats = true
-                    AppAnalytics.logButtonClick("open_daily_challenge")
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = layout.horizontalPadding)
-                    .padding(bottom = layout.sectionSpacing),
-            )
-
-            SudokuStatusCard(
-                elapsedSeconds = gameState.elapsedSeconds,
-                mistakes = gameState.mistakes,
-                notesMode = gameState.notesMode,
-                hintsUsed = freeHintsUsed,
-                freeHints = freeHintsMax,
-                earnedHintsAvailable = earnedHints,
-                showHintVideo = freeHintsRemaining == 0 && earnedHints == 0,
-                nextHintSeconds = nextHintInSeconds,
-                onReset = {
-                    startNewGameFromBoard()
-                    AppAnalytics.logButtonClick("reset_game")
-                },
-                onToggleNotes = {
-                    gameState = gameState.toggleNotesMode()
-                },
-                onHint = { onHintClick() },
-                isCompact = layout.isCompact,
-                scrollStatusBar = layout.scrollStatusBar,
-                chipHeight = layout.statusChipHeight,
-                captionFontSize = layout.statusCaptionFontSize,
-                valueFontSize = layout.statusValueFontSize,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = layout.sectionSpacing),
-            )
-
-            DifficultyRow(
-                selected = gameState.difficulty,
-                playerStats = playerStats,
-                layout = layout,
-                onSelect = { diff ->
-                    if (!playerStats.isDifficultyUnlocked(diff)) {
-                        val progress = playerStats.winsTowardUnlock(diff) ?: return@DifficultyRow
-                        val messageRes = when (diff) {
-                            SudokuDifficulty.MEDIUM -> R.string.difficulty_lock_medium
-                            SudokuDifficulty.HARD -> R.string.difficulty_lock_hard
-                            else -> return@DifficultyRow
-                        }
-                        Toast.makeText(
-                            context,
-                            context.getString(messageRes, progress.first, progress.second),
-                            Toast.LENGTH_SHORT,
-                        ).show()
-                        return@DifficultyRow
-                    }
-                    if (diff != gameState.difficulty) {
-                        startNewGameFromBoard(diff)
-                    }
-                },
-            )
-
-            BoxWithConstraints(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxWidth(),
-            ) {
-                val boardSize = layout.boardSizeFor(maxHeight)
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .align(Alignment.TopCenter),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = if (layout.isShortScreen) {
-                        Arrangement.Top
+                .navigationBarsPadding()
+                .then(
+                    if (useSpaceBetween) {
+                        Modifier.padding(vertical = layout.screenVerticalPadding)
                     } else {
-                        Arrangement.Center
+                        Modifier
                     },
-                ) {
+                ),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = if (useSpaceBetween) {
+                Arrangement.SpaceBetween
+            } else {
+                Arrangement.Top
+            },
+        ) {
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(layout.sectionSpacing),
+            ) {
+                SudokuGameHeader(
+                    audioEnabled = audioEnabled,
+                    layout = layout,
+                    showLeaderboards = playGamesLeaderboardsEnabled && activity != null,
+                    onOpenShare = {
+                        showShare = true
+                        AppAnalytics.logButtonClick("open_share")
+                    },
+                    onOpenStats = {
+                        showStats = true
+                        AppAnalytics.logMenuOpen("stats")
+                    },
+                    onOpenSettings = {
+                        AppAnalytics.logMenuOpen("settings")
+                        onOpenSettings()
+                    },
+                    onOpenLeaderboards = {
+                        AppAnalytics.logMenuOpen("leaderboards")
+                        openPlayGamesLeaderboards(gameState.difficulty)
+                    },
+                    onShowInstructions = {
+                        showInstructions = true
+                        AppAnalytics.logMenuOpen("instructions")
+                    },
+                    onToggleAudio = ::toggleAudio,
+                    headerIconSize = layout.headerIconSize,
+                    titleFontSize = layout.titleFontSize,
+                    subtitleFontSize = layout.subtitleFontSize,
+                    headerIconContentSize = layout.headerIconContentSize,
+                    verticalPadding = when {
+                        layout.isTallScreen -> 4.dp
+                        layout.isShortScreen -> 2.dp
+                        else -> 4.dp
+                    },
+                    modifier = Modifier.fillMaxWidth(),
+                )
+
+                DailyChallengeCard(
+                    info = dailyChallengeInfo,
+                    layout = layout,
+                    consecutiveDays = playerStats.consecutiveDays,
+                    onTap = {
+                        showStats = true
+                        AppAnalytics.logButtonClick("open_daily_challenge")
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = layout.horizontalPadding),
+                )
+
+                SudokuStatusCard(
+                    elapsedSeconds = gameState.elapsedSeconds,
+                    mistakes = gameState.mistakes,
+                    notesMode = gameState.notesMode,
+                    freeHints = freeHintsMax,
+                    freeHintsRemaining = freeHintsRemaining,
+                    earnedHintsAvailable = earnedHints,
+                    showHintVideo = freeHintsRemaining == 0 && earnedHints == 0,
+                    onReset = {
+                        startNewGameFromBoard()
+                        AppAnalytics.logButtonClick("reset_game")
+                    },
+                    onToggleNotes = {
+                        gameState = gameState.toggleNotesMode()
+                    },
+                    onHint = { onHintClick() },
+                    isCompact = layout.isCompact,
+                    scrollStatusBar = layout.scrollStatusBar,
+                    chipHeight = layout.statusChipHeight,
+                    captionFontSize = layout.statusCaptionFontSize,
+                    valueFontSize = layout.statusValueFontSize,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = layout.horizontalPadding),
+                )
+
+                DifficultyRow(
+                    selected = gameState.difficulty,
+                    playerStats = playerStats,
+                    layout = layout,
+                    horizontalPadding = layout.horizontalPadding,
+                    onSelect = ::onDifficultySelect,
+                )
+            }
+
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .then(
+                        if (!useSpaceBetween) {
+                            Modifier.weight(1f)
+                        } else {
+                            Modifier
+                        },
+                    )
+                    .padding(horizontal = layout.horizontalPadding),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = when {
+                    useSpaceBetween || layout.isShortScreen -> Arrangement.Top
+                    else -> Arrangement.Center
+                },
+            ) {
+                if (useSpaceBetween) {
                     SudokuBoard(
                         state = gameState,
                         settings = settings,
@@ -584,44 +625,51 @@ fun SudokuScreen(
                             feedback.onTap()
                             gameState = gameState.withSelection(index)
                         },
-                        modifier = Modifier.size(boardSize),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .heightIn(max = layout.distributedBoardMaxHeight(screenHeight)),
+                    )
+                } else {
+                    SudokuBoard(
+                        state = gameState,
+                        settings = settings,
+                        onCellClick = { index ->
+                            feedback.onTap()
+                            gameState = gameState.withSelection(index)
+                        },
+                        modifier = Modifier.fillMaxWidth(),
                     )
                     Spacer(modifier = Modifier.height(layout.sectionSpacing))
                     NumberPad(
                         layout = layout,
                         gameState = gameState,
-                        onDigit = { digit ->
-                            val before = gameState.userValues[gameState.selectedIndex]
-                            gameState = gameState.enterDigit(digit)
-                            if (gameState.selectedIndex in 0..80 &&
-                                !gameState.fixed[gameState.selectedIndex]
-                            ) {
-                                val after = gameState.userValues[gameState.selectedIndex]
-                                if (after != before && after != 0) {
-                                    feedback.onCellFilled(
-                                        after == gameState.solution[gameState.selectedIndex],
-                                    )
-                                }
-                            }
-                        },
-                        onErase = {
-                            gameState = gameState.eraseCell()
-                        },
-                        modifier = Modifier
-                            .width(boardSize)
-                            .heightIn(min = layout.numpadHeight),
+                        onDigit = ::onBoardDigit,
+                        onErase = { gameState = gameState.eraseCell() },
+                        modifier = Modifier.fillMaxWidth(),
                     )
                 }
             }
 
+            if (useSpaceBetween) {
+                NumberPad(
+                    layout = layout,
+                    gameState = gameState,
+                    onDigit = ::onBoardDigit,
+                    onErase = { gameState = gameState.eraseCell() },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = layout.horizontalPadding),
+                )
+            }
+
             Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = layout.sectionSpacing),
+                modifier = Modifier.fillMaxWidth(),
                 contentAlignment = Alignment.Center,
             ) {
                 BannerAdView(
-                    modifier = Modifier.width(layout.bannerWidth),
+                    modifier = Modifier
+                        .width(layout.bannerWidth)
+                        .navigationBarsPadding(),
                 )
             }
         }
@@ -640,6 +688,7 @@ fun SudokuScreen(
                 },
                 onShare = { platform ->
                     AppAnalytics.logShare(platform)
+                    AppAnalytics.logPostGameShare(shareFromVictory)
                     ShareHelper.share(context, platform, shareMessage, shareStrings)
                 },
                 headerIconSize = layout.headerIconSize,
@@ -648,21 +697,29 @@ fun SudokuScreen(
         }
     }
 
+    if (showInstructions) {
+        LaunchedEffect(Unit) { AppAnalytics.logScreenView("instructions") }
+        InstructionsDialog(onDismiss = { showInstructions = false })
+    }
+
     if (showStats) {
+        LaunchedEffect(Unit) { AppAnalytics.logScreenView("stats") }
         StatsDialog(
             stats = playerStats,
             dailyInfo = dailyChallengeInfo,
             onDismiss = { showStats = false },
-            showPlayGamesActions = playGamesEnabled && activity != null,
-            onOpenLeaderboard = activity?.let { act ->
+            showPlayGamesActions = playGamesLeaderboardsEnabled && activity != null,
+            onOpenLeaderboard = activity?.let {
                 {
-                    AppAnalytics.logButtonClick("play_games_leaderboard")
-                    PlayGamesHelper.showLeaderboard(act)
+                    showStats = false
+                    AppAnalytics.logMenuOpen("leaderboards_stats")
+                    openPlayGamesLeaderboards(gameState.difficulty)
                 }
             },
             onOpenAchievements = activity?.let { act ->
                 {
-                    AppAnalytics.logButtonClick("play_games_achievements")
+                    showStats = false
+                    AppAnalytics.logMenuOpen("achievements_stats")
                     PlayGamesHelper.showAchievements(act)
                 }
             },
@@ -673,6 +730,14 @@ fun SudokuScreen(
         WinDialog(
             elapsedSeconds = gameState.elapsedSeconds,
             mistakes = gameState.mistakes,
+            showLeaderboards = playGamesLeaderboardsEnabled && activity != null,
+            onOpenLeaderboards = activity?.let {
+                {
+                    showWin = false
+                    AppAnalytics.logMenuOpen("leaderboards_win")
+                    openPlayGamesLeaderboards(gameState.difficulty)
+                }
+            },
             onDismiss = { showWin = false },
             onShare = {
                 showWin = false
@@ -714,13 +779,13 @@ private fun DifficultyRow(
     selected: SudokuDifficulty,
     playerStats: PlayerStats,
     layout: SudokuLayoutInfo,
+    horizontalPadding: Dp = layout.horizontalPadding,
     onSelect: (SudokuDifficulty) -> Unit,
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = layout.horizontalPadding)
-            .padding(bottom = layout.sectionSpacing),
+            .padding(horizontal = horizontalPadding),
         horizontalArrangement = Arrangement.spacedBy(6.dp, Alignment.CenterHorizontally),
     ) {
         SudokuDifficulty.entries.forEach { diff ->
@@ -837,7 +902,9 @@ private fun NumberPad(
     modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth()
+            .height(layout.numpadHeight),
         horizontalArrangement = Arrangement.spacedBy(layout.keySpacing),
     ) {
         for (n in 1..9) {
@@ -845,16 +912,18 @@ private fun NumberPad(
                 digit = n,
                 enabled = gameState.canEnterDigit(n),
                 onDigit = onDigit,
-                verticalPadding = layout.keyVerticalPadding,
                 fontSize = layout.keyFontSize,
-                modifier = Modifier.weight(1f),
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxHeight(),
             )
         }
         EraseKey(
             onErase = onErase,
-            verticalPadding = layout.keyVerticalPadding,
             fontSize = layout.keyFontSize,
-            modifier = Modifier.weight(1f),
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxHeight(),
         )
     }
 }
@@ -864,7 +933,6 @@ private fun NumberKey(
     digit: Int,
     enabled: Boolean,
     onDigit: (Int) -> Unit,
-    verticalPadding: androidx.compose.ui.unit.Dp,
     fontSize: androidx.compose.ui.unit.TextUnit,
     modifier: Modifier = Modifier,
 ) {
@@ -896,8 +964,7 @@ private fun NumberKey(
                 Color.White.copy(alpha = if (enabled) 0.35f else 0.12f),
                 shape,
             )
-            .clickable(enabled = enabled) { onDigit(digit) }
-            .padding(vertical = verticalPadding),
+            .clickable(enabled = enabled) { onDigit(digit) },
         contentAlignment = Alignment.Center,
     ) {
         Text(
@@ -912,7 +979,6 @@ private fun NumberKey(
 @Composable
 private fun EraseKey(
     onErase: () -> Unit,
-    verticalPadding: androidx.compose.ui.unit.Dp,
     fontSize: androidx.compose.ui.unit.TextUnit,
     modifier: Modifier = Modifier,
 ) {
@@ -926,8 +992,7 @@ private fun EraseKey(
                 Brush.verticalGradient(listOf(SudokuNeonPink, Color(0xFFC51162))),
             )
             .border(1.dp, Color.White.copy(alpha = 0.35f), RoundedCornerShape(8.dp))
-            .clickable(onClick = onErase)
-            .padding(vertical = verticalPadding),
+            .clickable(onClick = onErase),
         contentAlignment = Alignment.Center,
     ) {
         Text(

@@ -55,12 +55,16 @@
     <string name="difficulty_lock_medium">Gana %2$d partidas en Fácil para desbloquear Medio (%1$d/%2$d)</string>
     <string name="difficulty_lock_hard">Gana %2$d partidas en Medio para desbloquear Alto (%1$d/%2$d)</string>
     <string name="stats_title">Estadísticas</string>
+    <string name="stats_view_leaderboards">Ver clasificaciones (Play Games)</string>
     <string name="stats_section_progress">Progreso</string>
     <string name="stats_section_streaks">Rachas</string>
     <string name="stats_section_records">Mejores tiempos</string>
     <string name="stats_play_games_section">Google Play Games</string>
     <string name="play_games_leaderboards">Clasificaciones</string>
     <string name="play_games_achievements">Logros</string>
+    <string name="play_games_unavailable">Google Play Juegos no está disponible en este dispositivo</string>
+    <string name="play_games_sign_in_failed">No se pudo iniciar sesión en Play Juegos. Comprueba tu cuenta de Google.</string>
+    <string name="play_games_leaderboards_failed">No se pudieron abrir las clasificaciones. Inténtalo de nuevo.</string>
     <string name="stats_label_won">Ganadas</string>
     <string name="stats_label_played">Jugadas</string>
     <string name="stats_label_win_rate">% de victorias</string>

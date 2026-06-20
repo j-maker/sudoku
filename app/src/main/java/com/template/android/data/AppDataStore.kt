@@ -14,7 +14,7 @@ data class AppSettings(
     val languageCode: String = "es",
     val dailyReminderEnabled: Boolean = false,
     val dailyReminderHour: Int = 18,
-    val soundEnabled: Boolean = true,
+    val soundEnabled: Boolean = false,
     val vibrationEnabled: Boolean = true,
     val largeCells: Boolean = false,
     val highContrast: Boolean = false,
@@ -68,7 +68,7 @@ class AppDataStore(context: Context) {
         languageCode = resolvedLanguageCode(),
         dailyReminderEnabled = prefs.getBoolean(K_DAILY_REMINDER, false),
         dailyReminderHour = prefs.getInt(K_DAILY_REMINDER_HOUR, 18).coerceIn(6, 22),
-        soundEnabled = prefs.getBoolean(K_SOUND, true),
+        soundEnabled = prefs.getBoolean(K_SOUND, false),
         vibrationEnabled = prefs.getBoolean(K_VIBRATION, true),
         largeCells = prefs.getBoolean(K_LARGE_CELLS, false),
         highContrast = prefs.getBoolean(K_HIGH_CONTRAST, false),
@@ -129,14 +129,7 @@ class AppDataStore(context: Context) {
 
     fun loadHintState(): HintState {
         val remaining = prefs.getInt(K_HINTS_FREE_REMAINING, 2).coerceIn(0, 2)
-        val lastRefill = prefs.getLong(K_HINTS_LAST_REFILL_MS, 0L)
-        val pausedElapsed = prefs.getLong(K_HINTS_REFILL_ELAPSED_MS, -1L)
-        val effectiveLastRefill = if (pausedElapsed >= 0L && lastRefill > 0L) {
-            System.currentTimeMillis() - pausedElapsed
-        } else {
-            lastRefill
-        }
-        return HintState(freeHintsRemaining = remaining, lastRefillAtMs = effectiveLastRefill)
+        return HintState(freeHintsRemaining = remaining, lastRefillAtMs = 0L)
     }
 
     fun saveHintState(state: HintState) {

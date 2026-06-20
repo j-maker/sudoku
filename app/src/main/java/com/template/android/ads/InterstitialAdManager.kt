@@ -154,11 +154,12 @@ class InterstitialAdManager(context: Context) {
             return false
         }
 
+        onAdStarted?.invoke()
+
         ad.fullScreenContentCallback = object : FullScreenContentCallback() {
             override fun onAdShowedFullScreenContent() {
                 isShowing = true
                 AppAnalytics.logAdInterstitialShown(adUnitId)
-                onAdStarted?.invoke()
             }
 
             override fun onAdDismissedFullScreenContent() {

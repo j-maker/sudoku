@@ -37,6 +37,7 @@ data class SudokuLayoutInfo(
     val numpadHeight: Dp,
     val fixedChromeHeight: Dp,
     val scrollStatusBar: Boolean,
+    val screenVerticalPadding: Dp,
 )
 
 @Composable
@@ -58,11 +59,12 @@ fun BoxWithConstraintsScope.rememberSudokuLayoutInfo(
             else -> 1f
         }
 
-        val horizontalPadding = if (isCompact) 10.dp else 14.dp
+        val horizontalPadding = if (isCompact) 8.dp else 10.dp
         val sectionSpacing = when {
             isVeryShortScreen -> 2.dp
             isShortScreen -> 3.dp
             isCompact -> 4.dp
+            isTallScreen -> 8.dp
             else -> 5.dp
         }
 
@@ -73,22 +75,21 @@ fun BoxWithConstraintsScope.rememberSudokuLayoutInfo(
             isCompact -> 38.dp
             else -> 40.dp
         }
-        val streakRowHeight = if (isCompact) 24.dp else 26.dp
         val headerHeight = when {
-            isVeryShortScreen -> 88.dp
-            isCompact -> 92.dp
-            else -> 98.dp
-        } + streakRowHeight
+            isVeryShortScreen -> 48.dp
+            isCompact -> 52.dp
+            else -> 56.dp
+        }
         val statusHeight = ((when {
-            isVeryShortScreen -> 58.dp
-            isCompact -> 62.dp
-            else -> 66.dp
-        }.value * chromeScale).dp).coerceAtLeast(54.dp)
+            isVeryShortScreen -> 50.dp
+            isCompact -> 54.dp
+            else -> 58.dp
+        }.value * chromeScale).dp).coerceAtLeast(48.dp)
         val difficultyHeight = if (isCompact) 32.dp else 36.dp
         val numpadHeight = when {
-            isVeryShortScreen -> 44.dp
-            isCompact -> 48.dp
-            else -> 52.dp
+            isVeryShortScreen -> 48.dp
+            isCompact -> 52.dp
+            else -> 56.dp
         }
         val bannerSlot = 50.dp + sectionSpacing * 2
 
@@ -96,15 +97,7 @@ fun BoxWithConstraintsScope.rememberSudokuLayoutInfo(
             numpadHeight + bannerSlot + sectionSpacing * 5
 
         val maxBoardByWidth = maxWidth - horizontalPadding * 2
-        val maxBoardByHeight = (maxHeight - fixedChromeHeight).coerceAtLeast(200.dp)
-        val boardCap = when {
-            isVeryShortScreen -> 260.dp
-            isShortScreen -> 300.dp
-            isTallScreen -> 420.dp
-            else -> 360.dp
-        }
-        val boardMaxSize = (minOf(maxBoardByWidth, maxBoardByHeight, boardCap) * boardScale)
-            .coerceIn(210.dp, boardCap)
+        val boardMaxSize = maxBoardByWidth * boardScale
 
         val chipFontSize = when {
             prefersLargeSystemFont && isCompact -> 11.sp
@@ -134,16 +127,16 @@ fun BoxWithConstraintsScope.rememberSudokuLayoutInfo(
                 else -> 13.sp
             },
             headerIconContentSize = if (isCompact) 20.dp else 22.dp,
-            statusChipHeight = statusHeight - 16.dp,
+            statusChipHeight = statusHeight - 10.dp,
             statusCaptionFontSize = when {
-                prefersLargeSystemFont && isCompact -> 11.sp
-                isCompact -> 12.sp
-                else -> 13.sp
+                prefersLargeSystemFont && isCompact -> 10.sp
+                isCompact -> 11.sp
+                else -> 12.sp
             },
             statusValueFontSize = when {
-                prefersLargeSystemFont && isCompact -> 17.sp
-                isCompact -> 18.sp
-                else -> 19.sp
+                prefersLargeSystemFont && isCompact -> 16.sp
+                isCompact -> 17.sp
+                else -> 18.sp
             },
             chipHorizontalPadding = if (isCompact) 10.dp else 12.dp,
             chipVerticalPadding = if (isCompact) 5.dp else 6.dp,
@@ -158,9 +151,24 @@ fun BoxWithConstraintsScope.rememberSudokuLayoutInfo(
             keySpacing = if (isCompact) 3.dp else 4.dp,
             numpadHeight = numpadHeight,
             fixedChromeHeight = fixedChromeHeight,
-            scrollStatusBar = isVeryCompact || prefersLargeSystemFont,
+            scrollStatusBar = isCompact || isVeryCompact || prefersLargeSystemFont,
+            screenVerticalPadding = when {
+                isVeryShortScreen -> 4.dp
+                isShortScreen -> 6.dp
+                isTallScreen -> 12.dp
+                else -> 8.dp
+            },
         )
     }
+}
+
+/** Tope de altura del tablero en pantallas altas con distribución vertical. */
+fun SudokuLayoutInfo.distributedBoardMaxHeight(screenHeight: Dp): Dp {
+    val reserved = screenHeight * when {
+        isTallScreen -> 0.50f
+        else -> 0.52f
+    }
+    return (screenHeight - reserved).coerceIn(200.dp, 460.dp)
 }
 
 fun SudokuLayoutInfo.boardSizeFor(availableHeight: Dp): Dp {

@@ -262,7 +262,7 @@ fun StatsDialog(
                 accent = SudokuNeonPink,
             )
 
-            if (showPlayGamesActions && onOpenLeaderboard != null && onOpenAchievements != null) {
+            if (showPlayGamesActions && (onOpenLeaderboard != null || onOpenAchievements != null)) {
                 Spacer(modifier = Modifier.height(18.dp))
                 StatsSectionTitle(stringResource(R.string.stats_play_games_section))
                 Spacer(modifier = Modifier.height(10.dp))
@@ -270,18 +270,22 @@ fun StatsDialog(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(10.dp),
                 ) {
-                    StatsActionButton(
-                        label = stringResource(R.string.play_games_leaderboards),
-                        accent = SudokuPrimary,
-                        onClick = onOpenLeaderboard,
-                        modifier = Modifier.weight(1f),
-                    )
-                    StatsActionButton(
-                        label = stringResource(R.string.play_games_achievements),
-                        accent = SudokuAccent,
-                        onClick = onOpenAchievements,
-                        modifier = Modifier.weight(1f),
-                    )
+                    onOpenLeaderboard?.let { openLeaderboard ->
+                        StatsActionButton(
+                            label = stringResource(R.string.play_games_leaderboards),
+                            accent = SudokuPrimary,
+                            onClick = openLeaderboard,
+                            modifier = Modifier.weight(1f),
+                        )
+                    }
+                    onOpenAchievements?.let { openAchievements ->
+                        StatsActionButton(
+                            label = stringResource(R.string.play_games_achievements),
+                            accent = SudokuAccent,
+                            onClick = openAchievements,
+                            modifier = Modifier.weight(1f),
+                        )
+                    }
                 }
             }
 
@@ -324,6 +328,8 @@ private fun StatsActionButton(
                 color = accent,
             ),
             textAlign = TextAlign.Center,
+            maxLines = 2,
+            overflow = TextOverflow.Ellipsis,
         )
     }
 }
@@ -465,6 +471,8 @@ fun InstructionsDialog(
 fun WinDialog(
     elapsedSeconds: Int,
     mistakes: Int,
+    showLeaderboards: Boolean = false,
+    onOpenLeaderboards: (() -> Unit)? = null,
     onDismiss: () -> Unit,
     onShare: () -> Unit,
     onNewGame: () -> Unit,
@@ -561,6 +569,16 @@ fun WinDialog(
             )
 
             Spacer(modifier = Modifier.height(14.dp))
+
+            if (showLeaderboards && onOpenLeaderboards != null) {
+                StatsActionButton(
+                    label = stringResource(R.string.play_games_leaderboards),
+                    accent = SudokuPrimary,
+                    onClick = onOpenLeaderboards,
+                    modifier = Modifier.fillMaxWidth(),
+                )
+                Spacer(modifier = Modifier.height(10.dp))
+            }
 
             Row(
                 modifier = Modifier.fillMaxWidth(),

@@ -10,6 +10,7 @@
     <string name="a11y_sound_on">Activar sonido</string>
     <string name="a11y_sound_off">Desactivar sonido</string>
     <string name="a11y_close">Cerrar</string>
+    <string name="a11y_game_menu">Menú del juego</string>
 
     <string name="notification_channel_name">Recordatorios</string>
     <string name="notification_channel_desc">Avisos opcionales de Sudoku</string>

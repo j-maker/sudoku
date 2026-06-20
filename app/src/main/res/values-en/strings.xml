@@ -7,6 +7,7 @@
     <string name="a11y_sound_on">Turn sound on</string>
     <string name="a11y_sound_off">Turn sound off</string>
     <string name="a11y_close">Close</string>
+    <string name="a11y_game_menu">Game menu</string>
     <string name="notification_channel_name">Reminders</string>
     <string name="notification_channel_desc">Optional Sudoku notifications</string>
     <string name="notification_daily_title">🎯 Today\'s challenge</string>

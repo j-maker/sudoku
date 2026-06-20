@@ -1,0 +1,23 @@
+Coloca estos 6 PNG (512x512) en esta carpeta antes de crear el ZIP:
+
+  first_win.png          <- icono EASY / primera victoria
+  ten_wins.png           <- icono 10 VICTORIES
+  hard_mode.png          <- icono HARD MODE CHAMPION
+  win_streak.png         <- icono WIN STREAK 3
+  seven_day_player.png   <- icono 7 DAYS PLAYING
+  daily_challenge.png    <- icono DAILY CHALLENGE
+
+(No uses all_levels.png — no hay logro equivalente en la app.)
+
+Luego ejecuta en PowerShell:
+
+  cd "store-assets\play-games-achievements-import"
+  .\pack-achievements-zip.ps1
+
+Sube sudoku-achievements-import.zip en Play Console → Logros → Importar.
+
+IMPORTANTE antes de importar:
+1. Propiedades → Gestionar traducciones → añade los 13 idiomas:
+   es-ES, pt-BR, fr-FR, de-DE, it-IT, ru-RU, tr-TR, ar, hi-IN, id, ja-JP, ko-KR, zh-CN
+   (en-US ya es el predeterminado del proyecto)
+2. Tras importar, copia los IDs CgkI… a app/src/main/res/values/legal.xml

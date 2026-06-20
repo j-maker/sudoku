@@ -7,57 +7,12 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1090237180401:android:be75974b92b7b2a700fc50",
-        "android_client_info": {
-          "package_name": "com.jmaker.buscaminasarcade"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "1090237180401-h8giijoi64svkn2bua206v59gcu2fibr.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.jmaker.buscaminasarcade",
-            "certificate_hash": "80fa14d0d0404324ee4e87154c70cc6cd61e4e5b"
-          }
-        },
-        {
-          "client_id": "1090237180401-ok5k3sfbtf50g4bjs9kniri0jdk3gnk7.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.jmaker.buscaminasarcade",
-            "certificate_hash": "80970dcea5f2e97590f54cadaca3c56db109074d"
-          }
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDsJzji8JfCH7SG-jMHexmUrHg2x8y5vog"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
-    {
-      "client_info": {
         "mobilesdk_app_id": "1:1090237180401:android:16bb7f1a983f461800fc50",
         "android_client_info": {
           "package_name": "com.jmaker.sudoku"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "1090237180401-l0d4j1q5uehohn3l1gvnc9sc1lc0durn.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.jmaker.sudoku",
-            "certificate_hash": "80fa14d0d0404324ee4e87154c70cc6cd61e4e5b"
-          }
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
           "current_key": "AIzaSyDsJzji8JfCH7SG-jMHexmUrHg2x8y5vog"

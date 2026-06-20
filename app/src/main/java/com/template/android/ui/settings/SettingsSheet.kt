@@ -276,7 +276,7 @@ fun SettingsSheet(
                 label = stringResource(R.string.settings_reset_stats),
                 color = SudokuNeonPink,
                 onClick = {
-                    AppAnalytics.logButtonClick("reset_stats")
+                    AppAnalytics.logStatsReset()
                     dataStore.resetStats()
                 },
             )

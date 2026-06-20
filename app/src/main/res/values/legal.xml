@@ -4,23 +4,21 @@
     <string name="privacy_contact_email" translatable="false">jhonatan.diaz2012@gmail.com</string>
     <string name="privacy_policy_url" translatable="false">https://j-maker.github.io/sudoku/</string>
 
-    <!-- Play Console → Play Games Services → Configuración → ID del proyecto (número).
-         Vacío = Play Games desactivado en la app. -->
-    <string name="play_games_project_id" translatable="false">\u00401090237180401</string>
+    <!-- Play Console → Sudoku Neon → Play Games → Configuración → ID del proyecto.
+         Proyecto propio (Cloud: sudoku-neon-499717). Vacío = Play Games desactivado. -->
+    <string name="play_games_project_id" translatable="false">440995161343</string>
 
-    <!-- Leaderboards (Play Console → Clasificaciones). Puedes usar uno solo en _default
-         o tres por dificultad. Formato: CgkI… -->
-    <string name="play_games_leaderboard_default" translatable="false">CgkI8dPMudOfEAIQDw</string>
-    <string name="play_games_leaderboard_easy" translatable="false">CgkI8dPMudOfEAIQEA</string>
-    <string name="play_games_leaderboard_medium" translatable="false">CgkI8dPMudOfEAIQEQ</string>
-    <string name="play_games_leaderboard_hard" translatable="false">CgkI8dPMudOfEAIQEg</string>
+    <!-- Marcadores (Play Console → Sudoku Neon → Marcadores). -->
+    <string name="play_games_leaderboard_default" translatable="false">CgkI8nw6uoMEAIQAQ</string>
+    <string name="play_games_leaderboard_easy" translatable="false">CgkI8nw6uoMEAIQAg</string>
+    <string name="play_games_leaderboard_medium" translatable="false">CgkI8nw6uoMEAIQAw</string>
+    <string name="play_games_leaderboard_hard" translatable="false">CgkI8nw6uoMEAIQBA</string>
 
-    <!-- Logros (Play Console → Logros). Deben coincidir con AchievementId en la app:
-         first_win, wins_10, win_hard, streak_3, play_7_days, daily -->
-    <string name="play_games_achievement_first_win" translatable="false">CgkI8dPMudOfEAIQEw</string>
-    <string name="play_games_achievement_wins_10" translatable="false">CgkI8dPMudOfEAIQFA</string>
-    <string name="play_games_achievement_win_hard" translatable="false">CgkI8dPMudOfEAIQFQ</string>
-    <string name="play_games_achievement_streak_3" translatable="false">CgkI8dPMudOfEAIQFg</string>
-    <string name="play_games_achievement_play_7_days" translatable="false">CgkI8dPMudOfEAIQFw</string>
-    <string name="play_games_achievement_daily" translatable="false">CgkI8dPMudOfEAIQGA</string>
+    <!-- Logros (Play Console → Sudoku Neon → Logros). -->
+    <string name="play_games_achievement_first_win" translatable="false">CgkI8nw6uoMEAIQBw</string>
+    <string name="play_games_achievement_wins_10" translatable="false">CgkI8nw6uoMEAIQCw</string>
+    <string name="play_games_achievement_win_hard" translatable="false">CgkI8nw6uoMEAIQCA</string>
+    <string name="play_games_achievement_streak_3" translatable="false">CgkI8nw6uoMEAIQCQ</string>
+    <string name="play_games_achievement_play_7_days" translatable="false">CgkI8nw6uoMEAIQCg</string>
+    <string name="play_games_achievement_daily" translatable="false">CgkI8nw6uoMEAIQBg</string>
 </resources>

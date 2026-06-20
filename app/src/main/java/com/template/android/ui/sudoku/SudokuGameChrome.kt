@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
@@ -19,22 +20,24 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.VolumeOff
-import androidx.compose.material.icons.automirrored.filled.VolumeUp
-import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Lightbulb
 import androidx.compose.material.icons.filled.OndemandVideo
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Schedule
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.Share
 import com.template.android.ui.layout.NonScalingContent
 import com.template.android.ui.layout.SudokuLayoutInfo
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.MenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -43,6 +46,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -69,63 +73,42 @@ private val ChromeCaptionStyle = TextStyle(
 fun SudokuGameHeader(
     audioEnabled: Boolean,
     layout: SudokuLayoutInfo,
+    showLeaderboards: Boolean,
     onOpenShare: () -> Unit,
     onOpenStats: () -> Unit,
     onOpenSettings: () -> Unit,
+    onOpenLeaderboards: () -> Unit,
+    onShowInstructions: () -> Unit,
     onToggleAudio: () -> Unit,
     headerIconSize: Dp = 40.dp,
-    headerSideWidth: Dp = 54.dp,
     titleFontSize: TextUnit = 26.sp,
     subtitleFontSize: TextUnit = 11.sp,
     headerIconContentSize: Dp = 22.dp,
     verticalPadding: Dp = 6.dp,
     modifier: Modifier = Modifier,
 ) {
+    var optionsMenuExpanded by remember { mutableStateOf(false) }
+    val menuLabel = stringResource(R.string.a11y_game_menu)
     val shareLabel = stringResource(R.string.share_title)
     val statsLabel = stringResource(R.string.stats_title)
     val settingsLabel = stringResource(R.string.settings_title)
+    val leaderboardsLabel = stringResource(R.string.play_games_leaderboards)
+    val instructionsLabel = stringResource(R.string.settings_instructions)
     val audioLabel = stringResource(
         if (audioEnabled) R.string.a11y_sound_off else R.string.a11y_sound_on,
     )
     val titleText = stringResource(R.string.game_title).uppercase()
+    val menuAnchorWidth = headerIconSize + 8.dp
 
-    Row(
+    Box(
         modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 8.dp, vertical = verticalPadding),
-        verticalAlignment = Alignment.CenterVertically,
     ) {
         Column(
-            modifier = Modifier.width(headerSideWidth),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(6.dp),
-        ) {
-            HeaderIconButton(
-                onClick = onOpenShare,
-                contentDescription = shareLabel,
-                size = headerIconSize,
-                accent = SudokuPrimary,
-            ) {
-                NonScalingContent {
-                    HeaderGlyph(Icons.Filled.Share, headerIconContentSize, SudokuPrimary)
-                }
-            }
-            HeaderIconButton(
-                onClick = onOpenStats,
-                contentDescription = statsLabel,
-                size = headerIconSize,
-                accent = SudokuAccent,
-            ) {
-                NonScalingContent {
-                    HeaderGlyph(Icons.Filled.BarChart, headerIconContentSize, SudokuAccent)
-                }
-            }
-        }
-
-        Column(
             modifier = Modifier
-                .weight(1f)
-                .padding(horizontal = 4.dp),
+                .fillMaxWidth()
+                .padding(horizontal = menuAnchorWidth),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(
@@ -166,41 +149,166 @@ fun SudokuGameHeader(
             )
         }
 
-        Column(
-            modifier = Modifier.width(headerSideWidth),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(6.dp),
-        ) {
+        Box(modifier = Modifier.align(Alignment.CenterEnd)) {
             HeaderIconButton(
-                onClick = onOpenSettings,
-                contentDescription = settingsLabel,
+                onClick = { optionsMenuExpanded = true },
+                contentDescription = menuLabel,
                 size = headerIconSize,
-                accent = SudokuAccent,
+                accent = SudokuPrimary,
             ) {
                 NonScalingContent {
-                    HeaderGlyph(Icons.Filled.Settings, headerIconContentSize, SudokuAccent)
-                }
-            }
-            HeaderIconButton(
-                onClick = onToggleAudio,
-                contentDescription = audioLabel,
-                size = headerIconSize,
-                accent = if (audioEnabled) SudokuNeonGreen else SudokuNeonPink,
-            ) {
-                NonScalingContent {
-                    HeaderGlyph(
-                        imageVector = if (audioEnabled) {
-                            Icons.AutoMirrored.Filled.VolumeUp
-                        } else {
-                            Icons.AutoMirrored.Filled.VolumeOff
-                        },
-                        size = headerIconContentSize,
-                        tint = if (audioEnabled) SudokuNeonGreen else SudokuNeonPink,
+                    Icon(
+                        painter = painterResource(R.drawable.ic_more_vert),
+                        contentDescription = null,
+                        tint = SudokuPrimary,
+                        modifier = Modifier.size(headerIconContentSize),
                     )
                 }
             }
+            SudokuHeaderFloatingMenu(
+                expanded = optionsMenuExpanded,
+                onDismiss = { optionsMenuExpanded = false },
+                shareLabel = shareLabel,
+                statsLabel = statsLabel,
+                settingsLabel = settingsLabel,
+                leaderboardsLabel = leaderboardsLabel,
+                instructionsLabel = instructionsLabel,
+                showLeaderboards = showLeaderboards,
+                audioLabel = audioLabel,
+                audioEnabled = audioEnabled,
+                iconContentSize = headerIconContentSize,
+                onOpenShare = onOpenShare,
+                onOpenStats = onOpenStats,
+                onOpenSettings = onOpenSettings,
+                onOpenLeaderboards = onOpenLeaderboards,
+                onShowInstructions = onShowInstructions,
+                onToggleAudio = onToggleAudio,
+            )
         }
     }
+}
+
+@Composable
+private fun SudokuHeaderFloatingMenu(
+    expanded: Boolean,
+    onDismiss: () -> Unit,
+    shareLabel: String,
+    statsLabel: String,
+    settingsLabel: String,
+    leaderboardsLabel: String,
+    instructionsLabel: String,
+    showLeaderboards: Boolean,
+    audioLabel: String,
+    audioEnabled: Boolean,
+    iconContentSize: Dp,
+    onOpenShare: () -> Unit,
+    onOpenStats: () -> Unit,
+    onOpenSettings: () -> Unit,
+    onOpenLeaderboards: () -> Unit,
+    onShowInstructions: () -> Unit,
+    onToggleAudio: () -> Unit,
+) {
+    val menuShape = RoundedCornerShape(14.dp)
+    DropdownMenu(
+        expanded = expanded,
+        onDismissRequest = onDismiss,
+        shape = menuShape,
+        containerColor = Color(0xFF140830).copy(alpha = 0.96f),
+        tonalElevation = 0.dp,
+        shadowElevation = 16.dp,
+        border = BorderStroke(1.dp, SudokuPrimary.copy(alpha = 0.45f)),
+    ) {
+        SudokuHeaderMenuItem(
+            label = shareLabel,
+            onClick = {
+                onDismiss()
+                onOpenShare()
+            },
+        ) {
+            Icon(
+                painter = painterResource(R.drawable.ic_share),
+                contentDescription = null,
+                tint = SudokuPrimary,
+                modifier = Modifier.size(iconContentSize),
+            )
+        }
+        SudokuHeaderMenuItem(
+            label = statsLabel,
+            onClick = {
+                onDismiss()
+                onOpenStats()
+            },
+        ) {
+            Text("📊", fontSize = iconContentSize.value.sp)
+        }
+        if (showLeaderboards) {
+            SudokuHeaderMenuItem(
+                label = leaderboardsLabel,
+                onClick = {
+                    onDismiss()
+                    onOpenLeaderboards()
+                },
+            ) {
+                Text("🏆", fontSize = iconContentSize.value.sp)
+            }
+        }
+        SudokuHeaderMenuItem(
+            label = instructionsLabel,
+            onClick = {
+                onDismiss()
+                onShowInstructions()
+            },
+        ) {
+            Text("📖", fontSize = iconContentSize.value.sp)
+        }
+        SudokuHeaderMenuItem(
+            label = settingsLabel,
+            onClick = {
+                onDismiss()
+                onOpenSettings()
+            },
+        ) {
+            Text("⚙️", fontSize = iconContentSize.value.sp)
+        }
+        SudokuHeaderMenuItem(
+            label = audioLabel,
+            onClick = {
+                onDismiss()
+                onToggleAudio()
+            },
+        ) {
+            Text(
+                text = if (audioEnabled) "🔊" else "🔇",
+                fontSize = iconContentSize.value.sp,
+            )
+        }
+    }
+}
+
+@Composable
+private fun SudokuHeaderMenuItem(
+    label: String,
+    onClick: () -> Unit,
+    leading: (@Composable () -> Unit)? = null,
+) {
+    DropdownMenuItem(
+        text = {
+            Text(
+                text = label,
+                color = Color.White,
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 14.sp,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
+        },
+        leadingIcon = leading,
+        onClick = onClick,
+        colors = MenuDefaults.itemColors(
+            textColor = Color.White,
+            leadingIconColor = SudokuAccent,
+        ),
+    )
 }
 
 @Composable
@@ -208,11 +316,10 @@ fun SudokuStatusCard(
     elapsedSeconds: Int,
     mistakes: Int,
     notesMode: Boolean,
-    hintsUsed: Int,
     freeHints: Int,
+    freeHintsRemaining: Int,
     earnedHintsAvailable: Int,
     showHintVideo: Boolean,
-    nextHintSeconds: Int?,
     onReset: () -> Unit,
     onToggleNotes: () -> Unit,
     onHint: () -> Unit,
@@ -231,17 +338,12 @@ fun SudokuStatusCard(
         stringResource(R.string.status_notes_off)
     }
     val notesContentDescription = "$notesBtnLabel — $notesStateLabel"
-    val hintsLabel = stringResource(R.string.status_hints_label)
-    val hintCountdownSeconds = if (showHintVideo) nextHintSeconds else null
-    val waitingRefill = hintCountdownSeconds != null
+    val hintsLabel = if (showHintVideo) "" else stringResource(R.string.status_hints_label)
     val hintsValue = when {
-        waitingRefill -> {
-            val mm = hintCountdownSeconds / 60
-            val ss = hintCountdownSeconds % 60
-            "%02d:%02d".format(mm, ss)
-        }
         earnedHintsAvailable > 0 -> earnedHintsAvailable.toString()
-        else -> "${hintsUsed.coerceAtMost(freeHints)}/$freeHints"
+        showHintVideo -> ""
+        freeHintsRemaining > 0 -> "${freeHintsRemaining}/$freeHints"
+        else -> "0/$freeHints"
     }
     val hintsAccent = when {
         showHintVideo -> SudokuNeonPink
@@ -254,16 +356,16 @@ fun SudokuStatusCard(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 12.dp)
+            .padding(horizontal = 6.dp)
             .clip(RoundedCornerShape(12.dp))
             .background(Color(0xFF140830).copy(alpha = 0.92f))
             .border(1.dp, SudokuPrimary.copy(alpha = 0.35f), RoundedCornerShape(12.dp))
-            .padding(horizontal = 8.dp, vertical = 8.dp)
+            .padding(horizontal = 6.dp, vertical = 5.dp)
             .then(if (scrollStatusBar) Modifier.horizontalScroll(statusScroll) else Modifier),
         horizontalArrangement = if (scrollStatusBar) {
-            Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally)
+            Arrangement.spacedBy(6.dp, Alignment.CenterHorizontally)
         } else {
-            Arrangement.spacedBy(8.dp)
+            Arrangement.spacedBy(6.dp)
         },
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -294,7 +396,6 @@ fun SudokuStatusCard(
             accent = hintsAccent,
             videoMode = showHintVideo,
             readyHint = earnedHintsAvailable > 0,
-            countdownMode = waitingRefill,
             height = chipHeight,
             captionFontSize = captionFontSize,
             valueFontSize = valueFontSize,
@@ -333,7 +434,6 @@ private fun StatusHintChip(
     accent: Color,
     videoMode: Boolean,
     readyHint: Boolean,
-    countdownMode: Boolean = false,
     height: Dp,
     captionFontSize: TextUnit,
     valueFontSize: TextUnit,
@@ -359,7 +459,7 @@ private fun StatusHintChip(
                 shape = RoundedCornerShape(8.dp),
             )
             .clickable(onClick = onClick)
-            .padding(horizontal = 6.dp, vertical = 6.dp),
+            .padding(horizontal = 5.dp, vertical = 4.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(2.dp, Alignment.CenterVertically),
     ) {
@@ -367,23 +467,24 @@ private fun StatusHintChip(
             imageVector = icon,
             contentDescription = null,
             tint = accent,
-            modifier = Modifier.size(if (videoMode) 24.dp else 22.dp),
+            modifier = Modifier.size(20.dp),
         )
-        Text(
-            text = caption,
-            style = ChromeCaptionStyle.copy(
-                fontSize = labelSize,
-                fontWeight = FontWeight.ExtraBold,
-                lineHeight = labelSize * 1.1f,
-                color = accent,
-            ),
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            textAlign = TextAlign.Center,
-        )
+        if (caption.isNotEmpty()) {
+            Text(
+                text = caption,
+                style = ChromeCaptionStyle.copy(
+                    fontSize = labelSize,
+                    fontWeight = FontWeight.ExtraBold,
+                    lineHeight = labelSize * 1.1f,
+                    color = accent,
+                ),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                textAlign = TextAlign.Center,
+            )
+        }
         if (value.isNotEmpty()) {
             val valueSize = when {
-                countdownMode -> (valueFontSize.value * 0.62f).sp
                 value.contains('/') -> (valueFontSize.value * 0.72f).sp
                 else -> (valueFontSize.value * 0.78f).sp
             }
@@ -399,20 +500,6 @@ private fun StatusHintChip(
             )
         }
     }
-}
-
-@Composable
-private fun HeaderGlyph(
-    imageVector: ImageVector,
-    size: Dp,
-    tint: Color,
-) {
-    Icon(
-        imageVector = imageVector,
-        contentDescription = null,
-        tint = tint,
-        modifier = Modifier.size(size),
-    )
 }
 
 @Composable
@@ -432,9 +519,9 @@ private fun StatusCounterChip(
             .heightIn(min = height)
             .clip(RoundedCornerShape(8.dp))
             .background(Color(0xFF0D0820))
-            .padding(horizontal = 8.dp, vertical = 6.dp),
+            .padding(horizontal = 6.dp, vertical = 4.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterVertically),
+        verticalArrangement = Arrangement.spacedBy(2.dp, Alignment.CenterVertically),
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -444,7 +531,7 @@ private fun StatusCounterChip(
                 imageVector = icon,
                 contentDescription = null,
                 tint = Color.White.copy(alpha = 0.72f),
-                modifier = Modifier.size(16.dp),
+                modifier = Modifier.size(14.dp),
             )
             Spacer(modifier = Modifier.width(4.dp))
             Text(
@@ -452,7 +539,7 @@ private fun StatusCounterChip(
                 style = ChromeCaptionStyle.copy(
                     fontSize = captionFontSize,
                     fontWeight = FontWeight.SemiBold,
-                    lineHeight = captionFontSize * 1.3f,
+                    lineHeight = captionFontSize * 1.2f,
                     color = Color.White.copy(alpha = 0.78f),
                 ),
                 maxLines = 1,
@@ -499,22 +586,22 @@ private fun StatusActionChip(
                 RoundedCornerShape(8.dp),
             )
             .clickable(onClick = onClick)
-            .padding(horizontal = 6.dp, vertical = 6.dp),
+            .padding(horizontal = 5.dp, vertical = 4.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterVertically),
+        verticalArrangement = Arrangement.spacedBy(2.dp, Alignment.CenterVertically),
     ) {
         Icon(
             imageVector = icon,
             contentDescription = null,
             tint = accent,
-            modifier = Modifier.size(22.dp),
+            modifier = Modifier.size(20.dp),
         )
         Text(
             text = caption,
             style = ChromeCaptionStyle.copy(
                 fontSize = captionFontSize,
                 fontWeight = FontWeight.Bold,
-                lineHeight = captionFontSize * 1.3f,
+                lineHeight = captionFontSize * 1.2f,
                 color = if (active) accent else Color.White.copy(alpha = 0.85f),
             ),
             maxLines = 2,

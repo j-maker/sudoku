@@ -13,7 +13,7 @@ class TemplateApp : Application() {
         AppAnalytics.init(this)
         FirebaseCrashReporting.init(this)
         PlayIntegrityChecker.checkOnAppStart(this)
-        PlayGamesHelper.initialize(this)
+        runCatching { PlayGamesHelper.initialize(this) }
         DailyReminderScheduler.ensureChannel(this)
         DailyReminderScheduler.sync(this)
     }
