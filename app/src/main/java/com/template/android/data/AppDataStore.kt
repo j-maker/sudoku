@@ -77,7 +77,7 @@ class AppDataStore(context: Context) {
     )
 
     fun saveSettings(settings: AppSettings, sync: Boolean = false) {
-        prefs.edit()
+        val editor = prefs.edit()
             .putString(K_LANGUAGE, settings.languageCode)
             .putBoolean(K_DAILY_REMINDER, settings.dailyReminderEnabled)
             .putInt(K_DAILY_REMINDER_HOUR, settings.dailyReminderHour.coerceIn(6, 22))
@@ -87,9 +87,11 @@ class AppDataStore(context: Context) {
             .putBoolean(K_HIGH_CONTRAST, settings.highContrast)
             .putBoolean(K_REDUCE_MOTION, settings.reduceMotion)
             .putBoolean(K_HIGHLIGHT_ERRORS, settings.highlightErrors)
-            .apply()
         if (sync) {
+            editor.commit()
             com.template.android.engagement.DailyReminderScheduler.sync(appContext)
+        } else {
+            editor.apply()
         }
     }
 
@@ -365,6 +367,12 @@ class AppDataStore(context: Context) {
         prefs.edit().putBoolean(K_REMINDER_PROMPT, true).apply()
     }
 
+    fun lastReminderNotifiedDate(): String? = prefs.getString(K_REMINDER_NOTIFIED_DATE, null)
+
+    fun setLastReminderNotifiedDate(dateKey: String) {
+        prefs.edit().putString(K_REMINDER_NOTIFIED_DATE, dateKey).apply()
+    }
+
     private fun updateBest(
         current: Int?,
         elapsed: Int,
@@ -497,6 +505,7 @@ class AppDataStore(context: Context) {
         private const val K_BOARD_NEW_GAME_COUNT = "board_new_game_count"
         private const val K_TUTORIAL_DONE = "tutorial_done"
         private const val K_REMINDER_PROMPT = "reminder_prompt_shown"
+        private const val K_REMINDER_NOTIFIED_DATE = "reminder_notified_date"
         private const val K_HINTS_FREE_REMAINING = "hints_free_remaining"
         private const val K_HINTS_LAST_REFILL_MS = "hints_last_refill_ms"
         private const val K_HINTS_REFILL_ELAPSED_MS = "hints_refill_elapsed_ms"

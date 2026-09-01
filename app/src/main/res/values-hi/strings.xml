@@ -5,4 +5,6 @@
     <string name="notification_channel_desc">ऐप की वैकल्पिक सूचनाएँ</string>
     <string name="notification_daily_title">🎯 आज की चुनौती</string>
     <string name="notification_daily_body">अभी पूरी नहीं: %1$s</string>
+    <string name="notification_play_title">सुडोकू खेलने का समय</string>
+    <string name="notification_play_body">एक पज़ल आपका इंतज़ार कर रहा है</string>
 </resources>

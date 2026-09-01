@@ -28,12 +28,12 @@ val configuredAppDisplayName = templateProp("appDisplayName", "App Template")
 
 android {
     namespace = "com.template.android"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = configuredApplicationId
         minSdk = 24
-        targetSdk = 35
+        targetSdk = 36
         versionCode = templateProp("versionCode", "1").toInt()
         versionName = templateProp("versionName", "1.0.0")
 

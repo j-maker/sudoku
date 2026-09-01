@@ -5,4 +5,6 @@
     <string name="notification_channel_desc">إشعارات اختيارية للتطبيق</string>
     <string name="notification_daily_title">🎯 تحديك اليوم</string>
     <string name="notification_daily_body">لم يكتمل بعد: %1$s</string>
+    <string name="notification_play_title">حان وقت سودوكو</string>
+    <string name="notification_play_body">هناك لغز في انتظارك</string>
 </resources>

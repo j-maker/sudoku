@@ -5,4 +5,6 @@
     <string name="notification_channel_desc">可选的应用通知</string>
     <string name="notification_daily_title">🎯 今日挑战</string>
     <string name="notification_daily_body">尚未完成：%1$s</string>
+    <string name="notification_play_title">数独时间到了</string>
+    <string name="notification_play_body">有一道谜题在等你</string>
 </resources>

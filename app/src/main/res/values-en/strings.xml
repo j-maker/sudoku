@@ -12,4 +12,6 @@
     <string name="notification_channel_desc">Optional Sudoku notifications</string>
     <string name="notification_daily_title">🎯 Today\'s challenge</string>
     <string name="notification_daily_body">Not completed yet: %1$s</string>
+    <string name="notification_play_title">Time to play Sudoku</string>
+    <string name="notification_play_body">A puzzle is waiting for you</string>
 </resources>

@@ -22,4 +22,11 @@
     <string name="play_games_achievements">実績</string>
     <string name="settings_rate_app">アプリを評価</string>
     <string name="hint_video_daily_limit">本日の動画上限に達しました。無料ヒントをお待ちください。</string>
+
+    <string name="more_games_title">ほかのゲーム</string>
+    <string name="more_games_download">Google Playでダウンロード</string>
+    <string name="more_games_target_name">マインスイーパー Arcade</string>
+    <string name="a11y_more_games_open">ほかのゲーム</string>
+    <string name="a11y_more_games_close">ほかのゲームを閉じる</string>
+
 </resources>

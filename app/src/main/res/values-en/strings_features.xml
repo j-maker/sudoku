@@ -23,6 +23,7 @@
     <string name="settings_daily_reminder">Enable reminder</string>
     <string name="settings_daily_reminder_desc">Daily notification to play again</string>
     <string name="settings_reminder_hour">Reminder time: %1$d:00</string>
+    <string name="settings_reminder_permission_blocked">Sudoku notifications are off in system settings. Enable them to receive the reminder.</string>
     <string name="settings_privacy_policy">Privacy policy</string>
     <string name="settings_ad_consent">Manage ad consent</string>
     <string name="settings_rate_app">Rate the app</string>
@@ -120,4 +121,10 @@
     <string name="share_more">More apps…</string>
     <string name="share_app_not_installed">App not installed — opening other options</string>
     <string name="share_instagram_paste">Text copied. Open Instagram and paste it in your story or post</string>
+
+    <string name="more_games_title">More games</string>
+    <string name="more_games_download">Download on Google Play</string>
+    <string name="more_games_target_name">Minesweeper Arcade</string>
+    <string name="a11y_more_games_open">More games</string>
+    <string name="a11y_more_games_close">Close more games</string>
 </resources>

@@ -20,6 +20,7 @@ import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -28,6 +29,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
@@ -46,6 +50,7 @@ import com.template.android.ui.sudoku.SudokuStyledDialog
 import com.template.android.ui.theme.SudokuAccent
 import com.template.android.ui.theme.SudokuNeonPink
 import com.template.android.ui.theme.SudokuPrimary
+import com.template.android.engagement.DailyReminderScheduler
 import com.template.android.engagement.PlayReviewHelper
 import com.template.android.util.LocaleHelper
 import com.template.android.util.PrivacyHelper
@@ -74,6 +79,19 @@ fun SettingsSheet(
     }
     var showInstructions by remember { mutableStateOf(false) }
     var hideRateButton by remember { mutableStateOf(dataStore.wasReviewPrompted()) }
+    var notificationsAllowed by remember {
+        mutableStateOf(DailyReminderScheduler.canPostNotifications(context))
+    }
+    val lifecycleOwner = LocalLifecycleOwner.current
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                notificationsAllowed = DailyReminderScheduler.canPostNotifications(context)
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
+    }
 
     val requestNotificationPermission = rememberNotificationPermissionRequest { granted ->
         if (granted) {
@@ -243,6 +261,16 @@ fun SettingsSheet(
                         checkedTrackColor = SudokuPrimary,
                         uncheckedThumbColor = Color.White.copy(alpha = 0.75f),
                         uncheckedTrackColor = Color.White.copy(alpha = 0.2f),
+                    ),
+                )
+            }
+
+            if (settings.dailyReminderEnabled && !notificationsAllowed) {
+                Text(
+                    text = stringResource(R.string.settings_reminder_permission_blocked),
+                    style = SettingsTextStyle.copy(
+                        fontSize = 12.sp,
+                        color = SudokuNeonPink,
                     ),
                 )
             }

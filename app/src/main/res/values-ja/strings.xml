@@ -5,4 +5,6 @@
     <string name="notification_channel_desc">アプリのオプション通知</string>
     <string name="notification_daily_title">🎯 今日のチャレンジ</string>
     <string name="notification_daily_body">未達成：%1$s</string>
+    <string name="notification_play_title">数独の時間です</string>
+    <string name="notification_play_body">パズルが待っています</string>
 </resources>

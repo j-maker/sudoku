@@ -1,0 +1,100 @@
+<en-US>
+• Compatible with Android 16 (required by Google Play)
+• More reliable daily reminder notification
+• Shortcut to more games (Minesweeper)
+</en-US>
+<ar>
+• متوافق مع Android 16 (مطلوب من Google Play)
+• تذكير يومي أكثر موثوقية
+• اختصار لمزيد من الألعاب (كانسة الألغام)
+</ar>
+<de-DE>
+• Kompatibel mit Android 16 (von Google Play erforderlich)
+• Zuverlässigere tägliche Erinnerung
+• Shortcut zu weiteren Spielen (Minesweeper)
+</de-DE>
+<es-419>
+• Compatible con Android 16 (requisito de Google Play)
+• Recordatorio diario más fiable
+• Acceso rápido a más juegos (Buscaminas)
+</es-419>
+<es-ES>
+• Compatible con Android 16 (requisito de Google Play)
+• Recordatorio diario más fiable
+• Acceso rápido a más juegos (Buscaminas)
+</es-ES>
+<es-US>
+• Compatible con Android 16 (requisito de Google Play)
+• Recordatorio diario más fiable
+• Acceso rápido a más juegos (Buscaminas)
+</es-US>
+<fr-CA>
+• Compatible avec Android 16 (exigé par Google Play)
+• Rappel quotidien plus fiable
+• Raccourci vers plus de jeux (Démineur)
+</fr-CA>
+<fr-FR>
+• Compatible avec Android 16 (exigé par Google Play)
+• Rappel quotidien plus fiable
+• Raccourci vers plus de jeux (Démineur)
+</fr-FR>
+<hi-IN>
+• Android 16 के साथ संगत (Google Play की आवश्यकता)
+• अधिक विश्वसनीय दैनिक रिमाइंडर
+• और गेम्स के लिए शॉर्टकट (माइंसवीपर)
+</hi-IN>
+<id>
+• Kompatibel dengan Android 16 (wajib Google Play)
+• Pengingat harian yang lebih andal
+• Pintasan ke game lain (Minesweeper)
+</id>
+<it-IT>
+• Compatibile con Android 16 (richiesto da Google Play)
+• Promemoria giornaliero più affidabile
+• Scorciatoia ad altri giochi (Campo minato)
+</it-IT>
+<ja-JP>
+• Android 16に対応（Google Playの要件）
+• 毎日のリマインダーをより確実に
+• 他のゲーム（マインスイーパー）へのショートカット
+</ja-JP>
+<ko-KR>
+• Android 16 호환 (Google Play 요구사항)
+• 더 안정적인 매일 알림
+• 다른 게임(지뢰찾기) 바로가기
+</ko-KR>
+<pt-BR>
+• Compatível com o Android 16 (exigência do Google Play)
+• Lembrete diário mais confiável
+• Atalho para mais jogos (Campo minado)
+</pt-BR>
+<pt-PT>
+• Compatível com o Android 16 (exigência da Google Play)
+• Lembrete diário mais fiável
+• Atalho para mais jogos (Campo minado)
+</pt-PT>
+<ru-RU>
+• Совместимость с Android 16 (требование Google Play)
+• Более надёжное ежедневное напоминание
+• Ярлык к другим играм (Сапёр)
+</ru-RU>
+<tr-TR>
+• Android 16 uyumlu (Google Play gereksinimi)
+• Daha güvenilir günlük hatırlatıcı
+• Diğer oyunlara kısayol (Mayın Tarlası)
+</tr-TR>
+<zh-CN>
+• 兼容 Android 16（Google Play 要求）
+• 更可靠的每日提醒
+• 更多游戏快捷入口（扫雷）
+</zh-CN>
+<zh-HK>
+• 兼容 Android 16（Google Play 要求）
+• 更可靠的每日提醒
+• 更多遊戲快捷入口（掃雷）
+</zh-HK>
+<zh-TW>
+• 相容 Android 16（Google Play 要求）
+• 更可靠的每日提醒
+• 更多遊戲快捷入口（踩地雷）
+</zh-TW>

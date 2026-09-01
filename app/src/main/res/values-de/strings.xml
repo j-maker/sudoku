@@ -5,4 +5,6 @@
     <string name="notification_channel_desc">Optionale App-Benachrichtigungen</string>
     <string name="notification_daily_title">🎯 Deine Herausforderung heute</string>
     <string name="notification_daily_body">Noch nicht abgeschlossen: %1$s</string>
+    <string name="notification_play_title">Zeit für Sudoku</string>
+    <string name="notification_play_body">Ein Puzzle wartet auf dich</string>
 </resources>

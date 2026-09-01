@@ -22,4 +22,11 @@
     <string name="play_games_achievements">成就</string>
     <string name="settings_rate_app">评价应用</string>
     <string name="hint_video_daily_limit">已达每日视频上限。请等待免费提示。</string>
+
+    <string name="more_games_title">更多游戏</string>
+    <string name="more_games_download">在 Google Play 下载</string>
+    <string name="more_games_target_name">扫雷 Arcade</string>
+    <string name="a11y_more_games_open">更多游戏</string>
+    <string name="a11y_more_games_close">关闭更多游戏</string>
+
 </resources>

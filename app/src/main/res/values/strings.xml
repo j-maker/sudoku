@@ -16,6 +16,8 @@
     <string name="notification_channel_desc">Avisos opcionales de Sudoku</string>
     <string name="notification_daily_title">🎯 Tu reto de hoy</string>
     <string name="notification_daily_body">Aún no completaste: %1$s</string>
+    <string name="notification_play_title">Hora de jugar Sudoku</string>
+    <string name="notification_play_body">Un puzzle te está esperando</string>
 
     <string name="language_es">ES</string>
     <string name="language_en">EN</string>

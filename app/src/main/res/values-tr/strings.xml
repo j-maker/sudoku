@@ -5,4 +5,6 @@
     <string name="notification_channel_desc">İsteğe bağlı uygulama bildirimleri</string>
     <string name="notification_daily_title">🎯 Bugünkü görevin</string>
     <string name="notification_daily_body">Henüz tamamlanmadı: %1$s</string>
+    <string name="notification_play_title">Sudoku zamanı</string>
+    <string name="notification_play_body">Seni bir bulmaca bekliyor</string>
 </resources>

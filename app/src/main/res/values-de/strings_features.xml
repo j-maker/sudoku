@@ -22,4 +22,11 @@
     <string name="play_games_achievements">Erfolge</string>
     <string name="settings_rate_app">App bewerten</string>
     <string name="hint_video_daily_limit">Tägliches Videolimit erreicht. Warte auf den Gratis-Tipp.</string>
+
+    <string name="more_games_title">Mehr Spiele</string>
+    <string name="more_games_download">Bei Google Play herunterladen</string>
+    <string name="more_games_target_name">Minesweeper Arcade</string>
+    <string name="a11y_more_games_open">Mehr Spiele</string>
+    <string name="a11y_more_games_close">Weitere Spiele schließen</string>
+
 </resources>

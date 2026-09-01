@@ -91,6 +91,16 @@ object AppAnalytics {
         }
     }
 
+    fun logMoreGamesOpen() {
+        log("more_games_open")
+    }
+
+    fun logMoreGamesStore(packageName: String) {
+        log("more_games_store") {
+            putString("target_package", packageName)
+        }
+    }
+
     fun logAchievementUnlock(achievement: AchievementId) {
         log("achievement_unlock") {
             putString("achievement_id", achievement.name.lowercase())

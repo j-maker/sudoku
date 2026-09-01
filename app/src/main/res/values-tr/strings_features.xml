@@ -22,4 +22,11 @@
     <string name="play_games_achievements">Başarımlar</string>
     <string name="settings_rate_app">Uygulamayı değerlendir</string>
     <string name="hint_video_daily_limit">Günlük video limitine ulaşıldı. Ücretsiz ipucunu bekleyin.</string>
+
+    <string name="more_games_title">Daha fazla oyun</string>
+    <string name="more_games_download">Google Play’den indir</string>
+    <string name="more_games_target_name">Mayın Tarlası Arcade</string>
+    <string name="a11y_more_games_open">Daha fazla oyun</string>
+    <string name="a11y_more_games_close">Diğer oyunları kapat</string>
+
 </resources>

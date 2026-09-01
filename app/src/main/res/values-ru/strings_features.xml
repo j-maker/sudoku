@@ -22,4 +22,11 @@
     <string name="play_games_achievements">Достижения</string>
     <string name="settings_rate_app">Оценить приложение</string>
     <string name="hint_video_daily_limit">Дневной лимит видео исчерпан. Подождите бесплатную подсказку.</string>
+
+    <string name="more_games_title">Ещё игры</string>
+    <string name="more_games_download">Скачать в Google Play</string>
+    <string name="more_games_target_name">Сапёр Arcade</string>
+    <string name="a11y_more_games_open">Ещё игры</string>
+    <string name="a11y_more_games_close">Закрыть другие игры</string>
+
 </resources>

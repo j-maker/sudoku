@@ -22,4 +22,11 @@
     <string name="play_games_achievements">الإنجازات</string>
     <string name="settings_rate_app">قيّم التطبيق</string>
     <string name="hint_video_daily_limit">تم الوصول إلى الحد اليومي للفيديو. انتظر التلميح المجاني.</string>
+
+    <string name="more_games_title">المزيد من الألعاب</string>
+    <string name="more_games_download">نزّل من Google Play</string>
+    <string name="more_games_target_name">كانس الألغام Arcade</string>
+    <string name="a11y_more_games_open">المزيد من الألعاب</string>
+    <string name="a11y_more_games_close">إغلاق المزيد من الألعاب</string>
+
 </resources>

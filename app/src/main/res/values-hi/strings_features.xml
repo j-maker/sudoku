@@ -22,4 +22,11 @@
     <string name="play_games_achievements">उपलब्धियाँ</string>
     <string name="settings_rate_app">ऐप को रेट करें</string>
     <string name="hint_video_daily_limit">दैनिक वीडियो सीमा पूरी हो गई। मुफ़्त संकेत की प्रतीक्षा करें।</string>
+
+    <string name="more_games_title">और खेल</string>
+    <string name="more_games_download">Google Play पर डाउनलोड करें</string>
+    <string name="more_games_target_name">माइनस्वीपर Arcade</string>
+    <string name="a11y_more_games_open">और खेल</string>
+    <string name="a11y_more_games_close">अन्य खेल बंद करें</string>
+
 </resources>

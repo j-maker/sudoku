@@ -22,4 +22,11 @@
     <string name="play_games_achievements">Succès</string>
     <string name="settings_rate_app">Noter l\'application</string>
     <string name="hint_video_daily_limit">Limite quotidienne de vidéos atteinte. Attendez l\'indice gratuit.</string>
+
+    <string name="more_games_title">Plus de jeux</string>
+    <string name="more_games_download">Télécharger sur Google Play</string>
+    <string name="more_games_target_name">Démineur Arcade</string>
+    <string name="a11y_more_games_open">Plus de jeux</string>
+    <string name="a11y_more_games_close">Fermer plus de jeux</string>
+
 </resources>

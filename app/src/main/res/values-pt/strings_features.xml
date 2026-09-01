@@ -22,4 +22,11 @@
     <string name="play_games_leaderboards">Classificações</string>
     <string name="play_games_achievements">Conquistas</string>
     <string name="hint_video_daily_limit">Limite diário de vídeos atingido. Aguarde a dica grátis.</string>
+
+    <string name="more_games_title">Mais jogos</string>
+    <string name="more_games_download">Transferir no Google Play</string>
+    <string name="more_games_target_name">Buscaminas Arcade</string>
+    <string name="a11y_more_games_open">Mais jogos</string>
+    <string name="a11y_more_games_close">Fechar mais jogos</string>
+
 </resources>

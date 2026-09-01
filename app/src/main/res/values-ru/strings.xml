@@ -5,4 +5,6 @@
     <string name="notification_channel_desc">Необязательные уведомления приложения</string>
     <string name="notification_daily_title">🎯 Ваш вызов на сегодня</string>
     <string name="notification_daily_body">Ещё не выполнено: %1$s</string>
+    <string name="notification_play_title">Пора играть в Судоку</string>
+    <string name="notification_play_body">Тебя ждёт головоломка</string>
 </resources>

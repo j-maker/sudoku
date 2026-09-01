@@ -5,4 +5,6 @@
     <string name="notification_channel_desc">Notifikasi opsional aplikasi</string>
     <string name="notification_daily_title">🎯 Tantanganmu hari ini</string>
     <string name="notification_daily_body">Belum selesai: %1$s</string>
+    <string name="notification_play_title">Saatnya main Sudoku</string>
+    <string name="notification_play_body">Ada puzzle yang menunggumu</string>
 </resources>

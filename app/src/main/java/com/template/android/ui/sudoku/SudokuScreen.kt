@@ -72,6 +72,7 @@ import com.template.android.data.DailyChallengeRules
 import com.template.android.data.HintState
 import com.template.android.engagement.PlayGamesHelper
 import com.template.android.engagement.PlayReviewHelper
+import com.template.android.ui.MoreGamesFab
 import com.template.android.ui.layout.SudokuLayoutInfo
 import com.template.android.ui.layout.distributedBoardMaxHeight
 import com.template.android.ui.layout.rememberSudokuLayoutInfo
@@ -678,6 +679,10 @@ fun SudokuScreen(
             messages = achievementToasts,
             onDismissed = { achievementToasts = emptyList() },
         )
+
+        if (!interstitialActive) {
+            MoreGamesFab(animate = !settings.reduceMotion)
+        }
 
         if (showShare) {
             ShareSocialSheet(
