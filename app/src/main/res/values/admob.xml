@@ -9,4 +9,7 @@
     <string name="admob_interstitial_unit_id" translatable="false">ca-app-pub-8047251441069780/8105841448</string>
     <!-- Crear unidad Recompensado en AdMob (app Sudoku) y pegar el ID aquí -->
     <string name="admob_rewarded_unit_id" translatable="false">ca-app-pub-8047251441069780/2470285668</string>
+    <!-- Hashes de logcat: "Use RequestConfiguration.Builder.setTestDeviceIds". Vacío = solo emulador. -->
+    <string-array name="admob_test_device_ids" translatable="false">
+    </string-array>
 </resources>

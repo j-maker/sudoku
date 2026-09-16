@@ -21,11 +21,17 @@ class InterstitialAdManager(context: Context) {
     private var isShowing = false
     private var clockPauseCount = 0
     private var clockPausedAtMs = 0L
+    private val preloadWhenReady = AdSafety.QueueFlag()
 
     private val adUnitId: String
         get() = AdIds.interstitialId(appContext.getString(R.string.admob_interstitial_unit_id))
 
     fun preload() {
+        if (isLoading || interstitialAd != null) return
+        AdSafety.runWhenReady(preloadWhenReady) { loadAd() }
+    }
+
+    private fun loadAd() {
         if (isLoading || interstitialAd != null) return
         isLoading = true
         InterstitialAd.load(
@@ -85,7 +91,7 @@ class InterstitialAdManager(context: Context) {
         return System.currentTimeMillis()
     }
 
-    /** Tras completar un sudoku (natural break). Ignora cooldown de sesión; no encadena tras rewarded. */
+    /** Tras completar un sudoku (pausa natural). Respeta cooldown de 90s y el hueco tras rewarded. */
     fun showAfterVictory(
         activity: Activity,
         onAdStarted: (() -> Unit)? = null,
@@ -93,7 +99,6 @@ class InterstitialAdManager(context: Context) {
         onFinished: () -> Unit = {},
     ): Boolean = showIfReady(
         activity = activity,
-        ignoreCooldown = true,
         onAdStarted = onAdStarted,
         onAdShown = onAdShown,
         onFinished = onFinished,

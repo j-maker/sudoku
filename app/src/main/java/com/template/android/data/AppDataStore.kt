@@ -355,6 +355,13 @@ class AppDataStore(context: Context) {
         return next
     }
 
+    /** Victorias usadas para el ritmo de intersticiales. */
+    fun incrementVictoryCount(): Int {
+        val next = prefs.getInt(K_VICTORY_COUNT, 0) + 1
+        prefs.edit().putInt(K_VICTORY_COUNT, next).apply()
+        return next
+    }
+
     fun isTutorialCompleted(): Boolean = prefs.getBoolean(K_TUTORIAL_DONE, false)
 
     fun setTutorialCompleted() {
@@ -503,6 +510,7 @@ class AppDataStore(context: Context) {
         private const val K_BEST_HARD = "best_time_hard"
         private const val K_SAVED_GAME = "saved_game"
         private const val K_BOARD_NEW_GAME_COUNT = "board_new_game_count"
+        private const val K_VICTORY_COUNT = "victory_interstitial_count"
         private const val K_TUTORIAL_DONE = "tutorial_done"
         private const val K_REMINDER_PROMPT = "reminder_prompt_shown"
         private const val K_REMINDER_NOTIFIED_DATE = "reminder_notified_date"

@@ -26,9 +26,9 @@ object AdConsentManager {
             params,
             {
                 UserMessagingPlatform.loadAndShowConsentFormIfRequired(activity) { _ ->
-                    if (consentInformation.canRequestAds() || BuildConfig.DEBUG) {
+                    if (consentInformation.canRequestAds()) {
                         initializeMobileAds(activity)
-                    } else {
+                    } else if (BuildConfig.DEBUG) {
                         android.util.Log.d("AdConsent", "Anuncios no permitidos (consentimiento denegado)")
                     }
                 }
@@ -37,7 +37,7 @@ object AdConsentManager {
                 if (BuildConfig.DEBUG) {
                     android.util.Log.w("AdConsent", "requestConsentInfoUpdate: ${error.message}")
                 }
-                if (consentInformation.canRequestAds() || BuildConfig.DEBUG) {
+                if (consentInformation.canRequestAds()) {
                     initializeMobileAds(activity)
                 }
             },
@@ -67,6 +67,7 @@ object AdConsentManager {
 
     private fun initializeMobileAds(activity: Activity) {
         if (MobileAdsInitializer.isReady) return
+        AdSafety.applyRequestConfiguration(activity.applicationContext)
         MobileAds.initialize(activity.applicationContext) {
             MobileAdsInitializer.markReady()
             if (BuildConfig.DEBUG) {

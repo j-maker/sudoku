@@ -72,7 +72,6 @@ import com.template.android.data.DailyChallengeRules
 import com.template.android.data.HintState
 import com.template.android.engagement.PlayGamesHelper
 import com.template.android.engagement.PlayReviewHelper
-import com.template.android.ui.MoreGamesFab
 import com.template.android.ui.layout.SudokuLayoutInfo
 import com.template.android.ui.layout.distributedBoardMaxHeight
 import com.template.android.ui.layout.rememberSudokuLayoutInfo
@@ -430,7 +429,7 @@ fun SudokuScreen(
 
     fun startNewGameFromBoard(difficulty: SudokuDifficulty = gameState.difficulty) {
         val boardNewGameCount = dataStore.incrementBoardNewGameCount()
-        if (boardNewGameCount % BOARD_NEW_GAMES_PER_INTERSTITIAL == 0) {
+        if (boardNewGameCount % GAMES_PER_INTERSTITIAL == 0) {
             showInterstitialThenApplyNewGame(difficulty)
         } else {
             applyNewGame(difficulty)
@@ -439,7 +438,12 @@ fun SudokuScreen(
 
     fun startNewGameFromVictoryDialog() {
         showWin = false
-        showInterstitialThenApplyNewGame()
+        val victoryCount = dataStore.incrementVictoryCount()
+        if (victoryCount % GAMES_PER_INTERSTITIAL == 0) {
+            showInterstitialThenApplyNewGame()
+        } else {
+            applyNewGame()
+        }
     }
 
     fun toggleAudio() {
@@ -664,7 +668,9 @@ fun SudokuScreen(
             }
 
             Box(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp),
                 contentAlignment = Alignment.Center,
             ) {
                 BannerAdView(
@@ -679,10 +685,6 @@ fun SudokuScreen(
             messages = achievementToasts,
             onDismissed = { achievementToasts = emptyList() },
         )
-
-        if (!interstitialActive) {
-            MoreGamesFab(animate = !settings.reduceMotion)
-        }
 
         if (showShare) {
             ShareSocialSheet(
@@ -760,7 +762,7 @@ fun SudokuScreen(
 
 private const val REVIEW_POST_DIALOG_DELAY_MS = 800L
 private const val REVIEW_AFTER_AD_COOLDOWN_MS = 120_000L
-private const val BOARD_NEW_GAMES_PER_INTERSTITIAL = 3
+private const val GAMES_PER_INTERSTITIAL = 3
 
 private fun loadInitialGameState(
     dataStore: AppDataStore,

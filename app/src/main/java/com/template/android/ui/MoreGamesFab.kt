@@ -25,7 +25,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -69,6 +68,7 @@ import com.template.android.ui.theme.SudokuPrimary
 
 private const val TARGET_PACKAGE = "com.jmaker.buscaminasarcade"
 private val BannerRowHeight = 50.dp
+private val FabClearanceAboveBanner = 12.dp
 
 @Composable
 fun MoreGamesFab(
@@ -104,7 +104,7 @@ fun MoreGamesFab(
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .navigationBarsPadding()
-                .padding(end = 8.dp),
+                .padding(end = 8.dp, bottom = BannerRowHeight + FabClearanceAboveBanner),
             horizontalAlignment = Alignment.End,
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
@@ -123,33 +123,28 @@ fun MoreGamesFab(
                 )
             }
             Box(
-                modifier = Modifier.height(BannerRowHeight),
-                contentAlignment = Alignment.CenterEnd,
-            ) {
-                Box(
-                    modifier = Modifier
-                        .size(40.dp)
-                        .shadow(6.dp, CircleShape, ambientColor = SudokuAccent, spotColor = SudokuPrimary)
-                        .clip(CircleShape)
-                        .background(
-                            Brush.linearGradient(listOf(Color(0xFF1A3A66), Color(0xFF0A1829))),
-                        )
-                        .border(1.dp, SudokuPrimary.copy(alpha = 0.85f), CircleShape)
-                        .semantics { contentDescription = if (expanded) closeLabel else openLabel }
-                        .clickable {
-                            expanded = !expanded
-                            if (expanded) AppAnalytics.logMoreGamesOpen()
-                        },
-                    contentAlignment = Alignment.Center,
-                ) {
-                    Text(
-                        text = "+",
-                        color = SudokuPrimary,
-                        fontSize = 22.sp,
-                        fontWeight = FontWeight.Black,
-                        modifier = Modifier.rotate(rotation),
+                modifier = Modifier
+                    .size(40.dp)
+                    .shadow(6.dp, CircleShape, ambientColor = SudokuAccent, spotColor = SudokuPrimary)
+                    .clip(CircleShape)
+                    .background(
+                        Brush.linearGradient(listOf(Color(0xFF1A3A66), Color(0xFF0A1829))),
                     )
-                }
+                    .border(1.dp, SudokuPrimary.copy(alpha = 0.85f), CircleShape)
+                    .semantics { contentDescription = if (expanded) closeLabel else openLabel }
+                    .clickable {
+                        expanded = !expanded
+                        if (expanded) AppAnalytics.logMoreGamesOpen()
+                    },
+                contentAlignment = Alignment.Center,
+            ) {
+                Text(
+                    text = "+",
+                    color = SudokuPrimary,
+                    fontSize = 22.sp,
+                    fontWeight = FontWeight.Black,
+                    modifier = Modifier.rotate(rotation),
+                )
             }
         }
     }

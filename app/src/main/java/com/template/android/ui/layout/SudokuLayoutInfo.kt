@@ -91,7 +91,8 @@ fun BoxWithConstraintsScope.rememberSudokuLayoutInfo(
             isCompact -> 52.dp
             else -> 56.dp
         }
-        val bannerSlot = 50.dp + sectionSpacing * 2
+        val bannerTopGap = 8.dp
+        val bannerSlot = 50.dp + bannerTopGap + sectionSpacing
 
         val fixedChromeHeight = headerHeight + statusHeight + difficultyHeight +
             numpadHeight + bannerSlot + sectionSpacing * 5

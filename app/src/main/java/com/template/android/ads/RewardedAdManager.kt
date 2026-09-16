@@ -17,11 +17,17 @@ class RewardedAdManager(context: Context) {
     private var rewardedAd: RewardedAd? = null
     private var isLoading = false
     private var isShowing = false
+    private val preloadWhenReady = AdSafety.QueueFlag()
 
     private val adUnitId: String
         get() = AdIds.rewardedId(appContext.getString(R.string.admob_rewarded_unit_id))
 
     fun preload() {
+        if (isLoading || rewardedAd != null) return
+        AdSafety.runWhenReady(preloadWhenReady) { loadAd() }
+    }
+
+    private fun loadAd() {
         if (isLoading || rewardedAd != null) return
         isLoading = true
         RewardedAd.load(
