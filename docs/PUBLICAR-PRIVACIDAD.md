@@ -85,6 +85,22 @@ Reinstala la app y prueba: **Ajustes → Política de privacidad** debe abrir es
 
 ---
 
+## Términos del servicio
+
+| Archivo | Para qué |
+|---------|----------|
+| `store-assets/terms.html` | Fuente de verdad (edítalo aquí) |
+| `terms.html` (raíz) | Copia que publica GitHub Pages junto al `index.html` |
+
+1. Si cambias los términos, actualiza la copia de la raíz:
+   ```powershell
+   Copy-Item store-assets\terms.html terms.html -Force
+   ```
+2. Sube ambos archivos a `main` y comprueba que carga en **https://j-maker.github.io/sudoku/terms.html**.
+3. En Play Console → **Contenido de la aplicación → Estado de operador**, pega esa URL como enlace a los Términos del Servicio.
+
+---
+
 ## Paso 6 — AdMob UMP (consentimiento GDPR)
 
 > **PENDIENTE:** mismo flujo para **Sudoku** y **Buscaminas** (mensajes y apps vinculadas por separado en AdMob).

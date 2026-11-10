@@ -16,6 +16,7 @@
     <string name="settings_daily_reminder_desc">Uygulamaya dönmek için günlük bildirim</string>
     <string name="settings_reminder_hour">Hatırlatma saati: %1$d:00</string>
     <string name="settings_privacy_policy">Gizlilik politikası</string>
+    <string name="settings_terms_of_service">Hizmet şartları</string>
     <string name="settings_ad_consent">Reklam onayını yönet</string>
     <string name="stats_play_games_section">Google Play Games</string>
     <string name="play_games_leaderboards">Lider tabloları</string>

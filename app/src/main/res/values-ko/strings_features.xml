@@ -16,6 +16,7 @@
     <string name="settings_daily_reminder_desc">앱으로 돌아오도록 매일 알림</string>
     <string name="settings_reminder_hour">알림 시간: %1$d:00</string>
     <string name="settings_privacy_policy">개인정보 처리방침</string>
+    <string name="settings_terms_of_service">서비스 약관</string>
     <string name="settings_ad_consent">광고 동의 관리</string>
     <string name="stats_play_games_section">Google Play Games</string>
     <string name="play_games_leaderboards">리더보드</string>

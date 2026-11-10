@@ -3,6 +3,7 @@
 <resources>
     <string name="privacy_contact_email" translatable="false">jhonatan.diaz2012@gmail.com</string>
     <string name="privacy_policy_url" translatable="false">https://j-maker.github.io/sudoku/</string>
+    <string name="terms_of_service_url" translatable="false">https://j-maker.github.io/sudoku/terms.html</string>
 
     <!-- Play Console → Sudoku Neon → Play Games → Configuración → ID del proyecto.
          Proyecto propio (Cloud: sudoku-neon-499717). Vacío = Play Games desactivado. -->

@@ -25,6 +25,7 @@
     <string name="settings_reminder_hour">Hora del aviso: %1$d:00</string>
     <string name="settings_reminder_permission_blocked">Las notificaciones de Sudoku están desactivadas en el sistema. Actívalas para recibir el aviso.</string>
     <string name="settings_privacy_policy">Política de privacidad</string>
+    <string name="settings_terms_of_service">Términos del servicio</string>
     <string name="settings_ad_consent">Gestionar consentimiento de anuncios</string>
     <string name="settings_rate_app">Valorar la app</string>
     <string name="settings_reset_stats">Reiniciar estadísticas</string>

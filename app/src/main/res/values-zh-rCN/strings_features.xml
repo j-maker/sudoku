@@ -16,6 +16,7 @@
     <string name="settings_daily_reminder_desc">每日通知，提醒用户返回应用</string>
     <string name="settings_reminder_hour">提醒时间：%1$d:00</string>
     <string name="settings_privacy_policy">隐私政策</string>
+    <string name="settings_terms_of_service">服务条款</string>
     <string name="settings_ad_consent">管理广告同意</string>
     <string name="stats_play_games_section">Google Play Games</string>
     <string name="play_games_leaderboards">排行榜</string>

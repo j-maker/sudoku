@@ -128,6 +128,14 @@ fun SettingsSheet(
                 },
             )
 
+            SettingsActionButton(
+                label = stringResource(R.string.settings_terms_of_service),
+                onClick = {
+                    AppAnalytics.logButtonClick("terms_of_service")
+                    PrivacyHelper.openTermsOfService(context)
+                },
+            )
+
             if (activity != null && !hideRateButton) {
                 SettingsActionButton(
                     label = stringResource(R.string.settings_rate_app),

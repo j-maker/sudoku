@@ -29,6 +29,7 @@ val configuredAppDisplayName = templateProp("appDisplayName", "App Template")
 android {
     namespace = "com.template.android"
     compileSdk = 36
+    buildToolsVersion = "36.0.0"
 
     defaultConfig {
         applicationId = configuredApplicationId

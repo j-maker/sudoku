@@ -16,6 +16,7 @@
     <string name="settings_daily_reminder_desc">Tägliche Benachrichtigung zur App-Rückkehr</string>
     <string name="settings_reminder_hour">Uhrzeit: %1$d:00</string>
     <string name="settings_privacy_policy">Datenschutzrichtlinie</string>
+    <string name="settings_terms_of_service">Nutzungsbedingungen</string>
     <string name="settings_ad_consent">Werbeeinwilligung verwalten</string>
     <string name="stats_play_games_section">Google Play Games</string>
     <string name="play_games_leaderboards">Bestenlisten</string>

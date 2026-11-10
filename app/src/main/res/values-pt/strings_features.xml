@@ -16,6 +16,7 @@
     <string name="settings_daily_reminder_desc">Notificação diária para voltar à app</string>
     <string name="settings_reminder_hour">Hora do lembrete: %1$d:00</string>
     <string name="settings_privacy_policy">Política de privacidade</string>
+    <string name="settings_terms_of_service">Termos de serviço</string>
     <string name="settings_ad_consent">Gerenciar consentimento de anúncios</string>
     <string name="settings_rate_app">Avaliar a app</string>
     <string name="stats_play_games_section">Google Play Games</string>
